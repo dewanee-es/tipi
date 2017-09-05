@@ -1,0 +1,376 @@
+TODO
+====
+
+- MDWiki
+- Service system
+
+- - -
+
+Morphus CMS
+===========
+
+Morphus is a flat-file CMS based in Pico CMS
+
+Features
+--------
+
+-Folders: flat-file folder structure
+-File types: Markdown Extra/HTML
+-Syntax: Markdown Extreme (Markdown + Markdown Extra + Markdown Extra Extended + Markdown Github flavored + MultiMarkdown + Common Mark + Markdown Morphus flavored + kramdown)
+-Support for any parser: Markdown Extra, Markdown Extra Extended, Sundown, Parsedown, Textile, 
+-Content types
+-Meta headers
+-Admin plugin
+-SOA system
+-Twig template engine
+-Plugins (with PicoCMS plugin compatiblity by a plugin)
+-Page/post preview
+-Publish status: draft, hidden, visible
+-Tags and categories
+-Table of contents
+
+Installation
+------------
+
+Folders:
+-cache
+-config
+-pages	(content)
+
+Admin plugin
+------------
+
+Content
+-------
+
+File types (configuration), default:
+	'md' => 'markdown'
+	//'txt' => 'plain'
+	//'txt' => 'html'
+	//'html' => 'html'
+	
+Meta headers (configuration), default: (http://assemble.io/docs/YAML-front-matter.html)
+	'parser' => 'yaml',
+	'before' => "---\n",
+	'after' => "---\n"
+	
+	For headers like:
+		---
+		Title: Home
+		Description: A description for search engines goes here
+		---
+		# Home
+		This is come example **Markdown** content
+		
+Folder structure (pages/):
+	index.md	-> (default, configuration: 'index'/'home')
+	page1.md
+	page2.md
+	sub1.md
+	sub1/
+		sub1-1.md
+		sub1-2.md
+	sub2/
+		index.md
+		sub2-1.md
+		sub2-2.md
+	sub3/
+		sub3.md
+		sub3-1.md
+		sub3-2.md
+		
+Content types: (each type has a template with the same name in the theme)
+	home (home page)
+	page (other page, default)
+	catalog (list children pages with image)
+	
+Post preview:
+	# Home
+	This is the excerpt of the page.
+	<!--more-->
+	And the rest of the page.
+	
+	# Home
+	This is another example.<!--more--> And here there's no parragraph break.
+	
+Publish status:
+	draft:	Not finished. Not visible
+	hidden: Finished. Not visible
+	visible: Visible
+	
+Table of contents
+		
+Headers
+-------
+
+Title: Page title
+Description: HTML meta description
+Author: Author name
+Robots: index,follow
+Date: YYYYMMDD o DD/MM/YYYY (i18n)
+Image: Relative image path
+Tags: Comma separated tags (mainly for blogs)
+Category: Category
+
+Markdown Extreme
+----------------
+
+Extends extra markdown and implements:
+1. Markdown
+2. Markdown Extra
+3. [Markdown Extra Extended](https://github.com/egil/php-markdown-extra-extended)
+4. [Markdown Github flavored](https://help.github.com/articles/github-flavored-markdown)
+5. MultiMarkdown
+6. [Common Mark](http://commonmark.org/)
+7. Markdown Morphus flavored
+8. kramdown
+9. Pandoc
+10. http://markdown2.github.io/site/syntax/
+11. http://aplib.github.io/markdown-site-template/components/controls.alert.html 
+12. alerts: >>> ó |. O bien como en MDWiki, Alert: ...
+13. Bootstrap styles
+14. https://www.npmjs.com/package/markdown-symbols
+15. https://www.npmjs.com/package/namp 
+16. http://2buntu.com/articles/markdown/
+17. http://superuser.com/editing-help
+18. https://github.com/rmcvey/PHP-Markdown-Forms
+19. https://github.com/rbnvrw/markdown-forms
+20. http://pad.haroopress.com/page.html?f=haroopad-flavored-markdown
+21. https://aaronparecki.com/articles/2012/09/01/1/some-enhancements-to-markdown
+22. https://groups.google.com/forum/#!topic/pandoc-discuss/FnTRTIhCEi4
+23. http://kohanaframework.org/3.2/guide/userguide/markdown
+24. http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax
+25. https://github.com/infostreams/snippets
+26. http://sourceforge.net/p/yaml-javascript/wiki/markdown_syntax/
+27. KirbyText
+28. http://support.ghost.org/markdown-guide/
+29. https://github.com/markdown-it (Y PLUGINS!!!!)
+30. http://www.ybrikman.com/writing/2011/07/26/proposal-extend-markdown-syntax-to/
+31. http://learn.getgrav.org/content/markdown
+32. Wikilinks
+33. https://pythonhosted.org/Markdown/extensions/admonition.html	(y otras extensiones)
+34. http://johnmacfarlane.net/babelmark2/
+35. MDWiki gimmits
+36. http://markdown2.github.io/site/syntax/
+
+Features:
+37.- Autolinking for http(s)://
+38.- Snippets. Syntax: (name: value....)
+	* (google: text): Link to Google text search results
+	* (link: url popup: true target: blank text: link text class: css class)
+	* (email: email)
+	* (img: src)
+	* (file: file.pdf)
+	* (youtube: id)
+	* (vimeo: id)
+	* (twitter: @user o #hashtag)
+	* (tel: 91-435-0000)
+	* (include: page)
+39.- Wikilinks: [[Vídeos]] [[videos|clic aquí]]
+40.- Image floating:
+
+	![](left.png)
+	Text text text...
+	
+	Text text text...
+	![](right.png)
+	
+	![](nofloat.png)
+	
+	Text text text...
+	
+41.- Image caption (by theme)
+
+	![alt text](img.jpg "Image title and caption")
+	
+	(img: img.jpg "Image title and caption")	
+	(img: img.jpg Image title and caption)		Tip: The quotes aren't mandatory
+42. Parsedown
+43. Lists: #. (ol)
+44. Atributos de enlaces: class, style, target: [link]: www.web.com "Title" style="..." target="_blank"
+45. Atributos de imagenes: (como en los enlaces) [img]: img.png "Title" atr="valor" ....
+46. Imagenes: figure para imágenes en párrafos sueltos
+47. Tablas con caption o title (línea siguiente a la tabla: [caption y ref] o [caption][ref]) y con colspan (| celda doble ||) y rowspan???
+48. [include](file.md) or [](include:file.md)
+49. [preview:4](file.md) or [4](preview:file.md) (el nº representa el nº de secciones (parrafos) a mostrar)
+50. [TOC]
+51. Latex (Mathjax)
+52. UML (http://bramp.github.io/js-sequence-diagrams/, http://adrai.github.io/flowchart.js/)
+53. tables
+54. definition litst
+55. footnotes
+56. smartypants / typographer (quotes, ...)
+57. checkbox
+58. home/wiki/markdown
+59. http://rhojs.org/
+	
+Themes
+------
+
+The default templating library is Twig, but this can be overriden. Here is the variables that can be used in themes:
+
+* {{ config }} - Contains the values you set in config.php (e.g. {{ config.theme }} = "default")
+	
+Services
+--------
+
+Each service name has three parts separated by a dot: component.element.action
+Each plugin can register services by an action, an element or an entire component.
+When a service is called first executes all functions for the action, then for the element and then for the component. If any of the functions returns false then stops executing the rest of the functions.
+Each plugin receives in its constructor a service container so the plugin can register services:
+
+	function __construct($container) {
+		$container->register(...)
+	}
+	
+The ServiceContainer has the following methods:
+
+	register(string $service, [string $function = null,] int $priority = 0)
+		$service could be a fully service name or a partial service name (component or component.element) to listen all services of the component or element
+		$function is a string with a method name of the plugin class
+			If function is null then the class method elementAction will be executed. Ex: register('page.template.end', 10) = register('page.template.end', 'templateEnd', 10)
+		$priority the execution priority order (recommended values: -100 low .. 0 normal .. 100 high), if function A priority < function B priority then B is executed before A
+		Returns the container, so multiple calls could be chained: $container->register(...)->register(...)->register(...)->...
+		
+		$service could be an array of services. Ex:
+			register([
+				'a.b.c' => 'function1',	// Default priority, in this case 30
+				'd.e.f',	// Calls default function (elementAction), but in this case calls serviceFunction. Priority: 30
+				'g.h.i' => 20,	// Calls serviceFunction. Priority: 20
+				'j.k.l' => ['function2', 10]	// Calls function2 with a priority of 10
+			], 'serviceFunction', 30)	// The last two arguments are optional!
+
+--------TO REVIEW--------
+https://github.com/fruux/sabre-event/blob/master/lib/EventEmitterTrait.php
+Service::before('uno.dos.tres', [prioridad -100..0(default)..100,] funcion)
+Service::after(...)
+Service::override(...) // Sobrescribe el servicio (con todos sus extends) pero no los before y after (¿con posibilidad de llamar a la implementación previa?)
+Service::extend(...) // Ejecuta la implementación previa y esta
+Service::call('uno.dos.tres', arg1, arg2, ...)
+en todos los casos devolviendo true se sigue la ejecución del resto de handlers (default)
+devolviendo false no se sigue la ejecución de handlers del mismo tipo (before, after, extend)
+con override hay que llamar explicitamente con Service::super()
+O en vez de Service con $container o $services?
+Service::overload(servicio, condicion, funcion)??? Util por ejemplo para tener varios parser (Service::overload('page.content.parse', f($x) => $x->file_extension == '.tex', TextileParser)
+~~Services listener definition uses plugin name alphabetically order, so you can prefix plugin folder name with NN. where NN is a two digit number.~~
+By default, it calls method name elementAction, but this can be overrided:
+	"services": {
+		"pages.content.load": "loadContent",
+		"pages.parser": "parser",	// Prefix: parserAction1, parserAction2, ...
+		"core": "core",	// Prefix: coreElement1Action1, coreElement2Action2, ...
+	}
+Example: file plugins/myplugin/plugin.json
+{
+	"name": "MyPlugin",
+	//"class": "MyPlugin",
+	"services": ["pages.content.load", "pages.parser", "core"];
+}
+
+A plugin can define its own services:
+
+	$services = ["plugin1.do.stuff"];
+	
+	function doStuff(...) {
+		...
+	}
+	
+	function otherStuff(...) {
+		...
+		execute("plugin1.do.stuff");
+		...
+	}
+
+An overrided service could be overrided too!
+	Plugin1:
+		$services = ["pages.content.load"];
+		
+	Plugin2:
+		$services = ["plugin1.content.load"];
+		
+		function contentLoad(...) {
+			...
+			return false;
+		}
+		
+	When pages.content.load is called Plugin1 implementation is found, so the service name transforms to plugin1.content.load, then Plugin2 implementation is found,
+	so the service name will be plugin2.content.load and contentLoad of Plugin2 is called, as it returns false contentLoad of Plugin1 is never executed, but other implementations
+	of pages.content.load will be called.
+	
+Main components (default implementation):
+	core:	05.Core
+	page:	25.Page
+	repo:	15.Repo
+
+Default services: (3 main components, reserved names: core, page, repo)
+	core.config.load
+	core.files.get		(can't be overriden)
+	core.path.absolute
+	core.plugins.load	(plugins only can hook on after)
+	core.request.url
+	repo.content.load
+	repo.pages.current
+	repo.pages.read
+	repo.pages.sort
+	repo.request.file
+	page.content.parse
+	page.content.prepare
+	page.meta.headers
+	page.meta.parse
+	page.template.register
+	page.template.render
+	page.template.variables
+
+	REVIEW!!!:
+	core.plugins.load		(plugins_loaded)
+	core.config.load		(config_loaded)
+	core.main.init			(after_init_core)
+	core.request.uri		(request_uri)
+	core.error.404			(after_404)
+	page.template.init		(template locator)
+	page.template.start		(before_init_template)
+	page.template.register	(template_engine_registered)
+	page.template.render	(before_render_template)
+	page.template.end		(after_render_template)
+	page.meta.init			(parser meta locator)
+	page.meta.read			(before_read_file_meta)
+	page.meta.process		(after_read_file_meta)
+	page.content.load		(before_load_content)
+	page.content.start		(after_load_content)
+	page.content.parse		(before_parse_content)
+	page.content.end		(after_parse_content)
+	page.parser.init		(parser locator)
+	repo.cache.init			(cache locator)
+	repo.data.init			(data persistence locator)
+	repo.page.resolve		(after_resolve_page)
+	
+Plugins
+-------
+
+- XML Sitemap
+- Google Analytics
+- RSS
+- ACL (Users), based in https://github.com/nliautaud/pico-users. Simply and powerful
+	- Rights defined by page and folder: 'a/page', 'all/files/in/here/', 'a/page+' (page and subpages)
+	- Rights defined in config
+	- Rights could be defined in page meta overriding config in the "Rights" header. These rights are hierarchical:
+		Page secret/infos
+			Rights: editors/admins
+		The page secret/infos and the subpages (secret/infos/**) only could be viewed by admins
+	- Multiple rights per page or folder: 'secret/infos/' => ['editors/admins', 'editors/john']
+	- Anonymous users. See example below.
+	- Page actions: 'page:action'. Actions: (none) (default, view page), edit (edit page), edit:meta (edit meta), edit:meta:rights (change page rights, rights header).
+		By default, nobody can execute any action, only view pages
+		Allow edit blog pages to editors (allow edit meta and meta rights): 'blog/:edit' => 'editors'
+		Allow edit sandbox pages to everybody (anonymous users too): 'sandbox/:edit' => '*'
+		Disable change rights of any page to everybody: ':edit:meta:rights' => '-'	// This could be any value that doesn't exist, but minus is a good choice! Tip: You can use the word 'none' too but make sure nobody has none username!
+- Admin
+- Editor (Markdown, WYSIWYG). See https://github.com/redyyu/tinpico/tree/master/editor
+- Cache
+- Pico Plugins
+- Comments (Facebook, Disqus, Morphus)
+- Search (like https://github.com/infostreams/pagelist-snippet)
+- Wiki (page history in other folder beside content)
+- Bootstrap (apply bootstrap styles to markdown parsed content, compatible with bootstrap themes)
+- Tipi (static web for view the cms content pages):
+	- JavaScript templating engine: https://github.com/nolimits4web/template7
+

@@ -1,0 +1,119 @@
+@import 'includes/grid.less';
+@import 'includes/buttons.less';
+@import 'includes/fonts.less';
+@import 'includes/colors.less';
+/********* Grid ***************/
+@total-width: 100%;
+@column-width: 60;
+@gutter-width: 20;
+@columns: 12;
+/************ Mixins ************/
+.border-radius (@radius: 5px) {
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  border-radius: @radius;
+}
+
+/************** Content ***********/
+html,
+body {
+  background-color: white;
+  color: @brown1;
+  font-family: @droidserif;
+  font-size: 14px;
+}
+input,
+textarea {
+  padding: 5px;
+  .border-radius(3px);
+  border: 1px solid grey;
+
+  // font
+  color: @brown1;
+  font-family: @droidserif;
+  font-size: 14px;
+}
+input[type=text] {
+  width: 100%;
+}
+textarea{
+  width:100%;
+}
+#content {
+  width: 60%;
+  margin: 0 auto;
+  section {
+    .column(12);
+    margin-bottom: 10px;
+  }
+  h2{
+    .column(12);
+    margin-top:20px;
+    margin-bottom: 10px;
+  }
+}
+
+section > div > div {
+  .column(12);
+  width:99.5%;
+
+  h3{
+    float:left;
+  }
+  button{
+    float:right;
+  }
+}
+hr{
+  .column(12);
+  margin-top: 30px;
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,.75), rgba(0,0,0,0));
+}
+/*************** JSON Ouput **************/
+#source {
+  textarea {
+    display: block;
+    width: 100%;
+  }
+}
+#result {
+  padding: 1em;
+}
+.pass {
+  .border-radius(3px);
+  background-color: @lightGreen;
+  color: @green;
+  border: 2px solid @green;
+}
+.fail {
+  .border-radius(3px);
+  background-color: @pink;
+  color: @red;
+  border: 2px solid @red;
+}
+.cmsLabel {
+  .column(3);
+  margin-top: 10px;
+}
+.cmsInput {
+  .column(9);
+  margin-top: 10px;
+}
+@media screen and (max-width: 960px) {
+  .cmsLabel {
+    .column(12);
+    margin-top: 10px;
+  }
+  .cmsInput {
+    .column(12);
+    margin-top: 5px;
+  }
+  section{
+    .column(12);
+  }
+  #result{
+    word-wrap: break-word;
+  }
+}

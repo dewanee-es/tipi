@@ -1,0 +1,74 @@
+@import (reference) 'fonts.less';
+@import (reference) 'colors.less';
+
+.v-align {
+  position: relative;
+  top: 25%;
+  display: block;
+}
+.fPages {
+  border:none;
+  color: @grey2;
+  text-align: center;
+  padding-top: 20px;
+  span {
+    .v-align;
+    font-family: @ptSerif;
+    font-style: italic;
+    font-size: 1em;
+    margin: 0;
+    a {
+      color: @grey2;
+      text-decoration: none;
+    }
+    a:hover {
+      color: white;
+    }
+  }
+}
+.fContacts {
+  border:none;
+  //border-top: 1px solid @grey4;
+  text-align: center;
+  padding-top: 10px;
+  ul {
+    padding: 0;
+    display: inline-block;
+    margin: 0 auto;
+    li {
+      display: inline-block;
+      margin: 0;
+      padding: 10px;
+      height: 30px;
+      img {
+        margin: 0 auto;
+        max-width: 100%;
+        max-height: 100%;
+      }
+
+      img:hover {
+        transform:translateY(-1px);
+      }
+    }
+  }
+}
+
+.fCopyright {
+  border:none;
+  color: @grey2;
+  text-align: center;
+  background-color: @grey0;
+  padding: 10px;
+  p {
+    .v-align;
+    font-size: 0.8em;
+    margin: 0;
+    a {
+      color: @grey1;
+      text-decoration: none;
+    }
+    a:hover {
+      color: white;
+    }
+  }
+}

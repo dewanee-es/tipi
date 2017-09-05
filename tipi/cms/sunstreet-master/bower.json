@@ -1,0 +1,15 @@
+{
+  "name": "ismailmarmoush-github-io",
+  "private": true,
+  "dependencies": {
+    "jquery": "~2.1.3",
+    "pace": "~1.0.2",
+    "routie": "~0.3.2",
+    "highlight": "~7.0.1",
+    "jsonlint": "~1.6.0",
+    "marked": "~0.3.3"
+  },
+  "devDependencies": {
+    
+  }
+}

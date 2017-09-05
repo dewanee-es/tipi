@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>{{ site_title }}</title>
+    <meta name="description" content="{{ site_description }}" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" href="{{ theme_url }}/css/bastard.min.css" />
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Noto+Serif:400,700,400italic|Open+Sans:700,400|EB+Garamond" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ theme_url }}/images/apple-touch-icon-144x144-precomposed.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ theme_url }}/images/apple-touch-icon-114x114-precomposed.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ theme_url }}/images/apple-touch-icon-72x72-precomposed.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ theme_url }}/images/apple-touch-icon-57x57-precomposed.png" />
+    <link rel="apple-touch-icon-precomposed" href="{{ theme_url }}/images/apple-touch-icon-precomposed.png" />
+    <link rel="apple-touch-icon" href="{{ theme_url }}/images/apple-touch-icon.png" />
+    <link rel="icon" type="image/x-icon" href="{{ theme_url }}/images/favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="{{ theme_url }}/images/favicon.ico" />
+
+    <!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+    <link rel="apple-touch-icon" sizes="57x57" href="{{ theme_url }}/images/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="60x60" href="{{ theme_url }}/images/apple-touch-icon-60x60.png" />
+    <!-- For first- and second-generation iPad: -->
+    <link rel="apple-touch-icon" sizes="72x72" href="{{ theme_url }}/images/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ theme_url }}/images/apple-touch-icon-76x76.png" />
+    <!-- For iPhone with high-resolution Retina display running iOS ≤ 6: -->
+    <link rel="apple-touch-icon" sizes="114x114" href="{{ theme_url }}/images/apple-touch-icon-114x114.png" />
+    <!-- For iPhone with high-resolution Retina display running iOS ≥ 7: -->
+    <link rel="apple-touch-icon" sizes="120x120" href="{{ theme_url }}/images/apple-touch-icon-120x120.png" />
+    <!-- For iPad with high-resolution Retina display running iOS ≤ 6: -->
+    <link rel="apple-touch-icon" sizes="144x144" href="{{ theme_url }}/images/apple-touch-icon-144x144.png" />
+    <!-- For iPad with high-resolution Retina display running iOS ≥ 7: -->
+    <link rel="apple-touch-icon" sizes="152x152" href="{{ theme_url }}/images/apple-touch-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ theme_url }}/images/apple-touch-icon-180x180.png" />
+    <link rel="icon" type="image/png" href="{{ theme_url }}/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="{{ theme_url }}/images/favicon-194x194.png" sizes="194x194">
+    <link rel="icon" type="image/png" href="{{ theme_url }}/images/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="{{ theme_url }}/images/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="{{ theme_url }}/images/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="{{ theme_url }}/images/manifest.json">
+    <link rel="shortcut icon" href="{{ theme_url }}/images/favicon.ico">
+    <meta name="msapplication-TileColor" content="#000000">
+    <meta name="msapplication-TileImage" content="{{ theme_url }}/images/mstile-144x144.png">
+    <meta name="theme-color" content="#000000">
+  </head>
+  <body>
+    <!-- Side Menu -->
+	<a id="slidemenu-toggle" href="{{ base_url }}" class="site-nav-logo">
+	  <span class="logo" style="background-image: url({{ theme_url }}/images/icon.png)"></span>
+	</a>
+    <nav id="slidemenu-wrapper">
+	  <div id="menu">
+		<ul class="slidemenu-nav">
+		  <a id="slidemenu-close" href="#" class="btn btn-md pull-right toggle"><i class="fa fa-chevron-circle-left fa-2x"></i></a>
+		</ul>
+	  </div>
+    </nav>
+    <!-- /Side Menu -->
+
+	<header class="post-header site-head" id="header">
+		<a class="blog-logo" href="{{ base_url }}">
+			<img src="{{ site_logo }}" alt="{{ site_title }}" />
+			<span class="blog-title">{{ site_title }}</span>
+		</a>
+	</header>
+	
+	<div id="top" class="top-ornament"></div>
+	<main class="content" role="main">
+
+		<article class="post page">
+
+			<div id="error"></div>
+
+			<h1 class="post-title">{{ site_title }}</h1>
+
+			<div id="tocIcon"></div>
+			<div id="toc" class="toc">
+			  <ul></ul>
+			</div>
+			
+			<section class="post-content" id="content"></section>
+			
+		</article>
+
+	</main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="row">
+                 <section id="copyright" class="copyright"></section>
+                 <section id="poweredby" class="poweredby">Based on original <a href="http://github.com/karloespiritu/Bastard"><strong>Bastard</strong></a> Theme</section>
+            </div>
+            <div class="row">
+                 <a id="scroll-to-top" class="pull-right" href="#top"><i class="fa fa-chevron-circle-up fa-2x"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script type="text/javascript" src="{{ theme_url }}/js/scripts.min.js"></script>
+</body>
+</html>

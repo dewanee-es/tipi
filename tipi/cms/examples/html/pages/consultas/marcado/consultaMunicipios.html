@@ -1,0 +1,83 @@
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            Progreso por Municipios
+            <small>(% Marcado)</small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-cube"></i> Inicio</a></li>
+            <li>Marcado</li>
+            <li class="active">Progreso por Municipios</li>
+          </ol>
+        </section>        
+
+        <!-- Main content -->
+        <section class="content" data-ng-controller="ConsultaDepuracionController">
+			<div class="row">
+		    	<div class="col-xs-12">
+	            	<div class="box box-primary">
+				    	<div class="box-header with-border">
+							<h3 class="box-title">Seleccione los datos de la consulta:</h3>
+		                </div><!-- /.box-header -->
+		                <form class="form-horizontal" data-ng-controller="ConsultaEntidadesController">
+		                	<div class="box-body">
+			                	<div class="form-group">
+			                  		<label for="cpro" class="col-xs-3 control-label">Provincia</label>
+			                  		<div class="col-xs-9">
+			                  			<select id="provinciaSelect" ng-model="provinciaSelect" class="form-control select2" ng-change="getMunicipios(provinciaSelect.cpro)"
+			                  				ng-options="provincia.dcProv for provincia in provincias | orderStringBy: 'dcProv'">
+							      		</select>
+							      	</div>
+				                </div>
+			                  	<div class="form-group">
+			                  		<label for="cmun" class="col-xs-3 control-label">Municipio</label>
+			                  		<div class="col-xs-9">
+			                  			<select id="municipioSelect" ng-model="municipioSelect" class="form-control select2" ng-disabled="disMunicipio"
+			                  				ng-options="municipio.dcCmun for municipio in municipios | orderStringBy: 'dcCmun' track by municipio.cmun">
+				                  		</select>
+				                  	</div>
+			                  	</div>          
+	                   		</div><!-- /.box-body -->
+		                  	<div class="box-footer" >
+				            	<button type="submit" class="btn btn-primary" data-ng-click="getMunicipiosPorcentajes(provinciaSelect.cpro,municipioSelect.cmun)">Consultar</button>
+				            </div>
+	                	</form>
+              		</div><!-- /.box -->
+				</div>
+			</div>
+			
+			<div class="row" data-ng-show="mostrarTabla" data-ng-repeat="municipio in municipiosTotal">
+				<div class="col-xs-12">
+					<div class="box box-info">
+				    	<div class="box-header">
+							<h3 class="box-title">% Completado</h3>
+				    		<div class="box-tools pull-right">
+				    			<span class="label bg-yellow">APPs</span>&nbsp;<span class="label bg-light-blue">Inmuebles</span>
+				    		</div>
+						</div><!-- /.box-header -->
+					    <div class="box-body no-padding">
+							<table class="table table-bordered">
+								<thead>
+			                      <tr>
+		            	            <th>% Aproximaciones Postales</th>
+		                	        <th>% Inmuebles</th>
+			                      </tr>
+			                    </thead>
+								<tbody>
+								  <td>
+					    			<knob data="calculaProcentaje(municipio[2],municipio[3])" width="90" height="90" color="#f39c12" readOnly="true"/>
+									<div class="knob-label">Aproximaciones Postales</div>
+								  </td>
+								  <td>
+					    			<knob data="calculaProcentaje(municipio[4],municipio[5])" width="90" height="90" color="#3c8dbc" readOnly="true"/>
+									<div class="knob-label">Inmuebles</div>
+								  </td>
+								</tbody>
+							</table>
+						</div>
+				    </div><!-- /.box -->  
+				</div>
+			</div>
+		</section>
+
+  	 

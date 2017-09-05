@@ -1,0 +1,396 @@
+{
+	"app": [
+		{
+			"marca": "NUMDESPR",
+			"pos": 1,
+			"valores": {
+				"D": {
+					"desc": "La numeración de la APP es desproporcionada respecto a las APPs cercanas",
+					"leyenda": ["NUM", "fa-ellipsis-h"]
+				}
+			}
+		},
+		{
+			"marca": "CALIF",
+			"pos": 4,
+			"valores": {
+				"0": {
+					"desc": "Existen APPs en el edificio con calificador vacío",
+					"leyenda": ["CAL", "fa-remove"]
+				},
+				"1": {
+					"desc": "Existen APPs en el edificio con calificador",
+					"leyenda": ["CAL", "fa-plus"]
+				}
+			}
+		},
+		{
+			"marca": "CALIFEQ",
+			"pos": 5,
+			"valor": {
+				"desc": "Existe un calificador equivalente (%s) en el resto de APPs del edificio",
+				"leyenda": ["CAL", "fa-edit"]
+			}
+		},
+		{
+			"marca": "CALIFBLOQEQ",
+			"pos": 6,
+			"longitud": 2,
+			"valor": {
+				"desc": "Existe un bloque equivalente (%s) al calificador en el resto de APPs del edificio",
+				"leyenda": ["CAL", "fa-random", "B"]
+			}
+		},
+		{
+			"marca": "CALIFPORTEQ",
+			"pos": 8,
+			"longitud": 2,
+			"valor": {
+				"desc": "Existe un portal equivalente (%s) al calificador en el resto de APPs del edificio",
+				"leyenda": ["CAL", "fa-random", "P"]
+			}
+		},
+		{
+			"marca": "CALIFTIPO",
+			"pos": 10,
+			"valores": {
+				"N": {
+					"desc": "Las APPs del edificio tienen calificador numérico",
+					"leyenda": ["CAL", "fa-sort-numeric-asc"]
+				},
+				"A": {
+					"desc": "Las APPs del edificio tienen calificador alfabético",
+					"leyenda": ["CAL", "fa-sort-alpha-asc"]
+				}
+			}
+		},
+		{
+			"marca": "CALIFPREV",
+			"pos": 11,
+			"valor": {
+				"desc": "No existe el calificador previo (%s) en el resto de APPs del edificio",
+				"leyenda": ["CAL", "fa-unlink"]
+			}
+		},
+		{
+			"marca": "BLOQ",
+			"pos": 13,
+			"valores": {
+				"0": {
+					"desc": "Existen APPs en el edificio con bloque vacío",
+					"leyenda": ["BLQ", "fa-remove"]
+				},
+				"1": {
+					"desc": "Existen APPs en el edificio con bloque",
+					"leyenda": ["BLQ", "fa-plus"]
+				}
+			}
+		},
+		{
+			"marca": "BLOQEQ",
+			"pos": 14,
+			"longitud": 2,
+			"valor": {
+				"desc": "Existe un bloque equivalente (%s) en el resto de APPs del edificio",
+				"leyenda": ["BLQ", "fa-edit"]
+			}
+		},
+		{
+			"marca": "BLOQCALIFEQ",
+			"pos": 16,
+			"valor": {
+				"desc": "Existe un calificador equivalente (%s) al bloque en el resto de APPs del edificio",
+				"leyenda": ["BLQ", "fa-random", "C"]
+			}
+		},
+		{
+			"marca": "BLOQPORTEQ",
+			"pos": 17,
+			"longitud": 2,
+			"valor": {
+				"desc": "Existe un portal equivalente (%s) al bloque en el resto de APPs del edificio",
+				"leyenda": ["BLQ", "fa-random", "P"]
+			}
+		},
+		{
+			"marca": "BLOQTIPO",
+			"pos": 19,
+			"valores": {
+				"N": {
+					"desc": "Las APPs del edificio tienen bloque numérico",
+					"leyenda": ["BLQ", "fa-sort-numeric-asc"]
+				},
+				"A": {
+					"desc": "Las APPs del edificio tienen bloque alfabético",
+					"leyenda": ["BLQ", "fa-sort-alpha-asc"]
+				}
+			}
+		},
+		{
+			"marca": "BLOQPREV",
+			"pos": 20,
+			"longitud": 2,
+			"valor": {
+				"desc": "No existe el bloque previo (%s) en el resto de APPs del edificio",
+				"leyenda": ["BLQ", "fa-unlink"]
+			}
+		},
+		{
+			"marca": "BLOQDIC",
+			"pos": 22,
+			"valores": {
+				"D": {
+					"desc": "El valor de bloque no existe en el diccionario de valores válidos",
+					"leyenda": ["BLQ", "fa-book"]
+				}
+			}
+		},
+		{
+			"marca": "PORT",
+			"pos": 25,
+			"valores": {
+				"0": {
+					"desc": "Existen APPs en el edificio con portal vacío",
+					"leyenda": ["POR", "fa-remove"]
+				},
+				"1": {
+					"desc": "Existen APPs en el edificio con portal",
+					"leyenda": ["POR", "fa-plus"]
+				}
+			}
+		},
+		{
+			"marca": "PORTEQ",
+			"pos": 26,
+			"longitud": 2,
+			"valor": {
+				"desc": "Existe un portal equivalente (%s) en el resto de APPs del edificio",
+				"leyenda": ["POR", "fa-edit"]
+			}
+		},
+		{
+			"marca": "PORTCALIFEQ",
+			"pos": 28,
+			"valor": {
+				"desc": "Existe un calificador equivalente (%s) al portal en el resto de APPs del edificio",
+				"leyenda": ["POR", "fa-random", "C"]
+			}
+		},
+		{
+			"marca": "PORTBLOQEQ",
+			"pos": 29,
+			"longitud": 2,
+			"valor": {
+				"desc": "Existe un bloque equivalente (%s) al portal en el resto de APPs del edificio",
+				"leyenda": ["POR", "fa-random", "B"]
+			}
+		},
+		{
+			"marca": "PORTTIPO",
+			"pos": 31,
+			"valores": {
+				"N": {
+					"desc": "Las APPs del edificio tienen portal numérico",
+					"leyenda": ["POR", "fa-sort-numeric-asc"]
+				},
+				"A": {
+					"desc": "Las APPs del edificio tienen portal alfabético",
+					"leyenda": ["POR", "fa-sort-alpha-asc"]
+				}
+			}
+		},
+		{
+			"marca": "PORTPREV",
+			"pos": 32,
+			"longitud": 2,
+			"valor": {
+				"desc": "No existe el portal previo (%s) en el resto de APPs del edificio",
+				"leyenda": ["POR", "fa-unlink"]
+			}
+		},
+		{
+			"marca": "PORTDIC",
+			"pos": 34,
+			"valores": {
+				"D": {
+					"desc": "El valor de portal no existe en el diccionario de valores válidos",
+					"leyenda": ["POR", "fa-book"]
+				}
+			}
+		}
+	],
+	"inmueble": [
+		{
+			"marca": "ESC",
+			"pos": 1,
+			"valores": {
+				"0": {
+					"desc": "Existen inmuebles en la APP con escalera vacía",
+					"leyenda": ["ESC", "fa-remove"]
+				},
+				"1": {
+					"desc": "Existen inmuebles en la APP con escalera",
+					"leyenda": ["ESC", "fa-plus"]
+				}
+			}
+		},
+		{
+			"marca": "ESCEQ",
+			"pos": 2,
+			"longitud": 2,
+			"valor": {
+				"desc": "Existe una escalera equivalente (%s) en el resto de inmuebles de la APP",
+				"leyenda": ["ESC", "fa-edit"]
+			}
+		},
+		{
+			"marca": "ESCPOS",
+			"pos": 4,
+			"valores": {
+				"1": {
+					"desc": "No existe la escalera derecha (DR) en el resto de inmuebles de la APP",
+					"leyenda": ["ESC", "fa-arrow-right"]
+				},
+				"2": {
+					"desc": "No existe la escalera izquierda (IZ) en el resto de inmuebles de la APP",
+					"leyenda": ["ESC", "fa-arrow-left"]
+				},
+				"3": {
+					"desc": "No existe la escalera izquierda (IZ) ni derecha (DR) en el resto de inmuebles de la APP",
+					"leyenda": ["ESC", "fa-arrows-h"]
+				}
+			}
+		},
+		{
+			"marca": "ESCTIPO",
+			"pos": 5,
+			"valores": {
+				"N": {
+					"desc": "Los inmuebles de la APP tienen escalera numérica",
+					"leyenda": ["ESC", "fa-sort-numeric-asc"]
+				},
+				"A": {
+					"desc": "Los inmuebles de la APP tienen escalera alfabética",
+					"leyenda": ["ESC", "fa-sort-alpha-asc"]
+				}
+			}
+		},
+		{
+			"marca": "ESCPREV",
+			"pos": 6,
+			"longitud": 2,
+			"valor": {
+				"desc": "No existe la escalera previa (%s) en el resto de inmuebles de la APP",
+				"leyenda": ["ESC", "fa-unlink"]
+			}
+		},
+		{
+			"marca": "ESCDIC",
+			"pos": 8,
+			"valores": {
+				"D": {
+					"desc": "El valor de escalera no existe en el diccionario de valores válidos",
+					"leyenda": ["ESC", "fa-book"]
+				}
+			}
+		},
+		{
+			"marca": "PLANINF",
+			"pos": 10,
+			"valores": {
+				"D": {
+					"desc": "La planta del inmueble es desproporcionada respecto al resto de inmuebles en la misma escalera",
+					"leyenda": ["PLA", "fa-ellipsis-v"]
+				},
+				"I": {
+					"desc": "No existe ningún inmueble en la planta inferior en la misma escalera",
+					"leyenda": ["PLA", "fa-level-down"]
+				}
+			}
+		},
+		{
+			"marca": "PLANDIC",
+			"pos": 11,
+			"valores": {
+				"D": {
+					"desc": "El valor de planta no existe en el diccionario de valores válidos",
+					"leyenda": ["PLA", "fa-book"]
+				}
+			}
+		},
+		{
+			"marca": "PUERT",
+			"pos": 13,
+			"valores": {
+				"0": {
+					"desc": "Existe un inmueble en la planta con la puerta vacía",
+					"leyenda": ["PUE", "fa-remove"]
+				},
+				"1": {
+					"desc": "Existen inmuebles en la planta con la puerta informada",
+					"leyenda": ["PUE", "fa-plus"]
+				}
+			}
+		},
+		{
+			"marca": "PUERTEQ",
+			"pos": 14,
+			"longitud": 4,
+			"valor": {
+				"desc": "Existe una puerta equivalente (%s) en el resto de inmuebles de la planta",
+				"leyenda": ["PUE", "fa-edit"]
+			}
+		},
+		{
+			"marca": "PUERTPOS",
+			"pos": 18,
+			"valores": {
+				"1": {
+					"desc": "No existe la puerta derecha (DR) en el resto de inmuebles de la planta",
+					"leyenda": ["PUE", "fa-arrow-right"]
+				},
+				"2": {
+					"desc": "No existe la puerta izquierda (IZ) en el resto de inmuebles de la planta",
+					"leyenda": ["PUE", "fa-arrow-left"]
+				},
+				"3": {
+					"desc": "No existe la puerta izquierda (IZ) ni derecha (DR) en el resto de inmuebles de la planta",
+					"leyenda": ["PUE", "fa-arrows-h"]
+				}
+			}
+		},
+		{
+			"marca": "PUERTTIPO",
+			"pos": 19,
+			"valores": {
+				"N": {
+					"desc": "Los inmuebles de la planta tienen puerta numérica",
+					"leyenda": ["PUE", "fa-sort-numeric-asc"]
+				},
+				"A": {
+					"desc": "Los inmuebles de la planta tienen puerta alfabética",
+					"leyenda": ["PUE", "fa-sort-alpha-asc"]
+				}
+			}
+		},
+		{
+			"marca": "PUERTPREV",
+			"pos": 20,
+			"longitud": 4,
+			"valor": {
+				"desc": "No existe la puerta previa (%s) en el resto de inmuebles de la planta",
+				"leyenda": ["PUE", "fa-unlink"]
+			}
+		},
+		{
+			"marca": "PUERTDIC",
+			"pos": 24,
+			"valores": {
+				"D": {
+					"desc": "El valor de puerta no existe en el diccionario de valores válidos",
+					"leyenda": ["PUE", "fa-book"]
+				}
+			}
+		}
+	]
+}

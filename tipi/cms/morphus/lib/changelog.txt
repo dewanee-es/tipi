@@ -1,0 +1,11 @@
+Pico -> Morphus
+===============
+
+protected $twig														->							->	$this->container->twig
+public function getConfig($configName = null)
+	$configName = null												->							->	$this->container->config
+	$configName != null												->	core.config.get			->	Core::doConfigGet(&$configName, &$configValue)
+public function getMetaHeaders():$headers							->	page.meta.headers		->	Page::doMetaHeaders(&$headers)
+	triggerEvent(onMetaHeaders)										->	after page.meta.headers
+public function parseFileMeta($rawContent, array $headers):$meta	->	page.meta.parse			->	Page::doMetaParse(&$rawContent, &$headers, &$meta)
+

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Template test</title>
+<script src="../js/template7.min.js"></script>
+<script src="../js/twig.min.js"></script>
+</head>
+<body>
+<script>
+var engines = [{
+	name: 'Template7',
+	render: function(template, data) {
+		Template7.registerHelper('random', function (arr, options) {
+			return arr[Math.floor(Math.random() * arr.length)];
+		});
+		var compiledTemplate = Template7.compile(template);
+		return compiledTemplate(data);
+	}
+},{
+	name: 'Twig',
+	render: function(template, data) {
+		var tpl = twig({
+			data: template
+		});
+		return tpl.render(data);
+	}
+}];
+var tests = [{
+	template: "Letra: {{ random(['a', 'b', 'c']) }}",
+	data: {}
+},{
+	template: "Letra: {{random(['a', 'b', 'c'])}}",
+	data: {}
+},{
+	template: "Letra: {{random(['a', 'b', 'c']}}",
+	data: {}
+},{
+	template: "Letra: {{random ['a', 'b', 'c']}}",
+	data: {}
+},{
+	template: "Letra: {{random letras}}",
+	data: {letras: ['a', 'b', 'c']}
+},{
+	template: "Letra: {{random letros}}",
+	data: {letras: ['a', 'b', 'c']}
+}];
+document.write('<table border="1"><tr><td></td>');
+for(var e = 0; e < engines.length; e++) {
+	var engine = engines[e];
+	document.write('<td>' + engine.name + '</td>');
+}
+for(var t = 0; t < tests.length; t++) {
+	var test = tests[t];
+	document.write('<tr><td>' + test.template + '</td>');
+	for(var e = 0; e < engines.length; e++) {
+		var engine = engines[e];
+		var text = 'ERROR';
+		try {
+			text = engine.render(test.template, test.data);
+		} catch(ex) {
+			text = 'ERROR: ' + ex.message;
+		}
+		document.write('<td>' + text + '</td>');
+	}
+	document.write('</tr>');
+}
+document.write('</tr></table>');
+</script>
+</body>
+</html>

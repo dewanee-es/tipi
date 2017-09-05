@@ -1,0 +1,93 @@
+{
+  "global": {
+    "title": "Marmoush.com",
+    "tag": "Web and Big Data",
+    "img": "content/img/sunset.jpg",
+    "thumb":"img/thumb.jpg",
+    "disqusShortname": "ismailmarmoush",
+    "googleAnalyticsId": "UA-18732433-1"
+  },
+
+  "footer": {
+    "copyright": "<a href=\"http://marmoush.com/\">Marmoush.com</a> © 2015. All rights reserved unless stated. Designed & built with love, coffee and biscuits.",
+    "poweredBy": "Powered By <a href=\"https://github.com/m-io/sunstreet/\">Sunstreet</a>",
+    "shortAbout": "Who's Behind it"
+  },
+  "contacts": {
+    "0": {
+      "url": "http://github.com/ismailmarmoush",
+      "img": "img/github.png"
+    },
+    "1": {
+      "url": "https://plus.google.com/+IsmailMarmoush/",
+      "img": "img/googleplus.svg"
+    },
+    "2": {
+      "url": "https://www.linkedin.com/profile/view?id=235757224",
+      "img": "img/linkedin.png"
+    },
+    "3": {
+      "url": "http://stackoverflow.com/users/263215/ismail-marmoush",
+      "img": "img/stackoverflow.svg"
+    },
+    "4": {
+      "url": "https://behance.net/marmoush",
+      "img": "img/behance.png"
+    },
+    "5": {
+      "url": "https://hackerrank.com/ismailmarmoush",
+      "img": "img/hackerrank.png"
+    }
+  },
+  "pages": {
+    "0": {
+      "url": "content/pages/about.md",
+      "title": "About",
+      "tag": "",
+      "img": "",
+      "disqusEnable": false
+    },
+    "1": {
+      "url": "content/pages/portfolio.md",
+      "title": "Portfolio",
+      "tag": "",
+      "img": "",
+      "disqusEnable": false
+    }
+  },
+  "posts": {
+    "0": {
+      "url": "https://api.github.com/repos/ismailmarmoush/debian/readme",
+      "title": "Minimal Debian Installation",
+      "tag": "Linux",
+      "img": "content/img/debian-wallpaper.jpg",
+      "thumb": "content/img/debian-wallpaper.jpg",
+      "disqusIdentifier": "/000001",
+      "disqusLang": "en",
+      "disqusEnable": true,
+      "date": "2015-06-28"
+    },
+    "1": {
+      "url": "content/posts/Papyrus-Java-to-UML-Reverse-Engineering.md",
+      "title": "Papyrus Java To UML Reverse Engineering",
+      "tag": "Linux",
+      "img": "content/img/eclipse.png",
+      "thumb": "content/img/eclipse.png",
+      "disqusIdentifier": "/000003",
+      "disqusLang": "en",
+      "disqusEnable": true,
+      "date": "2015-06-28"
+    },
+    "2": {
+      "url": "content/posts/Native-Guide-To-Egyptian-Software-and-IT-Industry-From-Developers-To-Companies.md",
+      "title": "Native Guide To Egyptian Software Industry",
+      "tag": "Software Development",
+      "img": "content/img/office.jpg",
+      "thumb": "content/img/office.jpg",
+      "disqusIdentifier": "/000002",
+      "disqusLang": "en",
+      "disqusEnable": true,
+      "date": "2015-06-28"
+    }
+  }
+}
