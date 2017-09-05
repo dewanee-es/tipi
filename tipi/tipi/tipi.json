@@ -2,7 +2,7 @@
 	"global": {
 		"title": "Tipi",
 		"theme": "tipi",
-		"appDir": "js",
+		"appDir": ".",
 		"contentDir": "content"
 	},
 	"pages": {
