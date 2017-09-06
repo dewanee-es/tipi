@@ -4,6 +4,8 @@
 * themes/tipi/index.html
 * content
 * LICENSE
+* cms.css
+* Templating
 
 ROADMAP
 -------

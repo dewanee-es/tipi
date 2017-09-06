@@ -125,7 +125,7 @@ Utils.startsWith = function(str, val) {
 
 Utils.titleToLink = function(str) {
   'use strict';
-  return '/' + str.replace(/\s+/g, '-');
+  return '/' + encodeURIComponent(str.replace(/\s+/g, '-'));
 };
 
 /******************** App Animation **************************/
@@ -370,7 +370,7 @@ Content.reloadPage = function(val) {
 	  $('body').removeClass().addClass('post-template ' + (val.home ? 'home-template' : 'page-template'));
       $('pre').addClass('hljs');
 	  $('table').addClass('table table-bordered');
-      Content.setHeaderImg(val);
+      Content.setHeader(val);
       Content.runToc();
 	  Content.ready();
       Animation.smoothScrolling();
@@ -430,7 +430,7 @@ Content.routes = function() {
     Content.updateBrowserTitle(configContent.global.title);
     $(configApp.blogId).fadeOut(500, function() {
       $(configApp.sliderId).fadeIn(500, function() {
-        Content.setHeaderImg(configContent.global);
+        Content.setHeader(configContent.global);
       });
     });
 	*/
@@ -503,12 +503,18 @@ Content.runToc = function(container) {
   }
 };
 
-Content.setHeaderImg = function(val) {
+Content.setHeader = function(val) {
   'use strict';
   if (val.img) {
-    $(configApp.headerId).css('background-image', 'url(' + val.img + ')');
+    //$(configApp.headerId).css('background-image', 'url(' + val.img + ')');
+    if (val.headline) {
+      $(configApp.headerId).html('<div id="headline" style="background-image: url(' + val.img + ')"><h1>' + val.headline + '</h1></div>');
+    } else {
+      $(configApp.headerId).html('<div id="banner" style="background-image: url(' + val.img + ')"></div>');
+    }
   } else {
-    $(configApp.headerId).css('background-image', '');
+    //$(configApp.headerId).css('background-image', '');
+	$(configApp.headerId).empty();  
   }
 };
 
@@ -755,7 +761,7 @@ Loader.loadJson = function(path, callback) {
 Backend.init = function(appDir, configJson) {
   configJson.global = configJson.global || {};
   configJson.global.appDir = appDir;
-  Loader.loadJavascript(appDir + '/js/jquery.js', function() {
+  Loader.loadJavascript(appDir + '/js/vendor/jquery.min.js', function() {
 	if(!Content.config(configJson)) {
 	  return;
 	}
@@ -789,9 +795,9 @@ Backend.init = function(appDir, configJson) {
 	  }
 	});
   });
-  Loader.loadJavascript(appDir + '/js/markup.min.js');
-  Loader.loadJavascript(appDir + '/js/highlight.pack.js');
-  Loader.loadJavascript(appDir + '/js/marked.min.js');
+  Loader.loadJavascript(appDir + '/js/vendor/markup.min.js');
+  Loader.loadJavascript(appDir + '/js/vendor/highlight.pack.js');
+  Loader.loadJavascript(appDir + '/markdown-it/markdown-it.min.js');
   Loader.loadJavascript(appDir + '/js/yaml.min.js');
   Loader.loadJavascript(appDir + '/js/routie.min.js');
   Loader.loadJavascript(appDir + '/js/markup.extras.min.js');
