@@ -1,9 +1,7 @@
 {
 	"global": {
 		"title": "Tipi",
-		"theme": "tipi",
-		"appDir": ".",
-		"contentDir": "content"
+		"theme": "tipi"
 	},
 	"pages": {
 		"index": "Tipi",
@@ -12,9 +10,5 @@
 		"documentation": "Documentation",
 		"themes": "Themes",
 		"plugins": "Plugins"
-	},
-	"metadata": {
-		"begin": "---",
-		"end": "---"
 	}
 }

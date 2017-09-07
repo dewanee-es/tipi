@@ -46,7 +46,7 @@ var configContent = {
 	extension: 'md',
 	logo: '',
 	appDir: '.',
-	contentDir: ''
+	contentDir: 'content/'
   },
   metadata: {
     begin: "---",
@@ -305,8 +305,18 @@ Content.footerInit = function() {
 
 Content.markdown = function(text, callback) {
   'use strict';
-  var md = window.markdownit();
-  var defaultRender = md.renderer.rules.link_open || function(tokens, idx, options, env, self) {
+  var md = window.markdownit({
+	  highlight: function (str, lang) {
+		  if (lang && hljs.getLanguage(lang)) {
+		      try {
+		    	  return hljs.highlight(lang, str).value;
+		      } catch (__) {}
+		  }
+
+		  return ''; // use external default escaping
+	  }
+  });
+  var defaultLinkOpenRender = md.renderer.rules.link_open || function(tokens, idx, options, env, self) {
 	return self.renderToken(tokens, idx, options);
   };
   md.renderer.rules.link_open = function(tokens, idx, options, env, self) {
@@ -324,25 +334,17 @@ Content.markdown = function(text, callback) {
 		href = '#' + hash + href;
 		tokens[idx].attrSet('href', href);
 	}
-	return defaultRender(tokens, idx, options, env, self);
+	return defaultLinkOpenRender(tokens, idx, options, env, self);
   };
-  /*var options = {
-    highlight: function(code, lang) {
-	  if(lang) {
-        return hljs.highlightAuto(code).value;
-	  } else {
-	    return code;
+  var defaultImageRender = md.renderer.rules.image;
+  md.renderer.rules.image = function (tokens, idx, options, env, self) {
+	  var src = tokens[idx].attrGet('src');
+	  if(src.indexOf('://') == -1) {
+		  src = configContent.global.contentDir + src;
+		  tokens[idx].attrSet('src', src);
 	  }
-    },
-	renderer: renderer
-  };
-  marked(md, options, function(err, output) {
-    if (err) {
-      throw err;
-    }
-    callback(output);
-  });
-  */
+	  return defaultImageRender(tokens, idx, options, env, self);
+  }
   var output = md.render(text);
   callback(output);
 };
@@ -834,7 +836,7 @@ Backend.init = function(appDir, configJson) {
 	
 	try {
 		Loader.loadJson(filename, function(configJson) {
-			var appDir = '_app';
+			var appDir = configContent.global.appDir;
 			if(configJson.global && configJson.global.appDir) {
 				appDir = configJson.global.appDir;
 			}
