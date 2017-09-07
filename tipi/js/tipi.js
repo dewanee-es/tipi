@@ -45,7 +45,7 @@ var configContent = {
 	theme: 'default',
 	extension: 'md',
 	logo: '',
-	appDir: '_app',
+	appDir: '.',
 	contentDir: ''
   },
   metadata: {
@@ -105,6 +105,7 @@ Utils.getUrl = function(page) {
 
 Utils.showErrorMsg = function(msg, description) {
   'use strict';
+  console.error(msg + ': ' + description);
   $(configApp.errorId).html('<strong>' + msg + '</strong><br/>' + description);
   $(configApp.errorId).show();
 };
@@ -302,10 +303,14 @@ Content.footerInit = function() {
   $(configApp.fPages + '> span').html(pageNames);
 };
 
-Content.markdown = function(md, callback) {
+Content.markdown = function(text, callback) {
   'use strict';
-  var renderer = new marked.Renderer();
-  renderer.link = function(href, title, text) {
+  var md = window.markdownit();
+  var defaultRender = md.renderer.rules.link_open || function(tokens, idx, options, env, self) {
+	return self.renderToken(tokens, idx, options);
+  };
+  md.renderer.rules.link_open = function(tokens, idx, options, env, self) {
+	var href = tokens[idx].attrGet('href');
 	if(href.indexOf('://') == -1) {
 		var hash = Utils.getHash();
 		if(hash === false || hash.length == 0) {
@@ -313,11 +318,15 @@ Content.markdown = function(md, callback) {
 		} else {
 			hash = hash.substr(0, hash.lastIndexOf('/') + 1);
 		}
+		if(href.endsWith('.md')) {
+			href = href.substr(0, href.length - 3);
+		}
 		href = '#' + hash + href;
+		tokens[idx].attrSet('href', href);
 	}
-	return marked.Renderer.prototype.link.call(this, href, title, text);
+	return defaultRender(tokens, idx, options, env, self);
   };
-  var options = {
+  /*var options = {
     highlight: function(code, lang) {
 	  if(lang) {
         return hljs.highlightAuto(code).value;
@@ -333,6 +342,9 @@ Content.markdown = function(md, callback) {
     }
     callback(output);
   });
+  */
+  var output = md.render(text);
+  callback(output);
 };
 
 Content.metadata = function(data, metadata) {
@@ -595,8 +607,7 @@ Backend.loadContent = function(url, callback) {
     $('<div></div>').load(url, function(data, status, xhr) {
       if (status === 'error') {
 	    $('h1').html('Page not found');
-        var msg = 'Sorry but there was an error';
-        Utils.showErrorMsg(msg, xhr.status + ': ' + xhr.statusText);
+        Utils.showErrorMsg('Page ' + url + ' not found', 'Sorry but there was an error (' + xhr.status + ': ' + xhr.statusText + ')');
       }
       if (status === 'success') {
 	    Utils.hideErrorMsg();
@@ -795,12 +806,13 @@ Backend.init = function(appDir, configJson) {
 	  }
 	});
   });
-  Loader.loadJavascript(appDir + '/js/vendor/markup.min.js');
   Loader.loadJavascript(appDir + '/js/vendor/highlight.pack.js');
+  Loader.loadJavascript(appDir + '/js/vendor/markup.min.js', function() {
+	  Loader.loadJavascript(appDir + '/js/vendor/markup.extras.min.js');
+  });  
+  Loader.loadJavascript(appDir + '/js/vendor/routie.min.js');
+  Loader.loadJavascript(appDir + '/js/vendor/yaml.min.js');
   Loader.loadJavascript(appDir + '/markdown-it/markdown-it.min.js');
-  Loader.loadJavascript(appDir + '/js/yaml.min.js');
-  Loader.loadJavascript(appDir + '/js/routie.min.js');
-  Loader.loadJavascript(appDir + '/js/markup.extras.min.js');
   Loader.loadCss(appDir + '/css/highlight.min.css');
 };
 

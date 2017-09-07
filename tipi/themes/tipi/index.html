@@ -5,19 +5,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
   <title></title>
-
-  <!-- Stylesheets -->
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/pace.css">
-  <link rel="stylesheet" href="css/solarized_dark.css">
-  <!--Scripts -->
-  <script src="js/jquery.js"></script>
-  <script src="js/marked.min.js"></script>
-  <script src="js/pace.min.js"></script>
-  <script src="js/routie.min.js"></script>
-  <script src="js/highlight.pack.js"></script>
-  <script src="js/main.js"></script>
-
+  <link rel="stylesheet" href="{{ theme_url }}/css/tipi.css">
+  <link rel="stylesheet" href="{{ theme_url }}/css/solarized_dark.css">
 </head>
 
 <body>
@@ -37,15 +26,17 @@
 
     <div class="push"> </div>
   </div>
+  
+  <div id="content"></div>
 
   <div id="footer">
-    <div class="fPages">
+    <div id="pages">
       <span></span>
     </div>
-    <div class="fContacts">
+    <div id="social">
       <ul></ul>
     </div>
-    <div class="fCopyright">
+    <div id="copyright">
       <p></p>
     </div>
   </div>

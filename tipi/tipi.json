@@ -7,6 +7,7 @@
 	},
 	"pages": {
 		"index": "Tipi",
+		"markdown": "Markdown",
 		"quick-start": "Quick start",
 		"documentation": "Documentation",
 		"themes": "Themes",

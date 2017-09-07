@@ -1,11 +1,29 @@
 * cms.html
 * .gitignore
 * README.md
-* themes/tipi/index.html
 * content
 * LICENSE
 * cms.css
 * Templating
+* pace
+* anchor.svg
+* arrow-bottom.svg
+* theme default
+* screenshot.png (multiple devices, responsive)
+* markdown links
+* markdown images: https://github.com/markdown-it/markdown-it/blob/master/docs/architecture.md
+* markdown highlight
+* content.json format
+* samples: Verano
+* samples: Start
+* composer
+* tipi.css
+* font awesome
+* blog Verano notes
+* hash & links format
+* Url with hash part doesn't work. Ex: tipi.html#/MyPage
+* Review markdown page (#/markdown) and markdown renderer options
+* ROADMAP
 
 ROADMAP
 -------
