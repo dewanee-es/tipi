@@ -118,6 +118,10 @@ This is the simplest example of an ![image](markdown.png) embedded in a paragrap
 	
 This is an image example with a title attribute ![Alternate Message](markdown.png "This is a title") embedded in a paragraph.
 
+    Click on the image to open it: [![](markdown.png)](markdown.png)
+    
+Click on the image to open it: [![](markdown.png)](markdown.png)
+
 Lists
 -----
 

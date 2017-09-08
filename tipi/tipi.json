@@ -1,7 +1,6 @@
 {
 	"global": {
-		"title": "Tipi",
-		"theme": "tipi"
+		"title": "Tipi"
 	},
 	"pages": {
 		"index": "Tipi",

@@ -4,26 +4,29 @@
 * LICENSE
 * markdown test page
 * Templating
-* pace
+* pace (no está funcionando, creo que el loader de estilos no funciona bien), pace.css a theme y pace.css default (si no se define otra hoja de estilo) => pace.css a theme, no existe un css por defecto
 * anchor.svg
 * arrow-bottom.svg
-* theme tipi: cd-scroll-down
-* screenshot.png (multiple devices, responsive)
+* themes: tipi (cd-scroll-down), sunstreet, pico, default
 * markdown links
-* markdown image link
 * content.json format
 * samples: Verano
 * samples: Start
 * samples: Halloween
-* composer
-* themes: sunstreet, pico, default
-* font awesome
+* samples: Dev
+* samples: Wiki
+* Loader: 1. sunstreet 2. mkdocs 3. mdwiki 4. tiddlewiki 5. docsify 6. tipi 7. mok... 8. gitbook 9. jekyll 10. markdown blog 11. markdown wiki 12. markdown cms 13.
+* NO THEME (index page is the template), con theme falla!!
+* XHR no síncrono!!!
 * blog Verano notes
 * hash & links format
 * Url with hash part doesn't work. Ex: tipi.html#/MyPage
 * Review markdown page (#/markdown) and markdown renderer options
 * markdown: html, breaks, powerdown
 * ROADMAP
+* font awesome
+* composer
+* screenshot.png (multiple devices, responsive)
 
 ROADMAP
 -------
@@ -81,6 +84,7 @@ ROADMAP
 - _app: fade en reload page y al cargar el tema inicial y primera página
 - _app: social
 - http://www.mkdocs.org/	-> config en yaml
+-mdwiki
 - MARKDOWN
 - sanitize urls: _ -> %20 y demás
 - Title para subpáginas
@@ -128,3 +132,52 @@ ROADMAP
 - https://github.com/semplon/GeniXCMS
 - .editorconfig
 - https://docsify.js.org
+
+Static Site Generators
+----------------------
+
+DAUX.IO
+Documentation generator that uses a simple folder structure and Markdown files to create WebHelp on the fly. Needs to be installed on a web server. Key features are: Mobile-friendly responsive design, auto syntax highlighting, themes, flat design style, shareable SEO-friendly URLs, as well as support for Google Analytics and Piwik Analytics.
+Price: free (open source)
+http://daux.io
+MkDocs
+Static site generator geared towards building project documentation. Documentation source files are written in Markdown. For creation, needs Python installed on your system.
+Price: free (open source)
+http://www.mkdocs.org
+docpress
+Creates simple static documentation sites.
+Price: free (open source)
+http://docpress.github.io
+docsify
+Creates simple static documentation sites.
+Price: free (open source)
+https://docsify.js.org
+Docute
+Creates simple static documentation sites.
+Price: free (open source)
+https://docute.js.org
+ 
+ 
+The following is a list of some general open source static site generators that transform reStructuredText or Markdown into static web sites:
+
+http://jekyllrb.com
+https://getgrav.org
+https://blog.getpelican.com
+https://hexo.io
+http://brunch.io
+https://middlemanapp.com
+http://gohugo.io
+http://www.metalsmith.io
+http://wintersmith.io
+https://github.com/eudicots/Cactus
+https://nanoc.ws
+ 
+Many more static site generators are listed here along with figures about their current popularity:
+https://www.staticgen.com
+Documentation theme for GRAV
+Price: free (open source)
+https://github.com/getgrav/grav-theme-learn2
+
+https://libraries.io/search?keywords=recyclerview%2Cdocumentation&languages=JavaScript
+http://www.blogduwebdesign.com/ressources-documentation/ressources-generer-automatiquement-documentation-projets/2354
+https://npm.taobao.org/package/marked > dependants

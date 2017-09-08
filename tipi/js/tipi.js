@@ -42,7 +42,7 @@ var configContent = {
 	description: '',
 	author: '',
     welcome: 'index',
-	theme: 'default',
+	theme: false,
 	extension: 'md',
 	logo: '',
 	appDir: '.',
@@ -63,6 +63,9 @@ var configContent = {
     template: 'index',
 	style: '',
   	iconClass: 'fa fa-'	// Font Awesome
+  },
+  addons: {
+	pace: true
   }
 };
 var Backend = {};
@@ -90,6 +93,11 @@ Utils.getHash = function() {
     return false;
   }
 };
+
+Utils.getPath = function(page, relative) {
+	var pos = page.lastIndexOf('/');
+	return configContent.global.contentDir + page.substring(0, pos) + relative;
+}
 
 Utils.getUrl = function(page) {
 	var url;
@@ -202,7 +210,7 @@ Animation.toc = function() {
 
 /******************** Content Manipulation **************************/
 
-Content.config = function(data) {
+Content.config = function(data, meta) {
 	// Dynamic copyright
 	configContent.footer.copyright = '<a href="#">' + data.global.title + '</a> &copy; ' + (new Date()).getFullYear() + ' &bull; All rights reserved.';
 	
@@ -238,6 +246,11 @@ Content.config = function(data) {
 	// Metadata
 	configContent.metadata.begin = configContent.metadata.begin.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 	configContent.metadata.end = configContent.metadata.end.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+	
+	// HTML Meta
+	$.each(meta, function(key, val) {
+		configContent.global[key] = val;
+	});
 	
 	return true;
 };
@@ -303,7 +316,7 @@ Content.footerInit = function() {
   $(configApp.fPages + '> span').html(pageNames);
 };
 
-Content.markdown = function(text, callback) {
+Content.markdown = function(text, page, callback) {
   'use strict';
   var md = window.markdownit({
 	  highlight: function (str, lang) {
@@ -321,17 +334,21 @@ Content.markdown = function(text, callback) {
   };
   md.renderer.rules.link_open = function(tokens, idx, options, env, self) {
 	var href = tokens[idx].attrGet('href');
-	if(href.indexOf('://') == -1) {
-		var hash = Utils.getHash();
-		if(hash === false || hash.length == 0) {
-			hash = '/';
+	if(href.indexOf(':') == -1) {
+		if(href.indexOf('.') == -1 || href.endsWith(configContent.global.extension)) {
+			var hash = Utils.getHash();
+			if(hash === false || hash.length == 0) {
+				hash = '/';
+			} else {
+				hash = hash.substr(0, hash.lastIndexOf('/') + 1);
+			}
+			if(href.endsWith(configContent.global.extension)) {
+				href = href.substr(0, href.length - configContent.global.extension.length - 1);
+			}
+			href = '#' + hash + href;
 		} else {
-			hash = hash.substr(0, hash.lastIndexOf('/') + 1);
+			href = Utils.getPath(page.url, href);
 		}
-		if(href.endsWith('.md')) {
-			href = href.substr(0, href.length - 3);
-		}
-		href = '#' + hash + href;
 		tokens[idx].attrSet('href', href);
 	}
 	return defaultLinkOpenRender(tokens, idx, options, env, self);
@@ -339,8 +356,8 @@ Content.markdown = function(text, callback) {
   var defaultImageRender = md.renderer.rules.image;
   md.renderer.rules.image = function (tokens, idx, options, env, self) {
 	  var src = tokens[idx].attrGet('src');
-	  if(src.indexOf('://') == -1) {
-		  src = configContent.global.contentDir + src;
+	  if(src.indexOf(':') == -1) {
+		  src = Utils.getPath(page.url, src);
 		  tokens[idx].attrSet('src', src);
 	  }
 	  return defaultImageRender(tokens, idx, options, env, self);
@@ -378,7 +395,7 @@ Content.reloadPage = function(val) {
     if(metadata.render) {
 	  data = Content.render(data, {meta: metadata});
     }
-    Content.markdown(data, function(compiledMarkdown) {
+    Content.markdown(data, val, function(compiledMarkdown) {
       compiledMarkdown = Content.snippets(compiledMarkdown);
       $(configApp.postId).html(compiledMarkdown);
 	  $('body').removeClass().addClass('post-template ' + (val.home ? 'home-template' : 'page-template'));
@@ -565,31 +582,37 @@ Content.snippets = function(html) {
 
 Content.theme = function(callback) {
   'use strict';
-  var themeTemplate = configContent.global.appDir + '/themes/' + configContent.global.theme + '/' + configContent.theme.template + '.html';
-  $.get(themeTemplate, null, null, 'html').always(function(data, status, xhr) {
-      if (status === 'error') {
-        var msg = 'Error loading theme ' + configContent.global.theme;
-        Utils.showErrorMsg(msg, themeTemplate + ': ' + data.statusText);
-      }
-      if (status === 'success') {
-	    var context = {
-			base_url: window.location.href.substring(0, window.location.href.length - window.location.hash.length),
-			theme_url: configContent.global.appDir + '/themes/' + configContent.global.theme,
-			site_title: configContent.global.title,
-			site_description: configContent.global.description,
-			site_author: configContent.global.author,
-			site_logo: configContent.global.logo
-		};
-		
-		for (var attribute in configContent.theme) {
-		  context['theme_' + attribute] = configContent.theme[attribute];
-		}
-	    
-		data = Content.render(data, context);
-		$('body').html(data);
-        callback();
-      }	  
-  });
+  var theme = configContent.global.theme;
+  
+  if(theme) {
+	  var themeTemplate = configContent.global.appDir + '/themes/' + theme + '/' + configContent.theme.template + '.html';
+	  $.get(themeTemplate, null, null, 'html').always(function(data, status, xhr) {
+	      if (status === 'error') {
+	        var msg = 'Error loading theme ' + configContent.global.theme;
+	        Utils.showErrorMsg(msg, themeTemplate + ': ' + data.statusText);
+	      }
+	      if (status === 'success') {
+		    var context = {
+				base_url: window.location.href.substring(0, window.location.href.length - window.location.hash.length),
+				theme_url: configContent.global.appDir + '/themes/' + configContent.global.theme,
+				site_title: configContent.global.title,
+				site_description: configContent.global.description,
+				site_author: configContent.global.author,
+				site_logo: configContent.global.logo
+			};
+			
+			for (var attribute in configContent.theme) {
+			  context['theme_' + attribute] = configContent.theme[attribute];
+			}
+		    
+			data = Content.render(data, context);
+			$('body').html(data);
+	        callback();
+	      }	  
+	  });
+  } else {
+	  callback();
+  }
 };
 
 Content.updateBrowserTitle = function(title) {
@@ -771,11 +794,12 @@ Loader.loadJson = function(path, callback) {
 };
 
 /******************* Initialization ****************/
-Backend.init = function(appDir, configJson) {
+Backend.init = function(appDir, configJson, metas) {
   configJson.global = configJson.global || {};
   configJson.global.appDir = appDir;
+  configJson.addons = Object.assign({}, configContent.addons, configJson.addons);
   Loader.loadJavascript(appDir + '/js/vendor/jquery.min.js', function() {
-	if(!Content.config(configJson)) {
+	if(!Content.config(configJson, metas)) {
 	  return;
 	}
 	
@@ -815,7 +839,12 @@ Backend.init = function(appDir, configJson) {
   Loader.loadJavascript(appDir + '/js/vendor/routie.min.js');
   Loader.loadJavascript(appDir + '/js/vendor/yaml.min.js');
   Loader.loadJavascript(appDir + '/markdown-it/markdown-it.min.js');
-  Loader.loadCss(appDir + '/css/highlight.min.css');
+  //Loader.loadCss(appDir + '/css/highlight.min.css');
+  
+  if(configJson.addons.pace) {
+	Loader.loadJavascript(appDir + '/js/vendor/pace.min.js');
+	Loader.loadCss(appDir + '/css/pace.css');
+  }
 };
 
 (function() {
@@ -840,7 +869,7 @@ Backend.init = function(appDir, configJson) {
 			if(configJson.global && configJson.global.appDir) {
 				appDir = configJson.global.appDir;
 			}
-			Backend.init(appDir, configJson);
+			Backend.init(appDir, configJson, metas);
 		});
 	} catch (e) {
 		document.write('<strong>Error loading config: ' + filename + '</strong><br/>');
