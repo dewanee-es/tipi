@@ -76,6 +76,7 @@ var GithubApi = {};
 var GoogleApi = {};
 var DisqusApi = {};
 var Loader = {};
+var Template = {};
 
 var escapeKey = 27;
 
@@ -318,7 +319,7 @@ Content.footerInit = function() {
 
 Content.markdown = function(text, page, callback) {
   'use strict';
-  var md = window.markdownit({
+  var md = new Powerdown({
 	  highlight: function (str, lang) {
 		  if (lang && hljs.getLanguage(lang)) {
 		      try {
@@ -329,10 +330,8 @@ Content.markdown = function(text, page, callback) {
 		  return ''; // use external default escaping
 	  }
   });
-  var defaultLinkOpenRender = md.renderer.rules.link_open || function(tokens, idx, options, env, self) {
-	return self.renderToken(tokens, idx, options);
-  };
-  md.renderer.rules.link_open = function(tokens, idx, options, env, self) {
+  var defaultLinkOpenRender = md.renderer.defaultRender('link_open');
+  md.renderer.assign('link_open', function(tokens, idx, options, env, self) {
 	var href = tokens[idx].attrGet('href');
 	if(href.indexOf(':') == -1) {
 		if(href.indexOf('.') == -1 || href.endsWith(configContent.global.extension)) {
@@ -352,16 +351,16 @@ Content.markdown = function(text, page, callback) {
 		tokens[idx].attrSet('href', href);
 	}
 	return defaultLinkOpenRender(tokens, idx, options, env, self);
-  };
-  var defaultImageRender = md.renderer.rules.image;
-  md.renderer.rules.image = function (tokens, idx, options, env, self) {
+  });
+  var defaultImageRender = md.renderer.defaultRender('image');
+  md.renderer.assign('image', function (tokens, idx, options, env, self) {
 	  var src = tokens[idx].attrGet('src');
 	  if(src.indexOf(':') == -1) {
 		  src = Utils.getPath(page.url, src);
 		  tokens[idx].attrSet('src', src);
 	  }
 	  return defaultImageRender(tokens, idx, options, env, self);
-  }
+  });
   var output = md.render(text);
   callback(output);
 };
@@ -793,6 +792,30 @@ Loader.loadJson = function(path, callback) {
 	}
 };
 
+
+/******************* Template ****************/
+Template.fromInnerHtml = function(name, selector) {
+	Template.fromString(name, $(selector).html());
+};
+		
+Template.fromOuterHtml = function(name, selector) {
+	Template.fromString(name, $(selector)[0].outerHTML);
+};
+		
+Template.fromString = function(name, string) {
+	Template[name] = {
+		template: string.replace(/\t|\r|\n/gi,''),
+		render: function(data) {
+			return this.template.replace(/\${([^{}]*)}/g,
+				function (variable, key) {
+					var value = data[key];
+					return typeof value === 'string' || typeof value === 'number' ? value : '';	// : variable;
+				}
+			);
+		}
+	}
+};
+
 /******************* Initialization ****************/
 Backend.init = function(appDir, configJson, metas) {
   configJson.global = configJson.global || {};
@@ -833,12 +856,13 @@ Backend.init = function(appDir, configJson, metas) {
 	});
   });
   Loader.loadJavascript(appDir + '/js/vendor/highlight.pack.js');
-  Loader.loadJavascript(appDir + '/js/vendor/markup.min.js', function() {
+  /*Loader.loadJavascript(appDir + '/js/vendor/markup.min.js', function() {
 	  Loader.loadJavascript(appDir + '/js/vendor/markup.extras.min.js');
-  });  
+  });*/  
   Loader.loadJavascript(appDir + '/js/vendor/routie.min.js');
   Loader.loadJavascript(appDir + '/js/vendor/yaml.min.js');
-  Loader.loadJavascript(appDir + '/markdown-it/markdown-it.min.js');
+  Loader.loadJavascript(appDir + '/markdown/markdown-it.min.js');
+  Loader.loadJavascript(appDir + '/markdown/powerdown.js');
   //Loader.loadCss(appDir + '/css/highlight.min.css');
   
   if(configJson.addons.pace) {

@@ -1,13 +1,10 @@
-* cms.html / cms.css
 * tipi theme css
 * content
-* LICENSE
 * markdown test page
-* Templating
+* Templating: 1. markup.js 2. handlebars 3. ${var}
 * pace (no está funcionando, creo que el loader de estilos no funciona bien), pace.css a theme y pace.css default (si no se define otra hoja de estilo) => pace.css a theme, no existe un css por defecto
 * anchor.svg
 * arrow-bottom.svg
-* themes: tipi (cd-scroll-down), sunstreet, pico, default
 * markdown links
 * content.json format
 * samples: Verano
@@ -23,10 +20,13 @@
 * Url with hash part doesn't work. Ex: tipi.html#/MyPage
 * Review markdown page (#/markdown) and markdown renderer options
 * markdown: html, breaks, powerdown
+* portada: index.md o ninguna
 * ROADMAP
+* themes: tipi (cd-scroll-down), sunstreet, pico, default
 * font awesome
 * composer
 * screenshot.png (multiple devices, responsive)
+* cms.html / cms.css
 
 ROADMAP
 -------
