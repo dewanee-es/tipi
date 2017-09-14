@@ -24,13 +24,9 @@ Blockquotes (commonmark)
 Here is the a normal paragraph.
 
 > This is the first level of quoting.
->
 >> This is nested blockquote
 that runs onto the next line.
->
 > Back to the first level.
-
-Notice the spaces when we start a new paragraph or separate the different blockquotes.
 
 Breaks (breaks)
 ---------------
@@ -93,6 +89,13 @@ Diagrams (powerdown)
   Bob -> Alice : hello
   Alice -> Bob : Go Away
   ```
+
+Emojis (gfm)
+------------
+
+:smile:
+
+For a full list of available emoji and codes, check out [emoji-cheat-sheet.com](http://emoji-cheat-sheet.com/)
 
 Extended Text Formatting (markdown-it)
 --------------------------------------
@@ -257,6 +260,20 @@ Math (powerdown)
 ----------------
 
   Inline equation: $A = \pi*r^{2}$
+  
+Mentions and references (gfm)
+-----------------------------
+
+No implemented by default. Autolinking by extensions.
+Examples:
+
+16c999e8c71134401a78d4d46435517b2271d6ac
+mojombo@16c999e8c71134401a78d4d46435517b2271d6ac
+mojombo/github-flavored-markdown@16c999e8c71134401a78d4d46435517b2271d6ac
+#1
+mojombo#1
+mojombo/github-flavored-markdown#1
+@user
 
 Metadata (powerdown)
 --------------------
@@ -289,6 +306,13 @@ Tables (markdown-it)
 | First row    |      Data     | Very long data entry |  
 | Second row   |    **Cell**   |               *Cell* |  
 
+Task lists (gfm)
+----------------
+
+- [x] list syntax required (any unordered or ordered list supported)
+- [x] this is a complete item
+- [ ] this is an incomplete item
+
 Typographer (typographer)
 -------------------------
 
@@ -302,12 +326,13 @@ Enable some language-neutral replacement + quotes beautification.
   
   quotes: ""'' as “”‘’
 
-!!! Unstable !!!
-----------------
+Unstable:
+=========
 
 Features under formal definition and development.
 
-* **Filters**
+Filters
+-------
 
-  Inspired by http://pandoc.org/scripting.html
-  and https://github.com/markdown-it/markdown-ast-spec/blob/master/ast.md
+Inspired by http://pandoc.org/scripting.html
+and https://github.com/markdown-it/markdown-ast-spec/blob/master/ast.md

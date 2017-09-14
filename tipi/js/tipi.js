@@ -211,7 +211,7 @@ Animation.toc = function() {
 
 /******************** Content Manipulation **************************/
 
-Content.config = function(data, meta) {
+Content.config = function(data, metas) {
 	// Dynamic copyright
 	configContent.footer.copyright = '<a href="#">' + data.global.title + '</a> &copy; ' + (new Date()).getFullYear() + ' &bull; All rights reserved.';
 	
@@ -248,9 +248,11 @@ Content.config = function(data, meta) {
 	configContent.metadata.begin = configContent.metadata.begin.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 	configContent.metadata.end = configContent.metadata.end.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 	
-	// HTML Meta
-	$.each(meta, function(key, val) {
-		configContent.global[key] = val;
+	// HTML Metas
+	$.each(metas, function (index, meta) {
+		if(meta.name && meta.content) {
+			configContent.global[meta.name] = meta.content;
+		}
 	});
 	
 	return true;
@@ -320,15 +322,6 @@ Content.footerInit = function() {
 Content.markdown = function(text, page, callback) {
   'use strict';
   var md = new Powerdown({
-	  highlight: function (str, lang) {
-		  if (lang && hljs.getLanguage(lang)) {
-		      try {
-		    	  return hljs.highlight(lang, str).value;
-		      } catch (__) {}
-		  }
-
-		  return ''; // use external default escaping
-	  }
   });
   var defaultLinkOpenRender = md.renderer.defaultRender('link_open');
   md.renderer.assign('link_open', function(tokens, idx, options, env, self) {
@@ -856,12 +849,12 @@ Backend.init = function(appDir, configJson, metas) {
 	});
   });
   Loader.loadJavascript(appDir + '/js/vendor/highlight.pack.js');
-  /*Loader.loadJavascript(appDir + '/js/vendor/markup.min.js', function() {
+  Loader.loadJavascript(appDir + '/js/vendor/markup.min.js', function() {
 	  Loader.loadJavascript(appDir + '/js/vendor/markup.extras.min.js');
-  });*/  
+  });
   Loader.loadJavascript(appDir + '/js/vendor/routie.min.js');
   Loader.loadJavascript(appDir + '/js/vendor/yaml.min.js');
-  Loader.loadJavascript(appDir + '/markdown/markdown-it.min.js');
+  Loader.loadJavascript(appDir + '/markdown/markdown-it.js');
   Loader.loadJavascript(appDir + '/markdown/powerdown.js');
   //Loader.loadCss(appDir + '/css/highlight.min.css');
   
@@ -878,7 +871,8 @@ Backend.init = function(appDir, configJson, metas) {
 	if(metas.length > 0 && metas['config']) {
 		filename = metas['config'].content;
 	} else {
-		filename = window.location.href.substr(window.location.href.lastIndexOf("/") + 1);
+		var href = window.location.href.substr(0, window.location.href.length - window.location.hash.length);
+		filename = href.substr(href.lastIndexOf("/") + 1);
 		filename = filename.substr(0, filename.lastIndexOf("."));
 		if (!filename || filename == 'index') {
 			filename = 'config.json';
