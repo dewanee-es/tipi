@@ -3,7 +3,7 @@
 * markdown test page
 * Templating: 1. markup.js 2. handlebars 3. ${var}
 * pace (no está funcionando, creo que el loader de estilos no funciona bien), pace.css a theme y pace.css default (si no se define otra hoja de estilo) => pace.css a theme, no existe un css por defecto
-* anchor.svg
+* anchor.svg -> TOC
 * arrow-bottom.svg
 * content.json format
 * samples: Verano
@@ -11,26 +11,26 @@
 * samples: Halloween
 * samples: Dev
 * samples: Wiki
-* Loader: 1. sunstreet 2. mkdocs 3. mdwiki 4. tiddlewiki 5. docsify 6. tipi 7. madoko 8. gitbook 9. jekyll 10. markdown blog 11. markdown wiki 12. markdown cms 13.
+* Loader: 1. sunstreet 2. mkdocs 3. mdwiki 4. tiddlewiki 5. docsify 6. tipi 7. madoko 8. gitbook 9. jekyll 10. markdown blog 11. markdown wiki 12. markdown cms 13. hackmd.io
 * NO THEME (index page is the template), con theme falla!!
 * XHR no síncrono!!!
 * blog Verano notes
 * hash & links & files & folders format
-* Review markdown page (#/markdown) and markdown renderer options
-* markdown: html, breaks, powerdown
+* Powerdown: Review markdown page (#/markdown) and markdown renderer options
+* 
 * portada: index.md o ninguna
 * comprobar que se ha cargado routie.js. Poner todos los load con el mismo callback que lo que hace es ir incrementando un contador, cuando llega al nº total de scripts a cargar entonces llama al callback de inicialización
 * markdown async: code2flow
-* ROADMAP
-* themes: tipi (cd-scroll-down), sunstreet, pico, default
 * font awesome
-* composer
-* screenshot.png (multiple devices, responsive)
-* cms.html / cms.css
+* themes: tipi (cd-scroll-down), sunstreet, pico, default
+* ROADMAP
 
 ROADMAP
 -------
 
+- composer
+- screenshot.png (multiple devices, responsive)
+- cms.html / cms.css
 - angular
 - halloween
 - wiki

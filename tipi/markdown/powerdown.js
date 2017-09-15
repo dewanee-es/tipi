@@ -1,18 +1,24 @@
 function Powerdown(options) {
-	options = options || {};
-	options.highlight = options.highlight || Powerdown.highlight;
-	this.markdown = window.markdownit(options);
+	var mdOptions = Object.assign({}, Powerdown.defaultOptions, options);
+	this.markdown = window.markdownit(mdOptions);
 	this.renderer = new Powerdown.Renderer(this.markdown.renderer);
 }
 
-Powerdown.highlight = function(str, lang) {
-	if (lang && hljs.getLanguage(lang)) {
-		try {
-			return hljs.highlight(lang, str).value;
-		} catch (__) {}
+Powerdown.defaultOptions = {
+	html:			true,					// Enable HTML tags in source
+	xhtmlOut:		true,					// Use '/' to close single tags (<br />). CommonMark compatibility.
+	breaks:			true,					// Convert '\n' in paragraphs into <br>
+	linkify:		true,					// Autoconvert URL-like text to links
+	typographer:	true,					// Enable some language-neutral replacement + quotes beautification
+	highlight:		function(str, lang) {	// Highlighter function
+		if (lang && hljs.getLanguage(lang)) {
+			try {
+				return hljs.highlight(lang, str).value;
+			} catch (__) {}
+		}
+		
+		return ''; // use external default escaping
 	}
-	
-	return ''; // use external default escaping
 }
 
 Powerdown.prototype.render = function(text) {
@@ -65,6 +71,7 @@ Powerdown.Renderer.fences = {
 		if(content.charAt(0) != '@') {
 			content = "@startuml\n" + content + "\n@enduml";
 		}
+		// TODO: plantuml API
 		return "<img class='plantuml' src='https://g.gravizo.com/svg?\n" + content.replace(/\n/g, ';') + "\n'/>";
 	}
 }

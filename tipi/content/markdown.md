@@ -31,26 +31,27 @@ that runs onto the next line.
 Breaks (breaks)
 ---------------
 
-  End a line with two spaces to start a new paragraph.  
+Add an empty line to start a new paragraph.  
   
-  Use '\n' in paragraphs
-  to break line
+Use '\n' in paragraphs
+to break line.
   
 Code (commonmark)
 -----------------
 
   `Inline code` with backticks
   
-  ```
-  # code block
-  print '3 backticks or'
-  print 'indent 4 spaces'
-  ```
   
     # code block
     print '3 backticks or'
     print 'indent 4 spaces'
-    
+
+```
+# code block
+print '3 backticks or'
+print 'indent 4 spaces'
+```
+
     # code block
     print 'tab'
       
