@@ -493,7 +493,7 @@ Content.routes = function() {
 Content.runToc = function(container) {
   'use strict';
   container = typeof container !== 'undefined' ? container : configApp.postId;
-  var list = $(configApp.tocId + ' > ul');
+  var list = $('<ul></ul>');
   var itemNo = 0;
   $(list).empty();
   // search for first h1 header in the page
@@ -520,7 +520,7 @@ Content.runToc = function(container) {
   });
   
   if(itemNo > 1) {
-	$(configApp.tocId + ' > ul').append(list);
+	$(configApp.tocId).empty().append(list);
 	$(configApp.tocId).show();
 	$(configApp.tocIconId).show();
   }
@@ -740,51 +740,68 @@ DisqusApi.init = function() {
 /* jshint ignore:end */
 
 /******************* Loader ****************/
-Loader.loadCss = function(path) {
-	var linkTag = document.createElement('script'); 
-	linkTag.rel = 'stylesheet';
-	linkTag.type = 'text/css';
-	linkTag.src = path;
-	var headTag = document.getElementsByTagName('head')[0];
-	headTag.appendChild(linkTag);
+Loader.loader = function (tag) {	// https://davidwalsh.name/javascript-loader
+	return function (path) {
+		return new Promise(function (resolve, reject) {
+			var element = document.createElement(tag);
+			var parent = 'body';
+			var attr = 'src';
+			
+			element.onload = function() {
+				resolve(path);
+			};
+			element.onerror = function() {
+				reject(path);
+			};
+			
+			switch(tag) {
+				case 'script':
+					element.async = true;
+					break;
+				case 'link':
+					element.type = 'text/css';
+					element.rel = 'stylesheet';
+					attr = 'href';
+					parent = 'head';
+	        }
+			
+			element[attr] = path;
+	        document[parent].appendChild(element);
+		});
+	}
 };
 
-Loader.loadJavascript = function(path, callback) {
-	var scriptTag = document.createElement('script'); 
-	scriptTag.type = 'text/javascript';
-	
-	if (callback) {
-	  if (scriptTag.readyState) {
-		scriptTag.onreadystatechange = function() {
-		  if (scriptTag.readyState == "loaded" || scriptTag.readyState == "complete") {
-			scriptTag.onreadystatechange = null;
-			callback();
-		  }
-		};
-	  } else {
-		scriptTag.onload = function() {
-		  callback();
-		};
-	  }
-	}
-	
-	scriptTag.src = path;
-	var headTag = document.getElementsByTagName('head')[0];
-	headTag.appendChild(scriptTag);
-};
+Loader.loadCss = Loader.loader('link');
+
+Loader.loadJavascript = Loader.loader('script');
+
+Loader.loadImage = Loader.loader('img');
   
-Loader.loadJson = function(path, callback) {
-	var xhr = new XMLHttpRequest();
-	xhr.overrideMimeType("application/json");
-	xhr.open('GET', path, false);
-	xhr.send();
+Loader.loadJson = function (path) {
+	return new Promise(function (resolve, reject) {
+		var xhr = new XMLHttpRequest();
+		xhr.overrideMimeType("application/json");
+		xhr.open('GET', path);
 		
-	if (xhr.status == 0 || xhr.status == 200) {
-	  callback(JSON.parse(xhr.responseText));
-	  return true;
-	}
+		xhr.onload = function() {
+			if (xhr.status == 200) {
+				resolve(JSON.parse(xhr.response));
+			} else {
+		        reject(Error(xhr.statusText));
+			}
+		};
+
+	    xhr.onerror = function() {
+	    	reject(Error("Network Error"));
+	    };
+		
+	    xhr.send();
+	});
 };
 
+Loader.loadAll = function(assets) {
+	return Promise.all(assets);
+};
 
 /******************* Template ****************/
 Template.fromInnerHtml = function(name, selector) {
@@ -814,7 +831,25 @@ Backend.init = function(appDir, configJson, metas) {
   configJson.global = configJson.global || {};
   configJson.global.appDir = appDir;
   configJson.addons = Object.assign({}, configContent.addons, configJson.addons);
-  Loader.loadJavascript(appDir + '/js/vendor/jquery.min.js', function() {
+  
+  var assets = [             
+	Loader.loadJavascript(appDir + '/js/vendor/jquery.min.js'),
+	Loader.loadJavascript(appDir + '/js/vendor/highlight.pack.js'),
+	Loader.loadJavascript(appDir + '/js/vendor/markup.min.js').then(function () {
+		Loader.loadJavascript(appDir + '/js/vendor/markup.extras.min.js');
+	}),
+	Loader.loadJavascript(appDir + '/js/vendor/routie.min.js'),
+	Loader.loadJavascript(appDir + '/js/vendor/yaml.min.js'),
+	Loader.loadJavascript(appDir + '/markdown/markdown-it.js'),
+	Loader.loadJavascript(appDir + '/markdown/powerdown.js')
+  ];
+  
+  if(configJson.addons.pace) {
+	  assets.push(Loader.loadJavascript(appDir + '/js/vendor/pace.min.js'));
+	  assets.push(Loader.loadCss(appDir + '/css/pace.css'));
+  }
+  
+  Loader.loadAll(assets).then(function() {
 	if(!Content.config(configJson, metas)) {
 	  return;
 	}
@@ -848,20 +883,6 @@ Backend.init = function(appDir, configJson, metas) {
 	  }
 	});
   });
-  Loader.loadJavascript(appDir + '/js/vendor/highlight.pack.js');
-  Loader.loadJavascript(appDir + '/js/vendor/markup.min.js', function() {
-	  Loader.loadJavascript(appDir + '/js/vendor/markup.extras.min.js');
-  });
-  Loader.loadJavascript(appDir + '/js/vendor/routie.min.js');
-  Loader.loadJavascript(appDir + '/js/vendor/yaml.min.js');
-  Loader.loadJavascript(appDir + '/markdown/markdown-it.js');
-  Loader.loadJavascript(appDir + '/markdown/powerdown.js');
-  //Loader.loadCss(appDir + '/css/highlight.min.css');
-  
-  if(configJson.addons.pace) {
-	Loader.loadJavascript(appDir + '/js/vendor/pace.min.js');
-	Loader.loadCss(appDir + '/css/pace.css');
-  }
 };
 
 (function() {
@@ -882,7 +903,7 @@ Backend.init = function(appDir, configJson, metas) {
 	}
 	
 	try {
-		Loader.loadJson(filename, function(configJson) {
+		Loader.loadJson(filename).then(function (configJson) {
 			var appDir = configContent.global.appDir;
 			if(configJson.global && configJson.global.appDir) {
 				appDir = configJson.global.appDir;

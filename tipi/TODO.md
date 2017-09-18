@@ -1,10 +1,8 @@
 * tipi theme css
-* content
 * markdown test page
 * Templating: 1. markup.js 2. handlebars 3. ${var}
 * pace (no está funcionando, creo que el loader de estilos no funciona bien), pace.css a theme y pace.css default (si no se define otra hoja de estilo) => pace.css a theme, no existe un css por defecto
 * anchor.svg -> TOC
-* arrow-bottom.svg
 * content.json format
 * samples: Verano
 * samples: Start
@@ -14,16 +12,48 @@
 * Loader: 1. sunstreet 2. mkdocs 3. mdwiki 4. tiddlewiki 5. docsify 6. tipi 7. madoko 8. gitbook 9. jekyll 10. markdown blog 11. markdown wiki 12. markdown cms 13. hackmd.io
 * NO THEME (index page is the template), con theme falla!!
 * XHR no síncrono!!!
-* blog Verano notes
 * hash & links & files & folders format
 * Powerdown: Review markdown page (#/markdown) and markdown renderer options
-* 
+* Powerdown: browserify, javascript package system
 * portada: index.md o ninguna
-* comprobar que se ha cargado routie.js. Poner todos los load con el mismo callback que lo que hace es ir incrementando un contador, cuando llega al nº total de scripts a cargar entonces llama al callback de inicialización
 * markdown async: code2flow
 * font awesome
-* themes: tipi (cd-scroll-down), sunstreet, pico, default
+* 404.md
+blog: content
+blog: ambition
+blog: dev
+blog: halloween
+blog: marmoush.com
+**blog: wiki**
+cms: 1. wikilinks [[Pagina]] 2. Translate [texto](archivo.md) -> #/Pagina 3. Directo #/Archivo -> archivo.md 4. Nombre archivo/carpeta con primera en mayúsculas 5. Nombre archivo/carpeta con primera en minúsculas 6. Carpeta por página con todo su contenido (carpeta pagina con pagina.md, pagina.jpg, thumb.jpg, ...) 7. Solo un nivel de carpetas/páginas 8. Carpetas/Páginas con subcarpetas/subpáginas 9. Solo un nivel de páginas, varios de carpetas, asociación mediante archivo json
+blog: nueva página
+blog: fuente
+blog: random splash image
+blog: css
+blog: codificacion archivos, título Verano: Pagina
+blog: TOC con nºs
+blog: home
+blog: fondos
+blog: libros
+blog: terrazas
+blog: viajar
+blog: slider?
+blog: posts sin fecha y aleatorios
+blog: pie de página con Verano @ 2017 y quitar powered y añadir corazon
+blog: menú no caben todas las categorías
+blog: articulo 11 trucos...
+blog: articulo cuevas...
+blog: articulo Redescubre los espacios verdes de tu ciudad.html
+blog: articulo 10 Pueblos con encanto escondidos en España.html
+blog: banner páginas (pej. cocina)
+blog: iconos
+blog: h1 mas pequeño
+blog: markdown: markdown-it, footnotes, __underscore__, links absolutos en nueva ventana
+blog: enlaces subpáginas en viajar
+blog: blockquote
+blog: enlaces (color y subrayado)
 * ROADMAP
+* theme tipi (google: codepen, html, css, simple, blog, theme, template, minimalist): #header, #toc, #tocIcon, #slider, #slides, #menu, #blog, #content, #disqus_thread, #footer, #pages, #social, #copyright, #poweredby, #error, blockquote, https://nystudio107.com/blog/loadjs-as-a-lightweight-javascript-loader	https://davidwalsh.name/javascript-loader
 
 ROADMAP
 -------
@@ -132,6 +162,7 @@ ROADMAP
 - https://github.com/semplon/GeniXCMS
 - .editorconfig
 - https://docsify.js.org
+- themes: tipi (cd-scroll-down), sunstreet, pico, default
 
 Static Site Generators
 ----------------------
