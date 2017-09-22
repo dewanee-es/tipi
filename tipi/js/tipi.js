@@ -41,7 +41,7 @@ var configContent = {
 	title: 'Untitled',
 	description: '',
 	author: '',
-    welcome: 'index',
+    welcome: 'Home',
 	theme: false,
 	extension: 'md',
 	logo: '',
@@ -64,8 +64,7 @@ var configContent = {
 	style: '',
   	iconClass: 'fa fa-'	// Font Awesome
   },
-  addons: {
-	pace: true
+  addons: {	// See Bakend.addons
   }
 };
 var Backend = {};
@@ -100,8 +99,13 @@ Utils.getPath = function(page, relative) {
 	return configContent.global.contentDir + page.substring(0, pos) + relative;
 }
 
+Utils.getTitle = function(slug) {
+	return (slug.charAt(0).toUpperCase() + slug.slice(1)).replace(/-/g, ' ');
+}
+
 Utils.getUrl = function(page) {
 	var url;
+	page = page.toLowerCase();
 	if(page.charAt(page.length - 1) == '/') {
 		var pieces = page.split('/');
 		var sub = pieces[pieces.length - 2];
@@ -228,21 +232,10 @@ Content.config = function(data, metas) {
 	}
 
     $.extend(true, configContent, data);
-	$.each(configContent.pages, function(key, val) {
-	    if(typeof val == 'string') {
-			val = { title: val };
-			configContent.pages[key] = val;
-		}
-		if(!val.url) {
-			val.url = Utils.getUrl(key);
-		}
-		if(!val.title) {
-			val.title = key.charAt(0).toUpperCase() + key.slice(1);
-		}
-		if(configContent.global.welcome == key) {
-			val.home = true;
-		}
-	});
+    
+    // Pages and posts
+    configContent.pages = Content.initPages(configContent.pages);
+    configContent.posts = Content.initPages(configContent.posts);
 	
 	// Metadata
 	configContent.metadata.begin = configContent.metadata.begin.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
@@ -276,6 +269,55 @@ Content.include = function(url) {
 	});
 	return '<div id="' + id + '"></div>';
 };
+
+Content.initPage = function(page) {
+	if(!page.title) {
+		if(!Content.initPage.pageSeq) {
+			Content.initPage.pageSeq = 1;
+		}
+		page.title = 'Page ' + (Content.initPage.pageSeq++);
+	}
+
+	page.url = page.url || Utils.getUrl(page.title);
+	page.tag = page.tag || '';
+	page.img = page.img || '';	// TODO: By default takes image with similar filename to content file and .jpg extension
+    page.thumb = page.thumb || page.img;
+    page.disqusEnable = page.disqusEnable || false;
+    page.disqusIdentifier = page.disqusIdentifier || '';
+    page.disqusLang = page.disqusLang || '';
+    page.date = page.date || '';
+    page.home = (configContent.global.welcome == page.title);
+    
+    return page;
+}
+
+Content.initPages = function(pages) {
+	var pageMap = {};
+	
+	if(Array.isArray(pages)) {
+		for(var i = 0; i < pages.length; i++) {
+			var val = pages[i];
+			if(typeof val == 'string') {
+				val = Content.initPage({ title: val});
+			} else {
+				val = Content.initPage(val);
+			}
+			pageMap[Utils.titleToLink(val.title)] = val;
+		}
+	} else {	
+		$.each(pages, function(title, val) {
+		    if(typeof val == 'string') {
+		    	val = Content.initPage({ title: title, url: val});
+		    } else {
+		    	val['title'] = title;
+		    	val = Content.initPage(val);
+		    }
+			pageMap[Utils.titleToLink(val.title)] = val;
+		});
+	}
+	
+	return pageMap;
+}
 
 Content.fillMenu = function() {
   'use strict';
@@ -317,6 +359,11 @@ Content.footerInit = function() {
   });
   pageNames = pageNames.substring(0, pageNames.length - 3);
   $(configApp.fPages + '> span').html(pageNames);
+};
+
+Content.getPage = function(slug) {
+	return configContent.pages[slug]
+		|| Content.initPage({ title: Utils.getTitle(slug) });	// TODO: initPage({ slug: slug})
 };
 
 Content.markdown = function(text, page, callback) {
@@ -448,7 +495,7 @@ Content.routes = function() {
     $(configApp.tocIconId).hide();
 	$(configApp.menuId + ' > ul > li.active').removeClass('active');
 	$(configApp.menuId + ' > ul > li > a[href="#"]').parent().addClass('active');
-    Content.reloadPage(configContent.pages[configContent.global.welcome]);
+    Content.reloadPage(Content.getPage(configContent.global.welcome));
     /*
     Content.updateBrowserTitle(configContent.global.title);
     $(configApp.blogId).fadeOut(500, function() {
@@ -460,15 +507,7 @@ Content.routes = function() {
   };
   
   urls['/*'] = function(url) {
-	var val;
-	if(configContent.pages[url]) {
-	  val = configContent.pages[url];
-	} else {
-	  val = {
-	    url: Utils.getUrl(url),
-		title: url.charAt(0).toUpperCase() + url.slice(1)
-      };
-	}
+	var val = Config.getPage(url);
     $(configApp.postId).empty();
     $(configApp.tocId).hide();
     $(configApp.tocIconId).hide();
@@ -826,6 +865,16 @@ Template.fromString = function(name, string) {
 	}
 };
 
+/******************* Addons ****************/
+Backend.addons = {
+	fontAwesome: function (appDir, assets) {
+		assets.push(Loader.loadCss(appDir + '/font-awesome/css/font-awesome.min.css'));
+	},
+	pace: function (appDir, assets) {
+		assets.push(Loader.loadJavascript(appDir + '/js/vendor/pace.min.js'));
+		assets.push(Loader.loadCss(appDir + '/css/pace.css'));
+	}
+}
 /******************* Initialization ****************/
 Backend.init = function(appDir, configJson, metas) {
   configJson.global = configJson.global || {};
@@ -844,9 +893,10 @@ Backend.init = function(appDir, configJson, metas) {
 	Loader.loadJavascript(appDir + '/markdown/powerdown.js')
   ];
   
-  if(configJson.addons.pace) {
-	  assets.push(Loader.loadJavascript(appDir + '/js/vendor/pace.min.js'));
-	  assets.push(Loader.loadCss(appDir + '/css/pace.css'));
+  for(var addon in configJson.addons) {
+	  if(configJson.addons[addon] && Backend.addons[addon]) {
+		  Backend.addons[addon](appDir, assets, configJson.addons[addon]);
+	  }
   }
   
   Loader.loadAll(assets).then(function() {

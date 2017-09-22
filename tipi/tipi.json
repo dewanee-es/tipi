@@ -1,13 +1,13 @@
 {
 	"global": {
-		"title": "Tipi"
+		"title": "Tipi",
+		"welcome": "Tipi"
 	},
 	"pages": {
-		"index": "Tipi",
-		"markdown": "Markdown",
-		"quick-start": "Quick start",
-		"documentation": "Documentation",
-		"themes": "Themes",
-		"plugins": "Plugins"
+	  "Tipi": "index"
+	},
+	"addons": {
+	  "fontAwesome": true,
+	  "pace": true	  
 	}
 }

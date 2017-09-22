@@ -1,59 +1,29 @@
-* tipi theme css
-* markdown test page
-* Templating: 1. markup.js 2. handlebars 3. ${var}
-* pace (no está funcionando, creo que el loader de estilos no funciona bien), pace.css a theme y pace.css default (si no se define otra hoja de estilo) => pace.css a theme, no existe un css por defecto
-* anchor.svg -> TOC
-* content.json format
+* addons: pace (no está funcionando, creo que el loader de estilos no funciona bien), pace.css a theme y pace.css default (si no se define otra hoja de estilo) => pace.css a theme, no existe un css por defecto
+* blocks: index.html con todos los bloques, metas
+* config: content.json format
+* errores: 404.md, codificacion caracteres tipi.html, error xml
+* footer: copyright, powered by
+* headers: title, h1
+* iconos: para páginas
+* images: random splash image, logo, favicon, default image for pages/posts
+* loader: 1. sunstreet 2. mkdocs 3. mdwiki 4. tiddlewiki 5. docsify 6. tipi 7. madoko 8. gitbook 9. jekyll 10. markdown blog 11. markdown wiki 12. markdown cms 13. hackmd.io 14. https://nystudio107.com/blog/loadjs-as-a-lightweight-javascript-loader	15. https://davidwalsh.name/javascript-loader
+* markdown: test page, browserify, javascript package system, async (code2flow)
+* menu: list pages
+* pages: hash, pages, links, files, folders
+* posts: slider, posts sin fecha y aleatorios
+* render: links absolutos en nueva ventana
+* templating: Features: includes, compile template, helpers, html no escape
+* theme: tipi theme css, http://www.bypeople.com/css-template/, tipi (cd-scroll-down), sunstreet, pico, default, bastard, uno-zen, ambition, theme tipi (google: codepen, html, css, simple, blog, theme, template, minimalist): #header, #toc, #tocIcon, #slider, #slides, #menu, #blog, #content, #disqus_thread, #footer, #pages, #social, #copyright, #poweredby, #error, blockquote, 
+* toc: TOC, anchor.svg, TOC con nºs
+* samples: Dev
+* samples: Halloween
 * samples: Verano
 * samples: Start
-* samples: Halloween
-* samples: Dev
 * samples: Wiki
-* Loader: 1. sunstreet 2. mkdocs 3. mdwiki 4. tiddlewiki 5. docsify 6. tipi 7. madoko 8. gitbook 9. jekyll 10. markdown blog 11. markdown wiki 12. markdown cms 13. hackmd.io
-* NO THEME (index page is the template), con theme falla!!
-* XHR no síncrono!!!
-* hash & links & files & folders format
-* Powerdown: Review markdown page (#/markdown) and markdown renderer options
-* Powerdown: browserify, javascript package system
-* portada: index.md o ninguna
-* markdown async: code2flow
-* font awesome
-* 404.md
-blog: content
-blog: ambition
-blog: dev
-blog: halloween
-blog: marmoush.com
-**blog: wiki**
-cms: 1. wikilinks [[Pagina]] 2. Translate [texto](archivo.md) -> #/Pagina 3. Directo #/Archivo -> archivo.md 4. Nombre archivo/carpeta con primera en mayúsculas 5. Nombre archivo/carpeta con primera en minúsculas 6. Carpeta por página con todo su contenido (carpeta pagina con pagina.md, pagina.jpg, thumb.jpg, ...) 7. Solo un nivel de carpetas/páginas 8. Carpetas/Páginas con subcarpetas/subpáginas 9. Solo un nivel de páginas, varios de carpetas, asociación mediante archivo json
-blog: nueva página
-blog: fuente
-blog: random splash image
-blog: css
-blog: codificacion archivos, título Verano: Pagina
-blog: TOC con nºs
-blog: home
-blog: fondos
-blog: libros
-blog: terrazas
-blog: viajar
-blog: slider?
-blog: posts sin fecha y aleatorios
-blog: pie de página con Verano @ 2017 y quitar powered y añadir corazon
-blog: menú no caben todas las categorías
-blog: articulo 11 trucos...
-blog: articulo cuevas...
-blog: articulo Redescubre los espacios verdes de tu ciudad.html
-blog: articulo 10 Pueblos con encanto escondidos en España.html
-blog: banner páginas (pej. cocina)
-blog: iconos
-blog: h1 mas pequeño
-blog: markdown: markdown-it, footnotes, __underscore__, links absolutos en nueva ventana
-blog: enlaces subpáginas en viajar
-blog: blockquote
-blog: enlaces (color y subrayado)
+* similar: stripdown.js, urubu
+* social
+* welcome: NO THEME (index page is the template), con theme falla!! home, default page with folder name
 * ROADMAP
-* theme tipi (google: codepen, html, css, simple, blog, theme, template, minimalist): #header, #toc, #tocIcon, #slider, #slides, #menu, #blog, #content, #disqus_thread, #footer, #pages, #social, #copyright, #poweredby, #error, blockquote, https://nystudio107.com/blog/loadjs-as-a-lightweight-javascript-loader	https://davidwalsh.name/javascript-loader
 
 ROADMAP
 -------
@@ -162,7 +132,6 @@ ROADMAP
 - https://github.com/semplon/GeniXCMS
 - .editorconfig
 - https://docsify.js.org
-- themes: tipi (cd-scroll-down), sunstreet, pico, default
 
 Static Site Generators
 ----------------------
@@ -200,7 +169,7 @@ https://middlemanapp.com
 http://gohugo.io
 http://www.metalsmith.io
 http://wintersmith.io
-https://github.com/eudicots/Cactus
+https://github.com/eudicots/Cactus -> assets optimization, sitemap.xml, robots.txt
 https://nanoc.ws
  
 Many more static site generators are listed here along with figures about their current popularity:
@@ -212,3 +181,4 @@ https://github.com/getgrav/grav-theme-learn2
 https://libraries.io/search?keywords=recyclerview%2Cdocumentation&languages=JavaScript
 http://www.blogduwebdesign.com/ressources-documentation/ressources-generer-automatiquement-documentation-projets/2354
 https://npm.taobao.org/package/marked > dependants
+http://couscous.io/
