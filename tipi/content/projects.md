@@ -19,6 +19,7 @@
 - Pico
 - Strapdown
 - Sunstreet
+- Urubu
 - https://blog.getpelican.com
 - https://hexo.io
 - http://brunch.io

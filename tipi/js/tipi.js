@@ -81,6 +81,10 @@ var escapeKey = 27;
 
 /******************** Utilities **************************/
 
+Utils.getFragment = function(page) {
+	return page.home ? '' : '/' + page.slug;
+}
+
 Utils.getHash = function() {
   'use strict';
   var url = window.location.hash;
@@ -98,6 +102,10 @@ Utils.getPath = function(page, relative) {
 	var pos = page.lastIndexOf('/');
 	return configContent.global.contentDir + page.substring(0, pos) + relative;
 }
+
+Utils.getSlug = function(title) {
+	return encodeURIComponent(title.replace(/\s+/g, '-'));
+};
 
 Utils.getTitle = function(slug) {
 	return (slug.charAt(0).toUpperCase() + slug.slice(1)).replace(/-/g, ' ');
@@ -135,11 +143,6 @@ Utils.startsWith = function(str, val) {
   } else {
     return false;
   }
-};
-
-Utils.titleToLink = function(str) {
-  'use strict';
-  return '/' + encodeURIComponent(str.replace(/\s+/g, '-'));
 };
 
 /******************** App Animation **************************/
@@ -287,6 +290,7 @@ Content.initPage = function(page) {
     page.disqusLang = page.disqusLang || '';
     page.date = page.date || '';
     page.home = (configContent.global.welcome == page.title);
+    page.slug = Utils.getSlug(page.title);
     
     return page;
 }
@@ -302,7 +306,7 @@ Content.initPages = function(pages) {
 			} else {
 				val = Content.initPage(val);
 			}
-			pageMap[Utils.titleToLink(val.title)] = val;
+			pageMap[val.slug] = val;
 		}
 	} else {	
 		$.each(pages, function(title, val) {
@@ -312,7 +316,7 @@ Content.initPages = function(pages) {
 		    	val['title'] = title;
 		    	val = Content.initPage(val);
 		    }
-			pageMap[Utils.titleToLink(val.title)] = val;
+			pageMap[val.slug] = val;
 		});
 	}
 	
@@ -323,7 +327,7 @@ Content.fillMenu = function() {
   'use strict';
   var a = '';
   $.each(configContent.pages, function(key, val) {
-    var fragment = (key == configContent.global.welcome) ? '' : Utils.titleToLink(key);
+    var fragment = Utils.getFragment(val);
     a += '<li><a href="#' + fragment + '" >';
     if(val.icon) a+= '<i class="' + configContent.theme.iconClass + val.icon + '"></i> ';
     a += val.title + '</a></li>';
@@ -343,7 +347,7 @@ Content.fillSlider = function() {
     }
     var p = '<p>' + val.title + '</p>';
     var p2 = '<p>' + val.date + '</p>';
-    var li = '<li><a href="#' + Utils.titleToLink(val.title) + '">' + img + p + p2 + '</a></li>';
+    var li = '<li><a href="#' + Utils.getFragment(val) + '">' + img + p + p2 + '</a></li>';
     $(li).appendTo(configApp.slidesId);
   });
 };
@@ -354,7 +358,7 @@ Content.footerInit = function() {
   $(configApp.fPoweredBy).html(configContent.footer.poweredBy);
   var pageNames = '';
   $.each(configContent.pages, function(key, val) {
-    var fragment = (key == configContent.global.welcome) ? '' : Utils.titleToLink(key);
+    var fragment = Utils.getFragment(val);
     pageNames += '<a href="#' + fragment + '">' + val.title + '</a>' + ' / ';
   });
   pageNames = pageNames.substring(0, pageNames.length - 3);
@@ -362,7 +366,7 @@ Content.footerInit = function() {
 };
 
 Content.getPage = function(slug) {
-	return configContent.pages[slug]
+	return configContent.pages[Utils.getSlug(slug)]	// Force slug
 		|| Content.initPage({ title: Utils.getTitle(slug) });	// TODO: initPage({ slug: slug})
 };
 
@@ -389,6 +393,8 @@ Content.markdown = function(text, page, callback) {
 			href = Utils.getPath(page.url, href);
 		}
 		tokens[idx].attrSet('href', href);
+	} else {
+		tokens[idx].attrSet('target', '_blank');
 	}
 	return defaultLinkOpenRender(tokens, idx, options, env, self);
   });
@@ -459,7 +465,8 @@ Content.render = function(template, data) {
 		data: template
 	});
 	return template.render(data);*/
-	return Mark.up(template, data, {delimiter: ':', includeFunction: Content.include});
+	//return Mark.up(template, data, {delimiter: ':', includeFunction: Content.include});
+	return template;
 };
 
 Content.routes = function() {
@@ -507,7 +514,7 @@ Content.routes = function() {
   };
   
   urls['/*'] = function(url) {
-	var val = Config.getPage(url);
+	var val = Content.getPage(url);
     $(configApp.postId).empty();
     $(configApp.tocId).hide();
     $(configApp.tocIconId).hide();
@@ -559,7 +566,7 @@ Content.runToc = function(container) {
   });
   
   if(itemNo > 1) {
-	$(configApp.tocId).empty().append(list);
+	$(configApp.tocId).find('ul').first().empty().append(list);
 	$(configApp.tocId).show();
 	$(configApp.tocIconId).show();
   }
@@ -611,18 +618,16 @@ Content.snippets = function(html) {
 	return html2;
 };
 
-Content.theme = function(callback) {
-  'use strict';
-  var theme = configContent.global.theme;
-  
-  if(theme) {
-	  var themeTemplate = configContent.global.appDir + '/themes/' + theme + '/' + configContent.theme.template + '.html';
-	  $.get(themeTemplate, null, null, 'html').always(function(data, status, xhr) {
+Content.template = function(templatePath, templateExtension, templateName, success, error) {
+	//ich.templatePath = templatePath;
+	//ich.templateExtension = templateExtension;
+	
+	var path = templatePath + '/' + templateName + '.' + templateExtension;
+
+	$.get(path, null, null, 'html').always(function(data, status, xhr) {
 	      if (status === 'error') {
-	        var msg = 'Error loading theme ' + configContent.global.theme;
-	        Utils.showErrorMsg(msg, themeTemplate + ': ' + data.statusText);
-	      }
-	      if (status === 'success') {
+	    	  error(path, data);
+	      } else if (status === 'success') {
 		    var context = {
 				base_url: window.location.href.substring(0, window.location.href.length - window.location.hash.length),
 				theme_url: configContent.global.appDir + '/themes/' + configContent.global.theme,
@@ -635,11 +640,48 @@ Content.theme = function(callback) {
 			for (var attribute in configContent.theme) {
 			  context['theme_' + attribute] = configContent.theme[attribute];
 			}
-		    
-			data = Content.render(data, context);
-			$('body').html(data);
-	        callback();
+			
+			ich.addTemplate(templateName, data);
+			
+			var content = ich[templateName](context);
+
+			$('body').html(content);
+	        success();
 	      }	  
+	  });
+	
+	/*if (status === 'error') {
+		var msg = 'Error loading theme ' + configContent.global.theme;
+		Utils.showErrorMsg(msg, themeTemplate + ': ' + data.statusText);
+	}*/
+	
+	/*var context = {
+			base_url: window.location.href.substring(0, window.location.href.length - window.location.hash.length),
+			theme_url: templatePath,
+			site_title: configContent.global.title,
+			site_description: configContent.global.description,
+			site_author: configContent.global.author,
+			site_logo: configContent.global.logo
+	};
+			
+	for (var attribute in configContent.theme) {
+		context['theme_' + attribute] = configContent.theme[attribute];
+	}
+	
+	ich.loadTemplate(template, context, function($content) {
+		$('body').html($content);
+	    callback();
+  	});*/
+}
+
+Content.theme = function(callback) {
+  'use strict';
+  var theme = configContent.global.theme;
+  
+  if(theme) {
+	  Content.template(configContent.global.appDir + '/themes/' + theme, 'html', configContent.theme.template, callback, function(path, data) {
+        var msg = 'Error loading theme ' + theme;
+        Utils.showErrorMsg(msg, path + ': ' + data.statusText);
 	  });
   } else {
 	  callback();
@@ -884,9 +926,12 @@ Backend.init = function(appDir, configJson, metas) {
   var assets = [             
 	Loader.loadJavascript(appDir + '/js/vendor/jquery.min.js'),
 	Loader.loadJavascript(appDir + '/js/vendor/highlight.pack.js'),
-	Loader.loadJavascript(appDir + '/js/vendor/markup.min.js').then(function () {
+	/*Loader.loadJavascript(appDir + '/js/vendor/markup.min.js').then(function () {
 		Loader.loadJavascript(appDir + '/js/vendor/markup.extras.min.js');
-	}),
+	}),*/
+	Loader.loadJavascript(appDir + '/js/vendor/ICanHaz.min.js'),/*.then(function() {
+		return Loader.loadJavascript(appDir + '/js/vendor/ICanHaz.load.js');
+	}),*/
 	Loader.loadJavascript(appDir + '/js/vendor/routie.min.js'),
 	Loader.loadJavascript(appDir + '/js/vendor/yaml.min.js'),
 	Loader.loadJavascript(appDir + '/markdown/markdown-it.js'),
