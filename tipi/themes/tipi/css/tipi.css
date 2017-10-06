@@ -164,6 +164,14 @@ a {
 	}
 }
 
+.social ul {
+	list-style-type: none;
+}
+
+.social ul li {
+	margin-bottom: 1rem;
+}
+
 .meta {
 	font-family: Georgia, serif;
 	font-size: calc(0.7rem + 0.25vw);

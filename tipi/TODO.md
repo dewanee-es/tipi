@@ -1,11 +1,12 @@
 * addons: pace (no está funcionando, creo que el loader de estilos no funciona bien), pace.css a theme y pace.css default (si no se define otra hoja de estilo) => pace.css a theme, no existe un css por defecto
+* anchors: link to headings ## The Walking Dead (2004) <-- [link](#The-Walking-Dead-2004)
 * blocks: index.html con todos los bloques, metas
-* config: OK
 * errores: 404.md, codificacion caracteres tipi.html, error xml
-* footer: copyright, powered by
 * headers: title, h1
 * iconos: para páginas
 * images: random splash image, logo, favicon, default image for pages/posts
+* layout: reload template on page change vs. transitions (ajaxcms, sunstreet, ...) vs. mustache data binding (ractive.js)
+* local storage: tick mark for read pages in links
 * loader: 1. sunstreet 2. mkdocs 3. mdwiki 4. tiddlewiki 5. docsify 6. tipi 7. madoko 8. gitbook 9. jekyll 10. markdown blog 11. markdown wiki 12. markdown cms 13. hackmd.io 14. https://nystudio107.com/blog/loadjs-as-a-lightweight-javascript-loader	15. https://davidwalsh.name/javascript-loader
 * markdown: test page, browserify, javascript package system, async (code2flow)
 * menu: list pages
@@ -16,11 +17,10 @@
 * samples: Dev
 * samples: Halloween
 * samples: Verano
-* **samples: Start**. Theme: 1. fixed header 2. volver arriba 3. menú 4. https://livedemo00.template-help.com/wordpress_53761/ 5. https://livedemo00.template-help.com/wordpress_53761/about/ 6. https://livedemo00.template-help.com/wordpress_53761/portfolio/ 7. https://livedemo00.template-help.com/wordpress_53761/portfolio/portfolio-2/ 8. https://livedemo00.template-help.com/wordpress_53761/portfolio/portfolio-3/ 9. mini banner arriba con system info (a partir linea 29) 10. https://livedemo00.template-help.com/wordpress_53761/portfolio/portfolio-3/category-1/ 11. https://livedemo00.template-help.com/wordpress_53761/portfolio/portfolio-3/category-2/ 12. https://livedemo00.template-help.com/wordpress_53761/blog/ 13. https://livedemo00.template-help.com/wordpress_53761/contacts/ 14. título página en breadcrumb 15. h1..h6 de diferentes tamaños
+* **samples: Start**. Theme: 1. fixed header 2. volver arriba 3. menú 4. https://livedemo00.template-help.com/wordpress_53761/ 5. https://livedemo00.template-help.com/wordpress_53761/about/ 6. https://livedemo00.template-help.com/wordpress_53761/portfolio/ 7. mini banner arriba con system info (a partir linea 29) 8. https://livedemo00.template-help.com/wordpress_53761/portfolio/portfolio-3/category-2/ 9. https://livedemo00.template-help.com/wordpress_53761/blog/ 10. https://livedemo00.template-help.com/wordpress_53761/contacts/ 11. título página en breadcrumb 12. nueva página
 * samples: Tipi
 * samples: Wiki
 * similar: see projects.md
-* social
 * templating: Features: includes, compile template, helpers, html no escape. ~Jinja2
 * theme: 1. tipi theme css, 2. http://www.bypeople.com/css-template/, 3. tipi (cd-scroll-down), 4. sunstreet, 5. pico, 6. default, 7. bastard, 8. uno-zen, 9. ambition, 10. theme tipi (google: codepen, html, css, simple, blog, theme, template, minimalist): #header, #toc, #tocIcon, #slider, #slides, #menu, #blog, #content, #disqus_thread, #footer, #pages, #social, #copyright, #poweredby, #error, blockquote, 11. blackdoc 12. bootstrap 13. start
 * toc: TOC, anchor.svg, TOC con nºs
@@ -135,7 +135,6 @@ ROADMAP
   - Coger ideas de Automad (ult. doc. revisado: Installation)
   - http://symfony.com/doc/current/components/dependency_injection/index.html
   - Fork pico cms  
-  - cms.txt
 - Jekyll
 - Hugo themes
 - Twitter Bootstrap,
@@ -148,6 +147,7 @@ ROADMAP
 - https://github.com/semplon/GeniXCMS
 - .editorconfig
 - https://docsify.js.org
+https://github.com/utensil/mdwiki-gimmicks
 
 Static Site Generators
 ----------------------
@@ -176,7 +176,6 @@ https://docute.js.org
  
 The following is a list of some general open source static site generators that transform reStructuredText or Markdown into static web sites:
 
-http://jekyllrb.com
 https://getgrav.org
 https://blog.getpelican.com
 https://hexo.io

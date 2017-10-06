@@ -3,7 +3,7 @@
        \/
        /\
       /  \
-     /    \     TIPI cms
+     /    \     Tipi CMS
     /  /\  \
    /__/  \__\
  
@@ -25,10 +25,10 @@ var configApp = {
 
   // Footer
   footerId: '#footer',
-  fPages: '#pages',
-  fContacts: '#social',
-  fCopyright: '#copyright',
-  fPoweredBy: '#poweredby',
+  pagesId: '#pages',
+  socialId: '#social',
+  copyrightId: '#copyright',
+  poweredById: '#poweredby',
   
   // Misc
   errorId: '#error',
@@ -46,17 +46,18 @@ var configContent = {
 	extension: 'md',
 	logo: '',
 	appDir: '.',
-	contentDir: 'content/'
+	contentDir: 'content/',
+	thumb: 'img/thumb.jpg'
   },
   metadata: {
     begin: "---",
 	end: "---"
   },
   footer: {
-    copyright: '',	// Dinamically generated on config load
+    copyright: '<a href="#">{{ site_title }}</a> &copy; {{ date.year }} &bull; All rights reserved.',
 	poweredBy: 'Powered by <a href="http://github.com/dewanee-es/tipi">Tipi</a>'
   },
-  contacts: {},
+  social: {},
   pages: {},
   posts: {},
   theme: {
@@ -80,6 +81,17 @@ var Template = {};
 var escapeKey = 27;
 
 /******************** Utilities **************************/
+
+Utils.date = {
+	date: function() { return new Date().getDate(); },
+	day: function() { return new Date().getDay(); },
+	year: function() { return new Date().getFullYear(); },
+	hours: function() { return new Date().getHours(); },
+	milliseconds: function() { return new Date().getMilliseconds(); },
+	minutes: function() { return new Date().getMinutes(); },
+	month: function() { return new Date().getMonth(); },
+	seconds: function() { return new Date().getSeconds(); },
+}
 
 Utils.getFragment = function(page) {
 	return page.home ? '' : '/' + page.slug;
@@ -219,8 +231,6 @@ Animation.toc = function() {
 /******************** Content Manipulation **************************/
 
 Content.config = function(data, metas) {
-	// Dynamic copyright
-	configContent.footer.copyright = '<a href="#">' + data.global.title + '</a> &copy; ' + (new Date()).getFullYear() + ' &bull; All rights reserved.';
 	
 	// Content dir
 	if(data.global.contentDir && data.global.contentDir.charAt(data.global.contentDir.length - 1) != '/') {
@@ -254,13 +264,18 @@ Content.config = function(data, metas) {
 	return true;
 };
 
-Content.contactInit = function() {
+Content.socialInit = function() {
   'use strict';
-  $.each(configContent.contacts, function(k, v) {
+  var socialList = $(configApp.socialId + ' > ul');
+  if(socialList.length == 0) {
+	  socialList = $('<ul></ul>');
+	  $(configApp.socialId).append(socialList);
+  }
+  $.each(configContent.social, function(k, v) {
     if (v.url) {
-      var imgEl = '<img src="' + v.img + '"/>';
+      var imgEl = '<img src="' + (v.icon ? configContent.global.appDir + '/img/social/' + v.icon + '.svg' : v.img) + '"/>';
       var anchorEl = '<li><a href="' + v.url + '">' + imgEl + '</a></li>';
-      $(configApp.fContacts + ' > ul').append(anchorEl);
+      socialList.append(anchorEl);
     }
   });
 };
@@ -345,8 +360,8 @@ Content.fillSlider = function() {
     } else {
       img = '<img src="' + configContent.global.thumb + '" />';
     }
-    var p = '<p>' + val.title + '</p>';
-    var p2 = '<p>' + val.date + '</p>';
+    var p = '<p class="slide-title">' + val.title + '</p>';
+    var p2 = '<p class="slide-date">' + val.date + '</p>';
     var li = '<li><a href="#' + Utils.getFragment(val) + '">' + img + p + p2 + '</a></li>';
     $(li).appendTo(configApp.slidesId);
   });
@@ -354,21 +369,39 @@ Content.fillSlider = function() {
 
 Content.footerInit = function() {
   'use strict';
-  $(configApp.fCopyright).html(configContent.footer.copyright);
-  $(configApp.fPoweredBy).html(configContent.footer.poweredBy);
+  $(configApp.copyrightId).html(Content.template('#copyright', configContent.footer.copyright));
+  $(configApp.poweredById).html(Content.template('#poweredBy', configContent.footer.poweredBy));
   var pageNames = '';
   $.each(configContent.pages, function(key, val) {
     var fragment = Utils.getFragment(val);
     pageNames += '<a href="#' + fragment + '">' + val.title + '</a>' + ' / ';
   });
   pageNames = pageNames.substring(0, pageNames.length - 3);
-  $(configApp.fPages + '> span').html(pageNames);
+  $(configApp.pagesId + '> span').html(pageNames);
 };
 
 Content.getPage = function(slug) {
-	return configContent.pages[Utils.getSlug(slug)]	// Force slug
-		|| Content.initPage({ title: Utils.getTitle(slug) });	// TODO: initPage({ slug: slug})
+	var key = Utils.getSlug(slug);	// Force slug
+	return configContent.pages[key]
+		|| configContent.posts[key]
+		|| Content.initPage({ title: Utils.getTitle(key) });	// TODO: initPage({ slug: slug})
 };
+
+Content.layout = function(templatePath, templateExtension, templateName, success, error) {
+	
+	var path = templatePath + '/' + templateName + '.' + templateExtension;
+
+	$.get(path, null, null, 'html').always(function(data, status, xhr) {
+	      if (status === 'error') {
+	    	  error(path, data);
+	      } else if (status === 'success') {			
+			var content = Content.template(templateName, data);
+
+			$('body').html(content);
+	        success();
+	      }	  
+	  });
+}
 
 Content.markdown = function(text, page, callback) {
   'use strict';
@@ -377,24 +410,26 @@ Content.markdown = function(text, page, callback) {
   var defaultLinkOpenRender = md.renderer.defaultRender('link_open');
   md.renderer.assign('link_open', function(tokens, idx, options, env, self) {
 	var href = tokens[idx].attrGet('href');
-	if(href.indexOf(':') == -1) {
-		if(href.indexOf('.') == -1 || href.endsWith(configContent.global.extension)) {
-			var hash = Utils.getHash();
-			if(hash === false || hash.length == 0) {
-				hash = '/';
+	if(href.charAt(0) != '#') {
+		if(href.indexOf(':') == -1) {
+			if(href.indexOf('.') == -1 || href.endsWith(configContent.global.extension)) {
+				var hash = Utils.getHash();
+				if(hash === false || hash.length == 0) {
+					hash = '/';
+				} else {
+					hash = hash.substr(0, hash.lastIndexOf('/') + 1);
+				}
+				if(href.endsWith(configContent.global.extension)) {
+					href = href.substr(0, href.length - configContent.global.extension.length - 1);
+				}
+				href = '#' + hash + href;
 			} else {
-				hash = hash.substr(0, hash.lastIndexOf('/') + 1);
+				href = Utils.getPath(page.url, href);
 			}
-			if(href.endsWith(configContent.global.extension)) {
-				href = href.substr(0, href.length - configContent.global.extension.length - 1);
-			}
-			href = '#' + hash + href;
+			tokens[idx].attrSet('href', href);
 		} else {
-			href = Utils.getPath(page.url, href);
+			tokens[idx].attrSet('target', '_blank');
 		}
-		tokens[idx].attrSet('href', href);
-	} else {
-		tokens[idx].attrSet('target', '_blank');
 	}
 	return defaultLinkOpenRender(tokens, idx, options, env, self);
   });
@@ -598,7 +633,7 @@ Content.snippets = function(html) {
 		html2 += html.substring(pos, match.index);
 		if(configApp.snippets[match[1]] === undefined) {
 			$.ajax({
-				url: '_app/js/snippets/' + match[1] + '.js',
+				url: configContent.global.appDir + '/js/markdown/snippets/' + match[1] + '.js',
 				dataType: 'script',
 				error: function() {
 					configApp.snippets[match[1]] = false;
@@ -618,60 +653,22 @@ Content.snippets = function(html) {
 	return html2;
 };
 
-Content.template = function(templatePath, templateExtension, templateName, success, error) {
-	//ich.templatePath = templatePath;
-	//ich.templateExtension = templateExtension;
-	
-	var path = templatePath + '/' + templateName + '.' + templateExtension;
-
-	$.get(path, null, null, 'html').always(function(data, status, xhr) {
-	      if (status === 'error') {
-	    	  error(path, data);
-	      } else if (status === 'success') {
-		    var context = {
-				base_url: window.location.href.substring(0, window.location.href.length - window.location.hash.length),
-				theme_url: configContent.global.appDir + '/themes/' + configContent.global.theme,
-				site_title: configContent.global.title,
-				site_description: configContent.global.description,
-				site_author: configContent.global.author,
-				site_logo: configContent.global.logo
-			};
-			
-			for (var attribute in configContent.theme) {
-			  context['theme_' + attribute] = configContent.theme[attribute];
-			}
-			
-			ich.addTemplate(templateName, data);
-			
-			var content = ich[templateName](context);
-
-			$('body').html(content);
-	        success();
-	      }	  
-	  });
-	
-	/*if (status === 'error') {
-		var msg = 'Error loading theme ' + configContent.global.theme;
-		Utils.showErrorMsg(msg, themeTemplate + ': ' + data.statusText);
-	}*/
-	
-	/*var context = {
-			base_url: window.location.href.substring(0, window.location.href.length - window.location.hash.length),
-			theme_url: templatePath,
-			site_title: configContent.global.title,
-			site_description: configContent.global.description,
-			site_author: configContent.global.author,
-			site_logo: configContent.global.logo
+Content.template = function(templateName, template) {
+	var context = {
+		base_url: window.location.href.substring(0, window.location.href.length - window.location.hash.length),
+		theme_url: configContent.global.appDir + '/themes/' + configContent.global.theme,
+		site_title: configContent.global.title,
+		site_description: configContent.global.description,
+		site_author: configContent.global.author,
+		site_logo: configContent.global.logo,
+		date: Utils.date
 	};
-			
-	for (var attribute in configContent.theme) {
-		context['theme_' + attribute] = configContent.theme[attribute];
-	}
 	
-	ich.loadTemplate(template, context, function($content) {
-		$('body').html($content);
-	    callback();
-  	});*/
+	for (var attribute in configContent.theme) {
+	  context['theme_' + attribute] = configContent.theme[attribute];
+	}
+
+	return Mustache.render(template, context);
 }
 
 Content.theme = function(callback) {
@@ -679,7 +676,7 @@ Content.theme = function(callback) {
   var theme = configContent.global.theme;
   
   if(theme) {
-	  Content.template(configContent.global.appDir + '/themes/' + theme, 'html', configContent.theme.template, callback, function(path, data) {
+	  Content.layout(configContent.global.appDir + '/themes/' + theme, 'html', configContent.theme.template, callback, function(path, data) {
         var msg = 'Error loading theme ' + theme;
         Utils.showErrorMsg(msg, path + ': ' + data.statusText);
 	  });
@@ -909,12 +906,27 @@ Template.fromString = function(name, string) {
 
 /******************* Addons ****************/
 Backend.addons = {
+	bootstrap: function (appDir, assets) {
+		assets.push(Loader.loadCss(appDir + '/addons/bootstrap/css/bootstrap.min.css'));
+		assets.push(Loader.loadJavascript(appDir + '/addons/bootstrap/js/bootstrap.min.js'));
+	},
 	fontAwesome: function (appDir, assets) {
-		assets.push(Loader.loadCss(appDir + '/font-awesome/css/font-awesome.min.css'));
+		assets.push(Loader.loadCss(appDir + '/addons/font-awesome/css/font-awesome.min.css'));
+	},
+	highlight: function (appDir, assets, stylesheet) {
+		assets.push(Loader.loadJavascript(appDir + '/addons/highlight/highlight.min.js'));
+		if(typeof stylesheet == 'string') {
+			assets.push(Loader.loadCss(appDir + '/addons/highlight/styles/' + stylesheet + '.css'));
+		}
 	},
 	pace: function (appDir, assets) {
-		assets.push(Loader.loadJavascript(appDir + '/js/vendor/pace.min.js'));
-		assets.push(Loader.loadCss(appDir + '/css/pace.css'));
+		assets.push(Loader.loadJavascript(appDir + '/addons/pace/pace.min.js'));
+		assets.push(Loader.loadCss(appDir + '/addons/pace/pace.css'));
+	},
+	slider: function (appDir, assets) {
+		assets.push(Loader.loadCss(appDir + '/addons/slick/slick.css'));
+		assets.push(Loader.loadCss(appDir + '/addons/slick/slick-theme.css'));
+		assets.push(Loader.loadJavascript(appDir + '/addons/slick/slick.min.js'));
 	}
 }
 /******************* Initialization ****************/
@@ -924,18 +936,12 @@ Backend.init = function(appDir, configJson, metas) {
   configJson.addons = Object.assign({}, configContent.addons, configJson.addons);
   
   var assets = [             
-	Loader.loadJavascript(appDir + '/js/vendor/jquery.min.js'),
-	Loader.loadJavascript(appDir + '/js/vendor/highlight.pack.js'),
-	/*Loader.loadJavascript(appDir + '/js/vendor/markup.min.js').then(function () {
-		Loader.loadJavascript(appDir + '/js/vendor/markup.extras.min.js');
-	}),*/
-	Loader.loadJavascript(appDir + '/js/vendor/ICanHaz.min.js'),/*.then(function() {
-		return Loader.loadJavascript(appDir + '/js/vendor/ICanHaz.load.js');
-	}),*/
-	Loader.loadJavascript(appDir + '/js/vendor/routie.min.js'),
-	Loader.loadJavascript(appDir + '/js/vendor/yaml.min.js'),
-	Loader.loadJavascript(appDir + '/markdown/markdown-it.js'),
-	Loader.loadJavascript(appDir + '/markdown/powerdown.js')
+	Loader.loadJavascript(appDir + '/js/jquery/jquery.min.js'),
+	Loader.loadJavascript(appDir + '/js/mustache/mustache.min.js'),
+	Loader.loadJavascript(appDir + '/js/routie/routie.min.js'),
+	Loader.loadJavascript(appDir + '/js/yaml/yaml.min.js'),
+	Loader.loadJavascript(appDir + '/js/markdown/markdown-it.js'),
+	Loader.loadJavascript(appDir + '/js/markdown/powerdown.js')
   ];
   
   for(var addon in configJson.addons) {
@@ -953,7 +959,7 @@ Backend.init = function(appDir, configJson, metas) {
 	  Content.routes();
 	  Content.fillSlider();
 	  Content.fillMenu();
-	  Content.contactInit();
+	  Content.socialInit();
 	  Content.footerInit();
 	  Animation.smoothScrolling();
 	  Animation.menu();

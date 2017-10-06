@@ -11,7 +11,7 @@
 - Grav
 - HTMLy
 - Hugo
-- Jekyll
+- [Jekyll](http://jekyllrb.com)
 - [Markdown site template](http://aplib.github.io/markdown-site-template/)
 - MdWiki
 - MkDocs

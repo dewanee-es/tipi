@@ -21,7 +21,8 @@ Here is the format of the config file with its default values. All the values ar
     "extension": "md",    // Default extension for content files
     "logo": "",           // Image logo
     "appDir": ".",        // Root Tipi directory with assets, themes, etc. Relative to index.html
-    "contentDir": "content/"  // Content files directory relative to index.html
+    "contentDir": "content/",  // Content files directory relative to index.html
+	"thumb": "img/thumb.jpg"	// Thumb image. Relative to index.html
   },
   "metadata": {   // Content files metadata configuration
     "begin": "---",       // Metadata block prefix
@@ -31,7 +32,7 @@ Here is the format of the config file with its default values. All the values ar
     "copyright": "",      // Copyright notice
     "poweredBy": "Powered by <a href='http://github.com/dewanee-es/tipi'>Tipi</a>"  // Powered by notice
   },
-  "contacts": [   // Social contacts. See format below
+  "social": [     // Social links. See format below
   ],
   "pages": {      // Pages list. See pages/posts format below.
   },
@@ -40,10 +41,11 @@ Here is the format of the config file with its default values. All the values ar
   "theme": {      // Theme configuration. Some themes use their own properties.
     "template": "index.html", // Theme template filename
     "style": "",              // Theme style. For themes with different styles. For example, in bootstrap theme is the bootswatch style name.
-    "iconClass": "fa fa-"     // CSS class prefix for icons. Default value works with Font Awesome icons.
+    "iconClass": "fa fa-"    // CSS class prefix for icons. Default value works with Font Awesome icons.
   },
   "addons": {     // Addons configuration. Set addon to true to activate
     "fontAwesome": false,     // Font Awesome icons
+	"highlight": false,       // Highlight.JS. Set to stylesheet name, for example "default". Set to true for custom stylesheet.
     "pace": false,            // Pace loader
   }
 }
@@ -96,11 +98,14 @@ There are four syntaxes available:
         ...
       ]
       
-### Contacts format
+### Social links format
+
+Use "icon" or "img" to specify social link image:
 
     [{
-      "img": "",  // Icon image. For example: "img/social/Github-color.svg"
-      "url: ""    // Link target. For example: "http://www.github.com"
+      "icon": "",	// Icon filename without extension. For example: "Github-color" for "img/social/Github-color.svg" image.
+	  "img": "",  	// Custom icon image. For example: "http://myserver.com/myicon.png"
+      "url: ""    	// Link target. For example: "http://www.github.com"
     }, {
       ...
     }] 
