@@ -38,7 +38,11 @@ For static sites (Javascript) all the URLs have a hash part with the page:
 		
 	http://site/index.html#/page/subpage/subsubpage
 	
-Page names could be uppercase (Wiki style) or lowercase (blog style). Really, page names is case insensitive. So, `/Page` and `/page` are the same page.
+Page names could be uppercase (Wiki style) or lowercase (blog style). Really, page names are case insensitive. So, `/Page` and `/page` are the same page. A page can not contain spaces, use _ or - characters instead.
+
+By default, URL is converted to lowercase and appended .md suffix to get the filename for the page:
+
+	/Page/Subpage/Subsubpage -> /page/subpage/subsubpage.md
 	
 ### Alias
 
@@ -126,3 +130,9 @@ No spaces allowed, use - or _ character.
 		|	+--subpage2.md	-> /Page1/Subpage2
 		|
 		+--page2.md		-> /Page2
+		|
+		+--page3/
+		    |
+			+--page3.md		-> /Page3/ (or /Page3/Page3) but not /Page3 (404 error)
+			|
+			+--subpage3.md		-> /Page3/Subpage3

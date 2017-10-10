@@ -21,8 +21,12 @@ Here is the format of the config file with its default values. All the values ar
     "extension": "md",    // Default extension for content files
     "logo": "",           // Image logo
     "appDir": ".",        // Root Tipi directory with assets, themes, etc. Relative to index.html
-    "contentDir": "content/",  // Content files directory relative to index.html
-	"thumb": "img/thumb.jpg"	// Thumb image. Relative to index.html
+    "contentDir": "content/",   // Content files directory relative to index.html
+	"defaultImg": false,		// By default, pages/posts images are empty.
+								// Set to true to use image with same content filename and .jpg extension.
+								// Set to string to use image with same content filename and custom extension (without dot), e.g. "png"
+	"thumb": "img/thumb.jpg",	// Thumb image for pages/posts without image. Relative to index.html
+	"breadcrumbHome": "#"		// Override URL for breadcrumb home link. Set to false to hide home link.
   },
   "metadata": {   // Content files metadata configuration
     "begin": "---",       // Metadata block prefix
@@ -61,7 +65,7 @@ There are four syntaxes available:
         "title": "",  // Page/Post title
         "url": "",    // Content filename (with extension). If omitted, use title and default extension to build the filename. See Pages documentation.
         "tag": "",    // Page/Post tag(s)
-        "img": "",    // Page/Post image relative to index.html. By default takes image with similar filename to content file and .jpg extension
+        "img": "",    // Page/Post image relative to index.html. See "defaultImg" option to use content filename and custom extension for default images.
         "thumb": "",  // Page/Post thumbnail image. By default is the same as "img"
         "disqusEnable": false,  // Active Disqus page/post comments
         "disqusIdentifier": "", // Disqus identifier

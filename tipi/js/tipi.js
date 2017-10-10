@@ -17,6 +17,7 @@ var configApp = {
   tocIconId: '#tocIcon',
   sliderId: '#slider',
   slidesId: '#slides',
+  breadcrumbId: '#breadcrumb',
   menuId: '#menu',
 
   blogId: '#blog',
@@ -47,7 +48,9 @@ var configContent = {
 	logo: '',
 	appDir: '.',
 	contentDir: 'content/',
-	thumb: 'img/thumb.jpg'
+	defaultImg: false,
+	thumb: 'img/thumb.jpg',
+	breadcrumbHome: '#'
   },
   metadata: {
     begin: "---",
@@ -81,6 +84,15 @@ var Template = {};
 var escapeKey = 27;
 
 /******************** Utilities **************************/
+
+Utils.basename = function(url) {
+	var pos = url.lastIndexOf('.');
+	if(pos != -1) {		
+		return url.substring(0, pos);
+	} else {
+		return url;
+	}
+}
 
 Utils.date = {
 	date: function() { return new Date().getDate(); },
@@ -120,18 +132,23 @@ Utils.getSlug = function(title) {
 };
 
 Utils.getTitle = function(slug) {
-	return (slug.charAt(0).toUpperCase() + slug.slice(1)).replace(/-/g, ' ');
+	if(slug.charAt(slug.length - 1) == '/') {
+		slug = slug.slice(0, -1);
+	}
+	var pieces = slug.split('/');
+	var title = pieces[pieces.length - 1];
+	return (title.charAt(0).toUpperCase() + title.slice(1)).replace(/-/g, ' ');
 }
 
-Utils.getUrl = function(page) {
+Utils.getUrl = function(slug) {
 	var url;
-	page = page.toLowerCase();
-	if(page.charAt(page.length - 1) == '/') {
-		var pieces = page.split('/');
+	slug = slug.toLowerCase();
+	if(slug.charAt(slug.length - 1) == '/') {
+		var pieces = slug.split('/');
 		var sub = pieces[pieces.length - 2];
-		url = page + sub + '.' + configContent.global.extension;
+		url = slug + sub + '.' + configContent.global.extension;
 	} else {
-		url = page + '.' + configContent.global.extension;
+		url = slug + '.' + configContent.global.extension;
 	}
 	return encodeURI(url);
 }
@@ -290,22 +307,31 @@ Content.include = function(url) {
 
 Content.initPage = function(page) {
 	if(!page.title) {
-		if(!Content.initPage.pageSeq) {
-			Content.initPage.pageSeq = 1;
+		if(page.slug) {
+			page.title = Utils.getTitle(page.slug);
+		} else {
+			if(!Content.initPage.pageSeq) {
+				Content.initPage.pageSeq = 1;
+			}
+			page.title = 'Page ' + (Content.initPage.pageSeq++);
 		}
-		page.title = 'Page ' + (Content.initPage.pageSeq++);
 	}
 
-	page.url = page.url || Utils.getUrl(page.title);
+    page.slug = page.slug || Utils.getSlug(page.title);
+	page.url = page.url || Utils.getUrl(page.slug);
 	page.tag = page.tag || '';
-	page.img = page.img || '';	// TODO: By default takes image with similar filename to content file and .jpg extension
+	page.img = page.img || (configContent.global.defaultImg
+		? Utils.basename(page.url) + '.' +
+			(typeof configContent.global.defaultImg == 'string'
+			? configContent.global.defaultImg
+			: 'jpg')
+		: '');
     page.thumb = page.thumb || page.img;
     page.disqusEnable = page.disqusEnable || false;
     page.disqusIdentifier = page.disqusIdentifier || '';
     page.disqusLang = page.disqusLang || '';
     page.date = page.date || '';
     page.home = (configContent.global.welcome == page.title);
-    page.slug = Utils.getSlug(page.title);
     
     return page;
 }
@@ -384,7 +410,7 @@ Content.getPage = function(slug) {
 	var key = Utils.getSlug(slug);	// Force slug
 	return configContent.pages[key]
 		|| configContent.posts[key]
-		|| Content.initPage({ title: Utils.getTitle(key) });	// TODO: initPage({ slug: slug})
+		|| Content.initPage({ slug: slug });
 };
 
 Content.layout = function(templatePath, templateExtension, templateName, success, error) {
@@ -483,6 +509,7 @@ Content.reloadPage = function(val) {
 	  $('table').addClass('table table-bordered');
       Content.setHeader(val);
       Content.runToc();
+	  Content.runBreadcrumb(val);
 	  Content.ready();
       Animation.smoothScrolling();
       DisqusApi.disqusReload(val.disqusEnable, val.disqusIdentifier, val.disqusLang);
@@ -569,6 +596,39 @@ Content.routes = function() {
     Content.reloadPage(val);
   }
   routie(urls);
+};
+
+Content.runBreadcrumb = function(page, container) {
+  container = typeof container !== 'undefined' ? container : configApp.breadcrumbId;
+  var breadcrumbHome = configContent.global.breadcrumbHome;
+  var list = $(container);
+  $(list).empty();
+  
+  if(page.home) {
+	  if(breadcrumbHome) {
+		$(list).append('<li class="active">' + configContent.global.title + '</li>');
+	  }
+  } else {
+	  if(breadcrumbHome) {
+		$(list).append('<li><a href="' + breadcrumbHome + '">' + configContent.global.title + '</a></li>');
+	  }
+	  
+	  var slug = page.slug;
+	  if(slug.charAt(slug.length - 1) == '/') {
+		  slug = slug.slice(0, -1);
+	  }
+	  var parts = slug.split('/');
+	  var fragment = '#';
+	  
+	  for(var i = 0; i < parts.length; i++) {
+		  fragment += '/' + parts[i];
+		  if(i == parts.length - 1) {
+			  $(list).append('<li class="active">' + page.title + '</li>');
+		  } else {
+			  $(list).append('<li><a href="' + fragment + '/">' + Utils.getTitle(parts[i]) + '</a></li>');
+		  }
+	  }
+  }
 };
 
 Content.runToc = function(container) {

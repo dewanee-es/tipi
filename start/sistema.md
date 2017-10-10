@@ -4,13 +4,12 @@
 
 ## Administración del sistema
 
-* [Primeros pasos](#/Primeros-pasos)
+* [Primeros pasos](#/Primeros-pasos/)
 * [Software y drivers](#/Software): Instalar las aplicaciones más habituales y paquetes comunes.
-* [Servidores Web y Nube](#/Web): nube, gestión alojamiento con Vesta
-	* [Servidor Web local](#/Web/LAMP)
+* [Servidores Web y Nube](#/Web/): nube, gestión alojamiento con Vesta
 * [Personalización](#/Personalización): Wallpapers
-* [Mantenimiento](#/Mantenimiento): https://glatelier.org/2009/03/02/limpiando-ubuntu-comandos-y-programas/
-* [Resolución de problemas](#/Problemas)
+* [Mantenimiento y resolución de problemas](#/Mantenimiento): https://glatelier.org/2009/03/02/limpiando-ubuntu-comandos-y-programas/
+* [Herramientas y utilidades](#/Herramientas/)
 
 <!--
 
