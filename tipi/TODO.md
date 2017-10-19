@@ -8,7 +8,6 @@
 * markdown: test page, browserify, javascript package system, async (code2flow)
 * menu: list pages
 * metadata: title, date, category, modified, tags, slug, authors, summary, lang, status (draft)
-* pages: hash, pages, links, files, folders. Archivo de carpeta: pagina.md (#/Pagina) vs. pagina/pagina.md (#/Pagina/) vs auto (prueba primero pagina.md y luego pagina/pagina.md). Links a directorio: #/Pagina/ -> pagina/pagina.md, Links relativos: en #/Pagina1/Pagina2 el link #./Pagina3 -> #/Pagina1/Pagina3, en #/Pagina1/Pagina2/ el link #./Pagina3 -> #/Pagina1/Pagina2/Pagina3. Ver en pages.md porque los links relativos sin ./ no se pueden tratar. Cambiar en config page.url por page.file
 * posts: slider, posts sin fecha y aleatorios
 * render: powerdown url rewriting/overriding render methods?
 * samples: Dev
@@ -33,8 +32,12 @@
 * images: random splash image, logo, favicon
 * welcome: NO THEME (index page is the template), home, default page with folder name
 * headers: h1
-
-
+* config pages/links/hash... Slug: wiki (upper first letter) / blog (lowercase), spaces / dash (space -> -) / underscore (space -> _), special (España) / translate (Espana). Files: title (case as slug) / lower (lowercase), spaces/dash (space -> -) / underscore (space -> _), special (España) / translate (Espana). Folders: files + subfolders / folder (files + subfolders) / force folder (page is always a folder) / auto (js only: try files + folders, if not found try folder with files)
+* URL routing & rewriting: todos los links que no sean externos son reescritos para añadir # por delante. Así: /Absoluto -> #/Absoluto, Relativo -> #Relativo, ./Subpagina -> #./Subpagina, ../Padre -> #../Padre, #anchor -> ##anchor
+* Cambiar en config page.url por page.file
+* Main page: # -> #/. La ruta # no está definida
+* Trailing slash: una página puede indicar que se redirija a pagina/ ya que los links cambian o forzar todas las páginas del sitio acaben con / o que se les quite /
+- pages.md: http://automad.org/documentation/editing-content How Automad Stores Content http://automad.org/documentation/editing-content/adding-pages Using a Text-Editor http://automad.org/documentation/editing-content/linking-to-files-and-pages
 
 system info js:
 https://stackoverflow.com/questions/8180296/what-information-can-we-access-from-the-client

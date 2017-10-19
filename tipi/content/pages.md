@@ -1,27 +1,5 @@
 # Pages
 
-- wikilinks [[Pagina]] [[./archivo.jpg]] [[/subpagina]]
-- links [texto](#/Pagina)
-- Translate [texto](archivo.md) -> #/Pagina
-- Directo #/Archivo -> archivo.md
-- Nombre archivo/carpeta con primera en mayúsculas
-- Carpeta por página con todo su contenido (carpeta pagina con pagina.md, pagina.jpg, thumb.jpg, ...)
-- Solo un nivel de carpetas/páginas
-- Carpetas/Páginas con subcarpetas/subpáginas
-- Solo un nivel de páginas, varios de carpetas, asociación mediante archivo json
-- carpetas archivos con espacios
-- carpetas archivos sin espacios: -
-- carpetas archivos con caracteres especiales: ñ
-- carpetas archivos sin caracteres especiales:
-- página con subpáginas: archivo dentro de carpeta y mismo nombre
-- página con subpáginas: archivo dentro de carpeta con nombre index.md
-- #
-- #!
-- #/
-- blog format: AAAA/MM/DD
-- Páginas en mayúsculas
-- Páginas en minúsculas
-
 Each markdown document is a page.
 
 ## URLs
@@ -100,8 +78,20 @@ Relative: -> current page: /TopPage1/Page1, current file: /toppage1/page1.md
 - ./Subpage (relative subpage) -> /TopPage1/Page1/Subpage
 - page1/subpage.md (relative file in subfolder) -> /toppage1/page1/subpage.md
 
-- ../TopPage1 (parent page) -> /TopPage1)
+- ../TopPage1 (parent page) -> /TopPage1
 - ../toppage1.md (parent file) -> /toppage1.md
+
+!!! Be careful with relative links:
+
+/TopPage1/Page1 and /TopPage1/Page1/ seems to be the same page, but relative links change!
+
+- Subpage (relative subpage) -> /TopPage1/Page1/Subpage
+
+- ./Subpage (relative subpage) -> /TopPage1/Page1/Subpage
+
+- ../Page2 (sibling page) -> /TopPage1/Page2
+
+Recommendation: Always strip ending slash. Change /Page1/ to /Page1
 
 ### Anchors
 
@@ -111,28 +101,56 @@ Use anchors (#) to link to sections in the page
 
 Filenames always in lowercase and .md extension.
 No spaces allowed, use - or _ character.
+Translate special characters (ex. ñ to n)
 
 ## Folders
 
 Folder names always in lowercase.
 No spaces allowed, use - or _ character.
+Translate special characters (ex. ñ to n)
 
 ### Subpages
+
+Pages and subpages could be organized in two ways:
+
+1. Page file and folder with subpages
 
 	content/
 		|
 		+--page1.md		-> /Page1
 		|
+		+--page1.jpg	-> /Page1.jpg
+		|
 		+--page1/
-		|	|
-		|	+--subpage1.md	-> /Page1/Subpage1
-		|	|
-		|	+--subpage2.md	-> /Page1/Subpage2
-		|
-		+--page2.md		-> /Page2
-		|
-		+--page3/
-		    |
-			+--page3.md		-> /Page3/ (or /Page3/Page3) but not /Page3 (404 error)
+		 	|
+			+--subpage1.md	-> /Page1/Subpage1
 			|
-			+--subpage3.md		-> /Page3/Subpage3
+			+--subpage1.jpg	-> /Page1/Subpage1.jpg
+			|
+			+--subpage2.md	-> /Page1/Subpage2
+			
+PRO: Easy URLs (URL is also file location)
+CON: Page files (md and resources) in one level are all mixed together
+			
+2. Folder with page and subpages
+			
+	content/
+		|
+		+--page2/
+		    |
+			+--page2.md		-> /Page2/ (or /Page2/Page2). PHP: also /Page2 JS: not /Page2 (404 error)
+			|
+			+--page2.jpg	-> /Page2/Page2.jpg
+			|
+			+--subpage3.md	-> /Page2/Subpage3
+			|
+			+--subpage3.jpg	-> /Page2/Subpage3.jpg
+			|
+			+--subpage4
+				|
+				+--subpage4.md	-> /Page2/Subpage4/
+				
+PRO: Better separation, each folder contain all page files (and subpages)
+CON: In JS, URLs for pages inside folders must end with / character
+
+Recommendation: The last option is the best way to organize files on disk. Even it's a good idea to have always a folder for each page.

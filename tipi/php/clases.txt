@@ -1,0 +1,89 @@
+## Automad
+
+Tipi (Core): The Automad class includes all methods and properties regarding the site, structure and pages. A Automad object is the "main" object. It consists of many single Page objects and holds also additional data like the site's name and theme.
+Cache: The Cache class holds all methods for evaluating, reading and writing the HTML output and the Automad object from/to AM_DIR_CACHE. Basically there are three things which get cached - the latest modification time of all the site's files and directories (site's mTime), the page's HTML and the Automad object.
+Config: The Config class.
+Context: The Context represents the current page within statements (loops) or just the requested page.
+Debug: The Debug class holds all methods to help debugging while development. The output of all the contained methods can be activated/deactivated with defining the AM_DEBUG_ENABLED constant. All logged information will be stored in $buffer as JS's console.log() items.
+Filelist: The Filelist object represents a set of files based on a file pattern.
+Html: The Html class holds all methods to generate html.
+Image: The Image object represents a resized (and cropped) copy of a given image.
+Page: The Page class holds all properties and methods of a single page. A Page object describes an entry in the collection of all pages in the Automad class. Basically the Automad object consists of many Page objects.
+Pagelist: A Pagelist object represents a set of Page objects (matching certain criterias).
+Parse: The Parse class holds all parsing methods.
+Resolve: The Resolve class holds all methods to modulate URLs and file paths.
+Selection: The Selection class holds all methods to filter and sort the collection of pages and return them as a new selection.
+Sitemap: The Sitemap class handles the generating process for a site's sitemap.xml.
+Template: The Template class holds all methods to render the current page using a template file.
+Toolbox: The Toolbox class holds all methods to be used within the template files.
+
+### GUI
+
+GUI (Admin/Edit): The GUI class provides all methods used for the GUI.
+
+### Extensions
+
+Carousel: The Carousel extension creates the markup for a Twitter Bootstrap carousel and automatically generates page variables for each matched image.
+Gallery: Create a simple gallery out of a set of images defined by a glob pattern.
+Navbar: The Navbar extension creates the markup of a Twitter Bootstrap Navbar for multiple levels. 
+
+## Ideas
+
+Blog
+CLI (Command)
+Controller
+Database
+Event
+Factory
+Language
+Metadata
+Markdown
+Model
+Plugin
+Router
+Search
+Security
+Service
+Site
+Storage
+Theme
+Update
+User
+View
+Wiki
+
+### Extensiones
+
+blog
+breadcrumbs
+command
+contact
+core
+disqus
+draft
+edit
+emoji
+feed
+fontawesome
+gallery
+googlecalendar
+googlemaps
+highlight
+image
+instagram
+language
+links
+markdown
+piwik
+preview
+search
+sitemap
+slider
+soundcloud
+toc
+traffic
+twitter
+update
+vimeo
+wiki
+youtube

@@ -35,7 +35,10 @@ var configApp = {
   errorId: '#error',
   
   // Snippets
-  snippets: []
+  snippets: [],
+  
+  // Storage
+  storagePrefix: 'tipi-'
 };
 var configContent = {
   global: {
@@ -50,7 +53,9 @@ var configContent = {
 	contentDir: 'content/',
 	defaultImg: false,
 	thumb: 'img/thumb.jpg',
-	breadcrumbHome: '#'
+	breadcrumbHome: '#/',
+	baseUrl: false,
+	id:	0	// Page id, calculated (hash from baseUrl)
   },
   metadata: {
     begin: "---",
@@ -84,6 +89,14 @@ var Template = {};
 var escapeKey = 27;
 
 /******************** Utilities **************************/
+
+Utils.addClass = function(value, classname) {
+	if(value) {
+		return value + ' ' + classname;
+	} else {
+		return classname;
+	}
+}
 
 Utils.basename = function(url) {
 	var pos = url.lastIndexOf('.');
@@ -173,6 +186,45 @@ Utils.startsWith = function(str, val) {
     return false;
   }
 };
+
+Utils.visit = function(url) {
+	var key = configApp.storagePrefix + configContent.global.id
+	var item = localStorage.getItem(key);
+	var data;
+	if(item) {
+		data = JSON.parse(item);
+	} else {
+		data = {
+			url: configContent.global.baseUrl,
+			visited: {}
+		};
+	}
+	data.visited[url] = true;
+	localStorage.setItem(key, JSON.stringify(data));
+}
+
+Utils.isVisited = function(url) {
+	var key = configApp.storagePrefix + configContent.global.id
+	var item = localStorage.getItem(key);
+	var data;
+	if(item) {
+		data = JSON.parse(item);
+		return data.visited[url];
+	} else {
+		return false;
+	}
+}
+
+Utils.hash = function(text) {
+	var hash = 0, i, chr;
+	if (text.length === 0) return hash;
+	for (i = 0; i < text.length; i++) {
+		chr   = text.charCodeAt(i);
+		hash  = ((hash << 5) - hash) + chr;
+		hash |= 0; // Convert to 32bit integer
+	}
+	return hash;
+}
 
 /******************** App Animation **************************/
 
@@ -270,6 +322,9 @@ Content.config = function(data, metas) {
 	// Metadata
 	configContent.metadata.begin = configContent.metadata.begin.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 	configContent.metadata.end = configContent.metadata.end.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+	
+	// Page Id
+	configContent.global.id = Utils.hash(configContent.global.baseUrl);
 	
 	// HTML Metas
 	$.each(metas, function (index, meta) {
@@ -436,8 +491,8 @@ Content.markdown = function(text, page, callback) {
   var defaultLinkOpenRender = md.renderer.defaultRender('link_open');
   md.renderer.assign('link_open', function(tokens, idx, options, env, self) {
 	var href = tokens[idx].attrGet('href');
-	if(href.charAt(0) != '#') {
-		if(href.indexOf(':') == -1) {
+	if(href.charAt(0) != '#') {	// External link or relative internal link
+		if(href.indexOf(':') == -1) {	// Relative link
 			if(href.indexOf('.') == -1 || href.endsWith(configContent.global.extension)) {
 				var hash = Utils.getHash();
 				if(hash === false || hash.length == 0) {
@@ -448,13 +503,21 @@ Content.markdown = function(text, page, callback) {
 				if(href.endsWith(configContent.global.extension)) {
 					href = href.substr(0, href.length - configContent.global.extension.length - 1);
 				}
-				href = '#' + hash + href;
-			} else {
+				hash = hash + href;
+				href = '#' + hash;
+				if(Utils.isVisited(hash)) {
+					tokens[idx].attrSet('class', Utils.addClass(tokens[idx].attrGet('class'), 'visited'));
+				}
+			} else {	// Resource
 				href = Utils.getPath(page.url, href);
 			}
 			tokens[idx].attrSet('href', href);
-		} else {
+		} else {	// External link
 			tokens[idx].attrSet('target', '_blank');
+		}
+	} else {	// Internal link
+		if(Utils.isVisited(href.substring(1))) {
+			tokens[idx].attrSet('class', Utils.addClass(tokens[idx].attrGet('class'), 'visited'));
 		}
 	}
 	return defaultLinkOpenRender(tokens, idx, options, env, self);
@@ -565,6 +628,7 @@ Content.routes = function() {
 	$(configApp.menuId + ' > ul > li.active').removeClass('active');
 	$(configApp.menuId + ' > ul > li > a[href="#"]').parent().addClass('active');
     Content.reloadPage(Content.getPage(configContent.global.welcome));
+	Utils.visit('/');
     /*
     Content.updateBrowserTitle(configContent.global.title);
     $(configApp.blogId).fadeOut(500, function() {
@@ -594,6 +658,7 @@ Content.routes = function() {
 	
 	item.parent().addClass('active');
     Content.reloadPage(val);
+	Utils.visit('/' + url);
   }
   routie(urls);
 };
@@ -1048,12 +1113,14 @@ Backend.init = function(appDir, configJson, metas) {
 
 (function() {
 	var metas = document.getElementsByTagName('meta');
+	var href = window.location.href.substr(0, window.location.href.length - window.location.hash.length);
 	var filename;
+	
+	configContent.global.baseUrl = href;
 	
 	if(metas.length > 0 && metas['config']) {
 		filename = metas['config'].content;
 	} else {
-		var href = window.location.href.substr(0, window.location.href.length - window.location.hash.length);
 		filename = href.substr(href.lastIndexOf("/") + 1);
 		filename = filename.substr(0, filename.lastIndexOf("."));
 		if (!filename || filename == 'index') {

@@ -26,7 +26,7 @@ Here is the format of the config file with its default values. All the values ar
 								// Set to true to use image with same content filename and .jpg extension.
 								// Set to string to use image with same content filename and custom extension (without dot), e.g. "png"
 	"thumb": "img/thumb.jpg",	// Thumb image for pages/posts without image. Relative to index.html
-	"breadcrumbHome": "#"		// Override URL for breadcrumb home link. Set to false to hide home link.
+	"breadcrumbHome": "#/"		// Override URL for breadcrumb home link. Set to false to hide home link.
   },
   "metadata": {   // Content files metadata configuration
     "begin": "---",       // Metadata block prefix
