@@ -12,10 +12,8 @@ Features:
 
 Documentation:
 
-* [Pages](pages.md)
-* [Configuration](config.md)
-* [Templating](templating.md)
-* [Snippets](snippets.md)
+* [Configuration](configuration.md)
+* [Page metadata](metadata.md)
 
 **Tipi is under active development and unstable**
 

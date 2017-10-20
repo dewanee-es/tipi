@@ -1,5 +1,21 @@
-## Automad
-
+Configuration: JSON o YAML?
+Image???: Image manipulation, e.g: ![](img.png 64x64) / Imágenes para páginas: splash o logo image, thumbnail, usado para ver listado de páginas con imágenes
+Metadata: Yaml (Symfony Yaml)
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+Configuration: actual (sunstreet)
+Configuration: https://hexo.io/docs/configuration.html
+Configuration: https://bauncms.com/docs/setup/configuration
+https://github.com/BaunCMS/Baun/blob/master/config/app.php
+https://github.com/BaunCMS/Baun/blob/master/config/blog.php
+https://github.com/BaunCMS/Baun/blob/master/config/plugins.php
+https://github.com/BaunCMS/Baun/blob/master/config/providers.php
+Container: 1. Pimple 2. Flight
+Event: Symfony EventDispatcher
+Highlighter: 1. http://qbnz.com/highlighter/ 2. Highlight JS
+Http: Symfony HttpFoundation 
+Image: https://github.com/avalanche123/Imagine
+Parser: 1. Markdown (core) 2. Textile (by plugin)
+Template: 1. Twig 2. https://shopify.github.io/liquid/ 3. otro (templating.txt): Handlebars, moustache, mark.up...
 Tipi (Core): The Automad class includes all methods and properties regarding the site, structure and pages. A Automad object is the "main" object. It consists of many single Page objects and holds also additional data like the site's name and theme.
 Cache: The Cache class holds all methods for evaluating, reading and writing the HTML output and the Automad object from/to AM_DIR_CACHE. Basically there are three things which get cached - the latest modification time of all the site's files and directories (site's mTime), the page's HTML and the Automad object.
 Config: The Config class.
@@ -7,7 +23,6 @@ Context: The Context represents the current page within statements (loops) or ju
 Debug: The Debug class holds all methods to help debugging while development. The output of all the contained methods can be activated/deactivated with defining the AM_DEBUG_ENABLED constant. All logged information will be stored in $buffer as JS's console.log() items.
 Filelist: The Filelist object represents a set of files based on a file pattern.
 Html: The Html class holds all methods to generate html.
-Image: The Image object represents a resized (and cropped) copy of a given image.
 Page: The Page class holds all properties and methods of a single page. A Page object describes an entry in the collection of all pages in the Automad class. Basically the Automad object consists of many Page objects.
 Pagelist: A Pagelist object represents a set of Page objects (matching certain criterias).
 Parse: The Parse class holds all parsing methods.
@@ -16,8 +31,10 @@ Selection: The Selection class holds all methods to filter and sort the collecti
 Sitemap: The Sitemap class handles the generating process for a site's sitemap.xml.
 Template: The Template class holds all methods to render the current page using a template file.
 Toolbox: The Toolbox class holds all methods to be used within the template files.
+http://event.thephpleague.com/
+https://github.com/mrjgreen/phroute
 
-### GUI
+## GUI
 
 GUI (Admin/Edit): The GUI class provides all methods used for the GUI.
 
@@ -28,14 +45,20 @@ Gallery: Create a simple gallery out of a set of images defined by a glob patter
 Navbar: The Navbar extension creates the markup of a Twitter Bootstrap Navbar for multiple levels. 
 
 ## Ideas
-
+Animation
+Backend
 Blog
 CLI (Command)
+Content
 Controller
 Database
+DisqusApi
 Event
 Factory
+GithubApi
+GoogleApi
 Language
+Loader
 Metadata
 Markdown
 Model
@@ -46,14 +69,15 @@ Security
 Service
 Site
 Storage
+Template
 Theme
 Update
 User
+Utils
 View
 Wiki
 
-### Extensiones
-
+### Extensiones: yellow
 blog
 breadcrumbs
 command
@@ -87,3 +111,16 @@ update
 vimeo
 wiki
 youtube
+
+## Development
+
+
+Dependency manager: Composer
+Dependency repository: Packagist
+
+## Inspired by
+
+1. https://hexo.io/docs
+2. https://jekyllrb.com/docs/home/
+3. https://bauncms.com/docs
+4. yellowcms

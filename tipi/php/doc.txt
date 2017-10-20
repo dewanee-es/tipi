@@ -1,2 +1,0 @@
-Configuration: https://hexo.io/docs/configuration.html
-Metadata: https://hexo.io/docs/front-matter.html

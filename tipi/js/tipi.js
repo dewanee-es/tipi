@@ -1113,8 +1113,12 @@ Backend.init = function(appDir, configJson, metas) {
 
 (function() {
 	var metas = document.getElementsByTagName('meta');
-	var href = window.location.href.substr(0, window.location.href.length - window.location.hash.length);
+	var href = window.location.href;	
 	var filename;
+	
+	if(window.location.hash.length > 0 || href.charAt(href.length - 1) == '#') {
+		href = href.substr(0, href.length - window.location.hash.length - 1);
+	}
 	
 	configContent.global.baseUrl = href;
 	

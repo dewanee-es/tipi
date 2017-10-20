@@ -1,3 +1,6 @@
+---
+status: Draft
+---
 # Configuration
 
 ## Filename
