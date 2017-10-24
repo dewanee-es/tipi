@@ -13,6 +13,63 @@ By default config filename is `config.json` but can be configured in `index.html
 
 Here is the format of the config file with its default values. All the values are optional.
 
+<!--
+* app: App configuration
+	* debug: (false) Enable debug mode
+	* content_path: ("content/") Path to the content folder (relative to base path)
+	* content_extension: (".md") The file extension to use for content files
+	* themes_path: ("themes/") Path to the themes folder (relative to base path)
+	* theme: ("tipi") The currently active theme name. Set to false to disable theming
+* blog: Blog configuration
+	* blog_folder: ("blog") The name of the folder where your posts are stored
+	* per_page: (10) The amount of the posts displayed on a single page. 0 disables pagination
+	* excerpt_words: (30) The length of excerpts in words
+	* date_format: ("YYYY-MM-DD") Date format (https://momentjs.com/docs/#/displaying/)
+	* time_format: ("HH:mm:ss") Time format
+	* permalink: (":year/:month/:day/:title") The permalink format of articles
+* site: Site configuration
+	* title: The title of your website
+	* subtitle: The subtitle of your website
+	* description: The description of your website
+	* author: Your name
+	* language: (en) The language of your website. Use a 2-lettter ISO-639-1 code
+	* timezone: The timezone of your website. Tipi uses the setting on your computer by default. You can find the list of available timezones [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones). Some examples are America/New_York, Japan, and UTC.
+* url: URL configuration
+	* url: The URL of your website	
+	* root: The root directory of your website (If your website is in a subdirectory, such as http://example.org/blog, set url to http://example.org/blog and set root to /blog/)
+	* permalink_defaults: Default values of each segment in permalink	
+* directory
+	* source_dir: ("source") Source folder. Where your content is stored
+	* public_dir: ("public") Public folder. Where the static site will be generated
+	* tag_dir: ("tags") Tag directory
+	* archive_dir: ("archives") Archive directory
+	* category_dir: ("categories") Category directory
+	* code_dir: ("downloads/code") Include code directory (subdirectory of source_dir)
+	* i18n_dir: (":lang") i18n directory
+	* skip_render:  Paths not to be rendered. You can use glob expressions for path matching	
+* writing
+	* new_post_name: (":title.md") The filename format for new posts
+	* default_layout: ("post") Default layout
+	* titlecase: (false) Transform titles into title case?
+	* external_link: (true) Open external links in new tab?
+	* filename_case: (0) Transform filenames to 1 lower case; 2 upper case
+	* render_drafts: (false) Display drafts?
+	* post_asset_folder: (false) Enable the Asset Folder?
+	* relative_link: (false) Make links relative to the root folder?
+	* future: (true) Display future posts?
+	* highlight:  Code block settings	
+* Category & Tag:
+	* default_category: (uncategorized) Default category
+	* category_map: Category slugs	
+	* tag_map: Tag slugs	
+* Pagination
+	* pagination_dir: ("page") Pagination directory
+* Extensions
+	* deploy: Deployment setting
+* Include/Exclude Files or Folders
+	* include: Hexo defaultly ignore hidden files and folders, but set this field will make Hexo process them
+	* exclude: Hexo process will ignore files list under this field
+	
 ```
 {
   "global": {   // Global configuration
@@ -57,6 +114,7 @@ Here is the format of the config file with its default values. All the values ar
   }
 }
 ```
+-->
 
 ### Pages/Posts format
 

@@ -484,6 +484,20 @@ Content.layout = function(templatePath, templateExtension, templateName, success
 	  });
 }
 
+Content.loaded = function(callback) {	// Callbacks for content load (called after every page load)
+	if(!Content.loaded.callbacks) {
+		Content.loaded.callbacks = [];
+	}
+	
+	if(callback) {
+		Content.loaded.callbacks.push(callback);
+	} else {
+		for(var i = 0; i < Content.loaded.callbacks.length; i++) {
+			Content.loaded.callbacks[i]();
+		}
+	}
+};
+
 Content.markdown = function(text, page, callback) {
   'use strict';
   var md = new Powerdown({
@@ -551,7 +565,18 @@ Content.metadata = function(data, metadata) {
   return data;
 };
 
-Content.ready = function() {
+Content.ready = function(callback) {	// Callbacks for content ready (called once after load theme)
+	if(!Content.ready.callbacks) {
+		Content.ready.callbacks = [];
+	}
+	
+	if(callback) {
+		Content.ready.callbacks.push(callback);
+	} else {
+		for(var i = 0; i < Content.ready.callbacks.length; i++) {
+			Content.ready.callbacks[i]();
+		}
+	}
 };
 
 Content.reloadPage = function(val) {
@@ -573,7 +598,7 @@ Content.reloadPage = function(val) {
       Content.setHeader(val);
       Content.runToc();
 	  Content.runBreadcrumb(val);
-	  Content.ready();
+	  Content.loaded();
       Animation.smoothScrolling();
       DisqusApi.disqusReload(val.disqusEnable, val.disqusIdentifier, val.disqusLang);
     });
@@ -1107,6 +1132,8 @@ Backend.init = function(appDir, configJson, metas) {
 	  } else {
 		$(configApp.menuId + ' > ul > li > a[href="#' + hash + '"]').parent().addClass('active');
 	  }
+	  
+	  Content.ready();	// Callbacks after init
 	});
   });
 };

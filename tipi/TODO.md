@@ -24,7 +24,6 @@
 * bastard.html de tema, cosas como {{ site_logo }}
 * no funcionan páginas como #/Cómics o #/Decoración
 * index.html con el template no funciona si añade scripts adicionales (bastard)
-* Content.ready: llamaar!! Lo llama, pero es mejor hacer Content.ready(function()) para vincular una función, en vez de Content.ready = function(). Llamando a Content.ready() sin parámetros ejecuta todas las funciones registradas. => Content.ready se llama cada vez que se carga una página! para cargar scripts mejor usar otra cosa (bastard)
 * permitir #/comics.md para ver el archivo
 * bastard: scroll to top no funciona
 * blocks: al cargar tema lo del head al head (title, metas...) y lo del body al body.
@@ -119,7 +118,6 @@ ROADMAP
 - _app: social
 - https://github.com/markdown-it/markdown-it
 - _app: ids para headers (esperar a cambio de parser) y generar toc con los ids buenos
-- DROPBOX / GOOGLE DRIVE
 - ANDROID
 - _app: título (h1) a partir de h1 de markdown
 - nueva página de Wiki
