@@ -140,10 +140,6 @@ Utils.getPath = function(page, relative) {
 	return configContent.global.contentDir + page.substring(0, pos) + relative;
 }
 
-Utils.getSlug = function(title) {
-	return encodeURIComponent(title.replace(/\s+/g, '-'));
-};
-
 Utils.getTitle = function(slug) {
 	if(slug.charAt(slug.length - 1) == '/') {
 		slug = slug.slice(0, -1);
@@ -171,6 +167,131 @@ Utils.showErrorMsg = function(msg, description) {
   console.error(msg + ': ' + description);
   $(configApp.errorId).html('<strong>' + msg + '</strong><br/>' + description);
   $(configApp.errorId).show();
+};
+
+Utils.slugify = function(text, mode) {
+	var modes = mode.split(',');
+	text = text.trim();
+	for(var i = 0; i < modes.length; i++) {
+		var f = Utils.slugify[modes[i].trim()];
+		if(f) {
+			text = f(text);
+		}
+	}
+	return Utils.slugify.clean(text);
+};
+
+Utils.slugify.allowed = function(text) {
+	return text.replace(/[\/\\?%*:|"<>]+/, '');
+};
+
+Utils.slugify.clean = function(text) {
+	return text.replace(/-+/, '-').replace(/_+/, '_').replace(/^[-_\s]+/, '').replace(/[-_\s]+$/, '');
+};
+
+Utils.slugify.dot_to_dash = function(text) {
+	return text.replace(/[\.\/\\?%*:|"<>]+/, '-');
+};
+
+Utils.slugify.dot_to_underscore = function(text) {
+	return text.replace(/[\.\/\\?%*:|"<>]+/, '_');
+}
+
+Utils.slugify.encode = function(text) {
+	return encodeURIComponent(text);
+};
+
+Utils.slugify.lowercase = function(text) {
+	return text.toLowerCase();
+};
+
+Utils.slugify.space_to_dash = function(text) {
+	return text.replace(/\s+/, '-');
+};
+
+Utils.slugify.space_to_underscore = function(text) {
+	return text.replace(/\s+/, '_');
+};
+
+Utils.slugify.transliterate = function(text) {
+	var result = '';
+	for(var i = 0; i < text.length; i++) {
+		var ch = text.charAt(i);
+		var tch = Utils.slugify.transliterate.charMap[ch];
+		result += (tch ? tch : ch);
+	}
+	return result;
+};
+
+Utils.slugify.transliterate.charMap = {
+    // latin
+	'À': 'A',
+	'Á': 'A',
+	'Â': 'A',
+	'Ã': 'A',
+	'Ä': 'Ae',
+	'Å': 'A',
+	'Æ': 'AE',
+	'Ç': 'C',
+	'È': 'E',
+	'É': 'E',
+	'Ê': 'E',
+	'Ë': 'E',
+	'Ì': 'I',
+	'Í': 'I',
+	'Î': 'I',
+	'Ï': 'I',
+	'Ð': 'D',
+	'Ñ': 'N',
+	'Ò': 'O',
+	'Ó': 'O',
+	'Ô': 'O',
+	'Õ': 'O',
+	'Ö': 'Oe',
+	'Ő': 'O',
+	'Ø': 'O',
+	'Ù': 'U',
+	'Ú': 'U',
+	'Û': 'U',
+	'Ü': 'Ue',
+	'Ű': 'U',
+	'Ý': 'Y',
+	'Þ': 'TH',
+	'ß': 'ss',
+	'à': 'a',
+	'á': 'a',
+	'â': 'a',
+	'ã': 'a',
+	'ä': 'ae',
+	'å': 'a',
+	'æ': 'ae',
+	'ç': 'c',
+	'è': 'e',
+	'é': 'e',
+	'ê': 'e',
+	'ë': 'e',
+	'ì': 'i',
+	'í': 'i',
+	'î': 'i',
+	'ï': 'i',
+	'ð': 'd',
+	'ñ': 'n',
+	'ò': 'o',
+	'ó': 'o',
+	'ô': 'o',
+	'õ': 'o',
+	'ö': 'oe',
+	'ő': 'o',
+	'ø': 'o',
+	'ù': 'u',
+	'ú': 'u',
+	'û': 'u',
+	'ü': 'ue',
+	'ű': 'u',
+	'ý': 'y',
+	'þ': 'th',
+	'ÿ': 'y',
+	'ẞ': 'SS'
 };
 
 Utils.hideErrorMsg = function(msg) {
@@ -372,7 +493,7 @@ Content.initPage = function(page) {
 		}
 	}
 
-    page.slug = page.slug || Utils.getSlug(page.title);
+    page.slug = page.slug || Utils.slugify(page.title, 'space_to_dash,encode');
 	page.url = page.url || Utils.getUrl(page.slug);
 	page.tag = page.tag || '';
 	page.img = page.img || (configContent.global.defaultImg
@@ -462,7 +583,7 @@ Content.footerInit = function() {
 };
 
 Content.getPage = function(slug) {
-	var key = Utils.getSlug(slug);	// Force slug
+	var key = Utils.slugify(slug, 'space_to_dash,encode');	// Force slug
 	return configContent.pages[key]
 		|| configContent.posts[key]
 		|| Content.initPage({ slug: slug });
