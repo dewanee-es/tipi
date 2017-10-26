@@ -31,10 +31,6 @@
 	* relative_link: (false) Make links relative to the root folder?
 	* future: (true) Display future posts?
 	* highlight:  Code block settings	
-* Category & Tag:
-	* default_category: (uncategorized) Default category
-	* category_map: Category slugs	
-	* tag_map: Tag slugs	
 * Pagination
 	* pagination_dir: ("page") Pagination directory
 * Extensions
@@ -44,6 +40,7 @@
 	* exclude: Hexo process will ignore files list under this field
 slugify_mode (encode): Specifies how terms (titles, tags, categories, etc.) will be “slugified”, i.e. turned into URL parts and filenames. The acceptable values detailed below, and can be combined by separating them with a comma (like, say, transliterate,lowercase):
 * encode (only URL): The term will be kept as-is, but non-ASCII characters (like accented characters and non-latin letters) will be percent-encoded. Modern browsers will usually show the decoded version however so it will look natural in the address bar. (file: Vídeos.md)
+* encode_plus (only URL): Like encode but spaces are replaced by +
 * transliterate: The term will be converted to ASCII, which means any accented or non-latin character will be tentatively replaced with an unaccented latin character. (file: Videos.md)
 * lowercase: Convert the term to lower-case. (file: vídeos.md)
 * dot_to_dash: Convert dots (and punctuation symbols) to dashes. 
@@ -52,6 +49,7 @@ slugify_mode (encode): Specifies how terms (titles, tags, categories, etc.) will
 * space_to_underscore: Convert spaces to underscore
 * allowed (for filename): (If no dot_to_dash or dot_to_underscore is used) Remove reserved characters: /\?%*:|"<>
 slugify_mode for files: 1. encode|transliterate 2. titlecase|lowercase 3. dot|(dash|underscore) 4. space|(dash|underscore) => default: encode,lowercase,dot,space_to_dash => lowercase,space_to_dash,allowed. Ejemplo: Vídeos: Terror => vídeos-terror.md
+slugify_mode for files: ¿cual es el origen? ¿a partir del título o a partir de slug? a partir de título está bien porque permite cosas como: John Doe como archivo y john-doe como slug, pero a partir del slug es dificil determinar el nombre del archivo. a partir del slug se puede determinar el nombre del archivo de forma fácil <-- opción recomendada. En ese caso: slugify_mode for files: lowercase,allowed
 slugify_mode for url: space_to_dash,encode. Ejemplo: Vídeos: Terror => V%C3%ADdeos%3A-Terror
 slugify: https://codenhagen.wordpress.com/2015/08/26/javascript-slugify-function/	https://gist.github.com/bentruyman/1211400	https://github.com/pid/speakingurl/blob/master/lib/speakingurl.js
 	
@@ -145,22 +143,23 @@ Here is the format of the config file with its default values. JSON & PHP config
 
 ```
 site:				# --- Site configuration ---
-  title: Untitled			# The title of your website
-  subtitle: 				# The subtitle of your website
-  description: 				# The description of your website
-  author:					# Your name
-  language: en				# The language of your website. Use a 2-lettter ISO-639-1 code
-  timezone": 				# The timezone of your website. Tipi uses the setting on your computer by default.
-  							# You can find the list of available timezones [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
-  							# Some examples are America/New_York, Japan, and UTC.
-  theme: tipi				# The currently active theme name. Set to false or empty value to disable theming.
-  welcome: Home   			# Welcome page. Set to false or empty value to use index.html as welcome page.
-  content_extension: md		# The file extension to use for content files
+  title: Untitled					# The title of your website
+  subtitle: 						# The subtitle of your website
+  description: 						# The description of your website
+  author:							# Your name
+  language: en						# The language of your website. Use a 2-lettter ISO-639-1 code
+  timezone": 						# The timezone of your website. Tipi uses the setting on your computer by default.
+									# You can find the list of available timezones [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
+									# Some examples are America/New_York, Japan, and UTC.
+  theme: tipi						# The currently active theme name. Set to false or empty value to disable theming.
+  welcome: Home   					# Welcome page. Set to false or empty value to use index.html as welcome page.
+  content_extension: md				# The file extension to use for content files
   
-blog:				# --- Blog configuration --- (Only PHP)
-  category_url: categories	# Category URL fragment
-  tag_url: tags				# Tag URL fragment
-  archive_url: archives		# Archive URL fragment
+blog:				# --- Blog configuration ---
+  default_category: uncategorized	# Default category
+  category_url: categories			# Category URL fragment
+  tag_url: tags						# Tag URL fragment
+  archive_url: archives				# Archive URL fragment
 	
 pages:				# --- Pages list --- (Only JS. See pages/posts format below)
 posts:      		# --- Posts list (blog) --- (Only JS. See pages/posts format below)

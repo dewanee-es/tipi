@@ -151,7 +151,7 @@ Utils.getTitle = function(slug) {
 
 Utils.getUrl = function(slug) {
 	var url;
-	slug = slug.toLowerCase();
+	slug = Utils.slugify(decodeURIComponent(slug.replace(/\+/, '%20')), 'lowercase,allowed');
 	if(slug.charAt(slug.length - 1) == '/') {
 		var pieces = slug.split('/');
 		var sub = pieces[pieces.length - 2];
@@ -159,7 +159,7 @@ Utils.getUrl = function(slug) {
 	} else {
 		url = slug + '.' + configContent.global.extension;
 	}
-	return encodeURI(url);
+	return url;
 }
 
 Utils.showErrorMsg = function(msg, description) {

@@ -68,27 +68,28 @@ Tipi class is the app container and provides the plugin architecture.
 
 The container can be populated with modules (a.k.a. plugins) and can hold values.
 
-Tipi::load($path)
+* `Tipi::load($path)`: Load module(s) from path.
 
-	Load all files/folders from $path and adds their classes to container
+  Path can be:
+  
+  1. A PHP file: Tipi loads file. The file must contain a class with same name as filename.
+  2. A JSON file: Tipi loads modules defined in the JSON file. The format is:
+  
+	```json
+	{
+		"module1": "path1",
+		"module2": "path2",
+		...
+	}
+	```
 	
-Tipi::set($name, $value)
-
-	Set the variable $name with $value
+	where `module` is module name and `path` can be a PHP file, JSON file or a folder.
+  3. A folder: If folder contains a JSON or PHP file with same name as folder, Tipi loads that file, else Tipi loads all PHP files and/or subfolders.
 	
-Tipi::get($name)
-
-	Get the variable $name value
+* `Tipi::set($name, $value)`: Set the variable `$name` with `$value`
 	
-Container code (index.php):
-
-```
-Tipi::set('config_path', 'config/');	// Set config path
-Tipi::load('lib');	// Load core modules in lib folder
-Tipi::load('plugins');	// Load plugins folder
-Tipi::run();	// Run application
-```
-
+* `Tipi::get($name)`: Get the variable `$name` value
+	
 ### System methods
 
 Each method is defined in a module:

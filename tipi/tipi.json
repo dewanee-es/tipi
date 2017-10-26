@@ -3,9 +3,13 @@
 		"title": "Tipi",
 		"welcome": "Tipi"
 	},
-	"pages": {
-	  "Tipi": "index.md"
-	},
+	"pages": [
+	  {
+		"title": "Tipi",
+		"url": "index.md"
+	  },
+	  "Gráficos"
+	],
 	"posts": [
 	  "Post1",
 	  "Post2",
