@@ -1,9 +1,37 @@
 <?php
 class Tipi {
+	
+	private static final $instance;
+	
+	private $plugins = [];
+	private $values = [];
+	
+	public static instance() {
+		if(!$instance) {
+			$instance = new Tipi();
+		}
+		
+		return $instance;
+	}
 
+	public static get($name) {
+		return self::instance()->_get($name);
+	}
+	
+	public static set($name, $value) {
+		self::instance()->_set($name, $value);
+	}
+	
 	public static load($path) {
-		$tipi = self::instance();
-		$tipi->_load($path);
+		self::instance()->_load($path);
+	}
+	
+	private _get($name) {
+		return $this->values[$name];
+	}
+	
+	private _set($name, $value) {
+		$this->values[$name] = $value;
 	}
 	
 	private _load($path) {
@@ -47,12 +75,17 @@ class Tipi {
 		$this->_loadPlugin($class_name);
 	}
 	
-	private _loadPlugin($class_name, $plugin_name = null) {
-		if(!$plugin_name) {
-			$plugin_name = $class_name;
-		}
+	private _loadJson($file) {
+		$contents = file_get_contents($file);
+		$json = json_decode($contents);
 		
-        $this->plugins[$plugin_name]= new $class_name();
+		foreach($json as $key => $value) {
+			$this->_load($value);
+		}
+	}
+	
+	private _loadPlugin($class_name) {
+		$this->plugins[] = new $class_name();
 	}
 	
 }

@@ -178,11 +178,17 @@ Utils.slugify = function(text, mode) {
 			text = f(text);
 		}
 	}
+	
+	// Decode / character
+	text = text.replace(/%2F/, '/');
+	
 	return Utils.slugify.clean(text);
 };
 
 Utils.slugify.allowed = function(text) {
-	return text.replace(/[\/\\?%*:|"<>]+/, '');
+	// permit / character
+	// text = text.replace(/\//, '');
+	return text.replace(/[\\?%*:|"<>]+/, '');
 };
 
 Utils.slugify.clean = function(text) {
@@ -493,6 +499,7 @@ Content.initPage = function(page) {
 		}
 	}
 
+
     page.slug = page.slug || Utils.slugify(page.title, 'space_to_dash,encode');
 	page.url = page.url || Utils.getUrl(page.slug);
 	page.tag = page.tag || '';
@@ -509,7 +516,12 @@ Content.initPage = function(page) {
     page.date = page.date || '';
     page.home = (configContent.global.welcome == page.title);
     
-    return page;
+	// remove trailing slash
+	if(page.title.charAt(page.title.length - 1) == '/') {
+		page.title = page.title.slice(0, -1);
+	}
+
+	return page;
 }
 
 Content.initPages = function(pages) {
