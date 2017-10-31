@@ -197,3 +197,36 @@ https://github.com/datenstrom/yellow/issues/266 y https://github.com/datenstrom/
 Headlesscms.org
 https://docs.bludit.com/en/
 https://github.com/bludit/bludit
+https://docs.statamic.com/
+Editor: Markdown Editor
+https://dillinger.io/
+Epic Editor
+https://jbt.github.io/markdown-editor
+Lepture
+https://stackedit.io/
+https://hipertextual.com/archivo/2014/01/editores-texto-markdown-windows/
+http://markdownpad.com/
+https://www.webpagefx.com/blog/web-design/online-markdown-editors/
+https://marketplace.visualstudio.com/items?itemName=MadsKristensen.MarkdownEditor
+https://simplemde.com/
+https://www.sitepoint.com/best-markdown-editors-windows/
+https://typora.io/
+https://github.com/benweet/stackedit
+https://github.com/tylingsoft/markdown-plus
+https://github.com/winterstein/Eclipse-Markdown-Editor-Plugin
+https://es.wikipedia.org/wiki/Markdown
+https://en.wikipedia.org/wiki/Markdown
+https://vuejs.org/v2/examples/
+https://macdown.uranusjr.com/
+https://caret.io/
+https://markdownify.js.org/
+https://es.wordpress.org/plugins/search/wp-markdown-editor/
+https://www.npmjs.com/package/electron-markdown-editor
+https://www.oxygenxml.com/xml_author/markdown_editor.html
+https://our.umbraco.org/projects/backoffice-extensions/markdown-editor/
+http://mashable.com/2013/06/24/markdown-tools/#MpiQ.fFp.ZqU
+https://www.microsoft.com/es-es/store/p/markdown-editor/9wzdncrdd2p3
+https://medium.com/@vilcins/best-markdown-editors-abf8d5250cee
+https://www.slant.co/topics/2196/~online-markdown-editor
+https://getkirby.com/docs (+ github)
+mechacms (+ github)

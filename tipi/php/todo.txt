@@ -24,3 +24,4 @@ templating
 datastore: content
 metadata: yaml
 router: url, alias for external content
+editor

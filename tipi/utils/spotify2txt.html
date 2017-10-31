@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Spotify Playlist to TXT</title>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+</head>
+<body>
+<textarea id="html">
+</textarea>
+<input type="button" value="Convertir" id="action"/>
+<script>
+$(function() {
+	$('#action').on('click', function(event) {
+		event.preventDefault();
+		var html = $('#html').val();
+		var el = $('<div></div>');
+		el.html(html);
+		var text = "name	artist	duration-ms	preview	img\n";
+		el.find('li').each(function() {
+			var item = $(this);
+			text += item.data('name') + "\t" + item.data('artists') + "\t" + item.data('duration-ms') + "\t" + item.data('preview') + "\t";
+			var img = false;
+			var size = 0;
+			$.each(item[0].attributes, function() {
+				if(this.name.startsWith('data-size-')) {
+					var attrSize = parseInt(this.name.substring(10));
+					if(Math.abs(attrSize - 300) < Math.abs(size - 300)) {
+						img = this.value;
+						size = attrSize;
+					}
+				}
+			});
+			text += img + "\n";
+		});
+		$('#html').val(text);
+	});
+});
+</script>
+</body>
+</html>
