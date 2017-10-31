@@ -54,6 +54,7 @@ var configContent = {
 	defaultImg: false,
 	thumb: 'img/thumb.jpg',
 	breadcrumbHome: '#/',
+	breadcrumbFragmentSuffix: '/',
 	baseUrl: false,
 	id:	0	// Page id, calculated (hash from baseUrl)
   },
@@ -491,6 +492,8 @@ Content.initPage = function(page) {
 	if(!page.title) {
 		if(page.slug) {
 			page.title = Utils.getTitle(page.slug);
+		} else if(page.url) {
+			page.title = Utils.getTitle(page.url);
 		} else {
 			if(!Content.initPage.pageSeq) {
 				Content.initPage.pageSeq = 1;
@@ -498,7 +501,6 @@ Content.initPage = function(page) {
 			page.title = 'Page ' + (Content.initPage.pageSeq++);
 		}
 	}
-
 
     page.slug = page.slug || Utils.slugify(page.title, 'space_to_dash,encode');
 	page.url = page.url || Utils.getUrl(page.slug);
@@ -595,10 +597,14 @@ Content.footerInit = function() {
 };
 
 Content.getPage = function(slug) {
-	var key = Utils.slugify(slug, 'space_to_dash,encode');	// Force slug
-	return configContent.pages[key]
-		|| configContent.posts[key]
-		|| Content.initPage({ slug: slug });
+	if(slug.endsWith('.' + configContent.global.extension)) {
+		return Content.initPage({ url: slug});
+	} else {
+		var key = Utils.slugify(slug, 'space_to_dash,encode');	// Force slug
+		return configContent.pages[key]
+			|| configContent.posts[key]
+			|| Content.initPage({ slug: slug });
+	}
 };
 
 Content.layout = function(templatePath, templateExtension, templateName, success, error) {
@@ -848,7 +854,7 @@ Content.runBreadcrumb = function(page, container) {
 		  if(i == parts.length - 1) {
 			  $(list).append('<li class="active">' + page.title + '</li>');
 		  } else {
-			  $(list).append('<li><a href="' + fragment + '/">' + Utils.getTitle(parts[i]) + '</a></li>');
+			  $(list).append('<li><a href="' + fragment + configContent.global.breadcrumbFragmentSuffix + '">' + Utils.getTitle(parts[i]) + '</a></li>');
 		  }
 	  }
   }
