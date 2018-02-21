@@ -1,8 +1,59 @@
 function Powerdown(options) {
 	var mdOptions = Object.assign({}, Powerdown.defaultOptions, options);
 	this.markdown = window.markdownit(mdOptions);
+	
+	window.markdownitContainer(this.markdown, 'alert', {
+		validate: function(params) {
+			return Powerdown.alertTranslate(params) !== null;
+		},
+
+		render: function (tokens, idx, _options, env, self) {
+			if (tokens[idx].nesting === 1) {
+			    var params = Powerdown.alertTranslate(tokens[idx].info);
+				return '<div class="alert alert-' + params.type + '"><strong>' + params.title + '</strong>';
+			} else {
+				return '</div>';
+			}
+		}
+	});
+	
 	this.renderer = new Powerdown.Renderer(this.markdown.renderer);
 }
+
+Powerdown.alertTranslate = function(text) {
+    var s = text.trim().split(/:($| (.+)?)/, 2);
+    var res = { type: null, title: null };
+    if(s[1]) {
+        res.title = s[1].trim();
+    } else {
+        res.title = s[0].trim();
+    }
+	switch(s[0].toLowerCase()) {
+		case 'info':
+		case 'information':
+		case 'informacion':
+		case 'información':
+			res.type = 'info';
+			break;
+		case 'warn':
+		case 'warning':
+		case 'warning!':
+		case 'aviso':
+			res.type = 'danger';
+			break;
+		case 'idea':
+		case 'tip':
+			res.type = 'success';
+			break;
+		case 'note':
+		case 'nota':
+			res.type = 'warning';
+			break;
+		default:
+			return null;
+	}
+	return res;
+};
 
 Powerdown.defaultOptions = {
 	html:			true,					// Enable HTML tags in source

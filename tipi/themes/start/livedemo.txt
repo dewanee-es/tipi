@@ -10,7 +10,6 @@ https://livedemo00.template-help.com/wordpress_53761/about/archives/
 https://livedemo00.template-help.com/wordpress_53761/about/faqs/
 https://livedemo00.template-help.com/wordpress_53761/about/testi/
 https://livedemo00.template-help.com/wordpress_53761/blog/
-https://livedemo00.template-help.com/wordpress_53761/blog/page/2/
 https://livedemo00.template-help.com/wordpress_53761/category/coding/
 https://livedemo00.template-help.com/wordpress_53761/category/css3/
 https://livedemo00.template-help.com/wordpress_53761/category/html5/

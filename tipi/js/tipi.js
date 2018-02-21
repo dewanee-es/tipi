@@ -31,6 +31,9 @@ var configApp = {
   copyrightId: '#copyright',
   poweredById: '#poweredby',
   
+  // Body class
+  bodyClass: '',
+  
   // Misc
   errorId: '#error',
   
@@ -138,7 +141,7 @@ Utils.getHash = function() {
 
 Utils.getPath = function(page, relative) {
 	var pos = page.lastIndexOf('/');
-	return configContent.global.contentDir + page.substring(0, pos) + relative;
+	return configContent.global.contentDir + page.substring(0, pos + 1) + relative;
 }
 
 Utils.getTitle = function(slug) {
@@ -152,7 +155,7 @@ Utils.getTitle = function(slug) {
 
 Utils.getUrl = function(slug) {
 	var url;
-	slug = Utils.slugify(decodeURIComponent(slug.replace(/\+/, '%20')), 'lowercase,allowed');
+	slug = Utils.slugify(decodeURIComponent(slug.replace(/\+/g, '%20')), 'lowercase,allowed');
 	if(slug.charAt(slug.length - 1) == '/') {
 		var pieces = slug.split('/');
 		var sub = pieces[pieces.length - 2];
@@ -181,27 +184,27 @@ Utils.slugify = function(text, mode) {
 	}
 	
 	// Decode / character
-	text = text.replace(/%2F/, '/');
+	text = text.replace(/%2F/g, '/');
 	
 	return Utils.slugify.clean(text);
 };
 
 Utils.slugify.allowed = function(text) {
 	// permit / character
-	// text = text.replace(/\//, '');
-	return text.replace(/[\\?%*:|"<>]+/, '');
+	// text = text.replace(/\//g, '');
+	return text.replace(/[\\?%*:|"<>]+/g, '');
 };
 
 Utils.slugify.clean = function(text) {
-	return text.replace(/-+/, '-').replace(/_+/, '_').replace(/^[-_\s]+/, '').replace(/[-_\s]+$/, '');
+	return text.replace(/-+/g, '-').replace(/_+/g, '_').replace(/^[-_\s]+/g, '').replace(/[-_\s]+$/g, '');
 };
 
 Utils.slugify.dot_to_dash = function(text) {
-	return text.replace(/[\.\/\\?%*:|"<>]+/, '-');
+	return text.replace(/[\.\/\\¿?%*:|"<>]+/g, '-');
 };
 
 Utils.slugify.dot_to_underscore = function(text) {
-	return text.replace(/[\.\/\\?%*:|"<>]+/, '_');
+	return text.replace(/[\.\/\\¿?%*:|"<>]+/g, '_');
 }
 
 Utils.slugify.encode = function(text) {
@@ -213,11 +216,11 @@ Utils.slugify.lowercase = function(text) {
 };
 
 Utils.slugify.space_to_dash = function(text) {
-	return text.replace(/\s+/, '-');
+	return text.replace(/\s+/g, '-');
 };
 
 Utils.slugify.space_to_underscore = function(text) {
-	return text.replace(/\s+/, '_');
+	return text.replace(/\s+/g, '_');
 };
 
 Utils.slugify.transliterate = function(text) {
@@ -343,6 +346,11 @@ Utils.isVisited = function(url) {
 	}
 }
 
+Utils.clearVisits = function() {
+	var key = configApp.storagePrefix + configContent.global.id
+	localStorage.removeItem(key);
+}
+
 Utils.hash = function(text) {
 	var hash = 0, i, chr;
 	if (text.length === 0) return hash;
@@ -374,20 +382,26 @@ Animation.menu = function() {
   });
 };
 
+Animation.scrollTo = function(target, callback) {
+  var $target = $(target);
+  $('html, body').stop().animate({
+    'scrollTop': $target.offset().top - 50
+  }, 900, 'swing', callback);
+};
+
 Animation.smoothScrolling = function() {
   'use strict';
-  $(configApp.tocId + ' a[href^="#"]').on('click', function(e) {
+  var handler = function(e) {
     e.preventDefault();
 
     var target = this.hash;
-    var $target = $(target);
-    $('html, body').stop().animate({
-      'scrollTop': $target.offset().top - 50
-    }, 900, 'swing', function() {
+    Animation.scrollTo(target, function() {
       // commenting this will prevent the url to be changed
       //window.location.hash = target;
     });
-  });
+  };
+  $(configApp.tocId + ' a[href^="#"]').on('click', handler);
+  $(configApp.postId + ' a[href^="#"]').not('[href^="#/"]').on('click', handler);
 };
 
 Animation.toc = function() {
@@ -427,6 +441,10 @@ Animation.toc = function() {
 
 /******************** Content Manipulation **************************/
 
+Content.bodyInit = function() {
+	configApp.bodyClass = $('body').attr('class');
+};
+
 Content.config = function(data, metas) {
 	
 	// Content dir
@@ -444,8 +462,8 @@ Content.config = function(data, metas) {
     $.extend(true, configContent, data);
     
     // Pages and posts
-    configContent.pages = Content.initPages(configContent.pages);
-    configContent.posts = Content.initPages(configContent.posts);
+    configContent.pages = Content.initPages(configContent.pages, 'page');
+    configContent.posts = Content.initPages(configContent.posts, 'post');
 	
 	// Metadata
 	configContent.metadata.begin = configContent.metadata.begin.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
@@ -488,35 +506,47 @@ Content.include = function(url) {
 	return '<div id="' + id + '"></div>';
 };
 
-Content.initPage = function(page) {
-	if(!page.title) {
-		if(page.slug) {
-			page.title = Utils.getTitle(page.slug);
-		} else if(page.url) {
-			page.title = Utils.getTitle(page.url);
-		} else {
-			if(!Content.initPage.pageSeq) {
-				Content.initPage.pageSeq = 1;
+Content.initPage = function(page, type) {
+	if(!page) {	// home page
+		page = {
+			title: configContent.global.title,
+			home: true,
+			slug: false,
+			url: false,
+			img: ''
+		};
+	} else {
+		if(!page.title) {
+			if(page.slug) {
+				page.title = Utils.getTitle(page.slug);
+			} else if(page.url) {
+				page.title = Utils.getTitle(page.url);
+			} else {
+				if(!Content.initPage.pageSeq) {
+					Content.initPage.pageSeq = 1;
+				}
+				page.title = 'Page ' + (Content.initPage.pageSeq++);
 			}
-			page.title = 'Page ' + (Content.initPage.pageSeq++);
 		}
-	}
 
-    page.slug = page.slug || Utils.slugify(page.title, 'space_to_dash,encode');
-	page.url = page.url || Utils.getUrl(page.slug);
+		page.home = (configContent.global.welcome == page.title);
+		page.slug = page.slug || Utils.slugify(page.title, 'space_to_dash,encode');
+		page.url = page.url || Utils.getUrl(page.slug);
+		page.img = page.img || (configContent.global.defaultImg
+			? Utils.basename(page.url) + '.' +
+				(typeof configContent.global.defaultImg == 'string'
+				? configContent.global.defaultImg
+				: 'jpg')
+			: '');
+	}
+	
+	page.type = type;
 	page.tag = page.tag || '';
-	page.img = page.img || (configContent.global.defaultImg
-		? Utils.basename(page.url) + '.' +
-			(typeof configContent.global.defaultImg == 'string'
-			? configContent.global.defaultImg
-			: 'jpg')
-		: '');
-    page.thumb = page.thumb || page.img;
-    page.disqusEnable = page.disqusEnable || false;
-    page.disqusIdentifier = page.disqusIdentifier || '';
-    page.disqusLang = page.disqusLang || '';
-    page.date = page.date || '';
-    page.home = (configContent.global.welcome == page.title);
+	page.thumb = page.thumb || page.img;
+	page.disqusEnable = page.disqusEnable || false;
+	page.disqusIdentifier = page.disqusIdentifier || '';
+	page.disqusLang = page.disqusLang || '';
+	page.date = page.date || '';
     
 	// remove trailing slash
 	if(page.title.charAt(page.title.length - 1) == '/') {
@@ -526,26 +556,26 @@ Content.initPage = function(page) {
 	return page;
 }
 
-Content.initPages = function(pages) {
+Content.initPages = function(pages, type) {
 	var pageMap = {};
 	
 	if(Array.isArray(pages)) {
 		for(var i = 0; i < pages.length; i++) {
 			var val = pages[i];
 			if(typeof val == 'string') {
-				val = Content.initPage({ title: val});
+				val = Content.initPage({ title: val}, type);
 			} else {
-				val = Content.initPage(val);
+				val = Content.initPage(val, type);
 			}
 			pageMap[val.slug] = val;
 		}
 	} else {	
 		$.each(pages, function(title, val) {
 		    if(typeof val == 'string') {
-		    	val = Content.initPage({ title: title, url: val});
+		    	val = Content.initPage({ title: title, url: val}, type);
 		    } else {
 		    	val['title'] = title;
-		    	val = Content.initPage(val);
+		    	val = Content.initPage(val, type);
 		    }
 			pageMap[val.slug] = val;
 		});
@@ -597,13 +627,15 @@ Content.footerInit = function() {
 };
 
 Content.getPage = function(slug) {
-	if(slug.endsWith('.' + configContent.global.extension)) {
-		return Content.initPage({ url: slug});
+	if(!slug) {	// home page
+		return Content.initPage(false, 'page');
+	} else if(slug.endsWith('.' + configContent.global.extension)) {	// file page
+		return Content.initPage({ url: slug}, 'page');
 	} else {
 		var key = Utils.slugify(slug, 'space_to_dash,encode');	// Force slug
 		return configContent.pages[key]
 			|| configContent.posts[key]
-			|| Content.initPage({ slug: slug });
+			|| Content.initPage({ slug: slug }, 'page');
 	}
 };
 
@@ -644,8 +676,22 @@ Content.markdown = function(text, page, callback) {
   var defaultLinkOpenRender = md.renderer.defaultRender('link_open');
   md.renderer.assign('link_open', function(tokens, idx, options, env, self) {
 	var href = tokens[idx].attrGet('href');
-	if(href.charAt(0) != '#') {	// External link or relative internal link
-		if(href.indexOf(':') == -1) {	// Relative link
+	if(href.charAt(0) == '/') {	// Absolute internal link
+		if(Utils.isVisited(href)) {
+			tokens[idx].attrSet('class', Utils.addClass(tokens[idx].attrGet('class'), 'visited'));
+		}
+		href = '#' + href;
+		tokens[idx].attrSet('href', href);
+	} else if(href.charAt(0) != '#') {	// External link or relative internal link
+		if(href.indexOf(':') != -1) {	// External link
+			tokens[idx].attrSet('target', '_blank');
+		} else {	// Relative internal link
+			var fragment = '';
+			var fpos = href.indexOf('#');
+			if(fpos != -1) {
+				fragment = href.substr(fpos);
+				href = href.substr(0, fpos);
+			}
 			if(href.indexOf('.') == -1 || href.endsWith(configContent.global.extension)) {
 				var hash = Utils.getHash();
 				if(hash === false || hash.length == 0) {
@@ -658,19 +704,13 @@ Content.markdown = function(text, page, callback) {
 				}
 				hash = hash + href;
 				href = '#' + hash;
-				if(Utils.isVisited(hash)) {
+				if(Utils.isVisited(decodeURI(hash + fragment))) {
 					tokens[idx].attrSet('class', Utils.addClass(tokens[idx].attrGet('class'), 'visited'));
 				}
 			} else {	// Resource
 				href = Utils.getPath(page.url, href);
 			}
-			tokens[idx].attrSet('href', href);
-		} else {	// External link
-			tokens[idx].attrSet('target', '_blank');
-		}
-	} else {	// Internal link
-		if(Utils.isVisited(href.substring(1))) {
-			tokens[idx].attrSet('class', Utils.addClass(tokens[idx].attrGet('class'), 'visited'));
+			tokens[idx].attrSet('href', href + fragment);
 		}
 	}
 	return defaultLinkOpenRender(tokens, idx, options, env, self);
@@ -718,31 +758,45 @@ Content.ready = function(callback) {	// Callbacks for content ready (called once
 	}
 };
 
-Content.reloadPage = function(val) {
+Content.reloadPage = function(val, hash) {
   'use strict';
   Content.updateBrowserTitle((val.home ? '' : val.title + ' | ') + configContent.global.title);
   $('h1').html(val.title);
-  Backend.loadContent(configContent.global.contentDir + val.url, function(data) {
-    var metadata = {};
-	data = Content.metadata(data, metadata);
-    if(metadata.render) {
+  if(val.url) {
+    Backend.loadContent(configContent.global.contentDir + val.url, function(data) {
+      var metadata = {};
+      data = Content.metadata(data, metadata);
+      if(metadata.render) {
 	  data = Content.render(data, {meta: metadata});
-    }
-    Content.markdown(data, val, function(compiledMarkdown) {
-      compiledMarkdown = Content.snippets(compiledMarkdown);
-      $(configApp.postId).html(compiledMarkdown);
-	  $('body').removeClass().addClass('post-template ' + (val.home ? 'home-template' : 'page-template'));
-      $('pre').addClass('hljs');
-	  $('table').addClass('table table-bordered');
-      Content.setHeader(val);
-      Content.runToc();
-	  Content.runBreadcrumb(val);
-	  Content.loaded();
-      Animation.smoothScrolling();
-      DisqusApi.disqusReload(val.disqusEnable, val.disqusIdentifier, val.disqusLang);
+      }
+      Content.markdown(data, val, function(compiledMarkdown) {
+        compiledMarkdown = Content.snippets(compiledMarkdown);
+        $(configApp.postId).html(compiledMarkdown);
+        $('pre').addClass('hljs');
+	    $('table').addClass('table table-bordered');
+	    Content.endReloadPage(val, hash);
+      });
     });
-  });
+  } else {
+    $(configApp.postId).html('');
+  	Content.endReloadPage(val, hash);
+  }
+};
 
+Content.endReloadPage = function(page, hash) {
+	$('body').removeClass().addClass(configApp.bodyClass + ' ' + page.type + '-template ' + (page.home ? 'home-template' : Utils.slugify(page.slug, 'lowercase,transliterate,space_to_underscore,dot_to_dash') + '-template'));
+    Content.setHeader(page);
+    Content.runToc();
+	Content.runBreadcrumb(page);
+	Content.loaded();
+    Animation.smoothScrolling();
+    DisqusApi.disqusReload(page.disqusEnable, page.disqusIdentifier, page.disqusLang);
+    
+    if(hash) {
+      Animation.scrollTo('#' + Utils.slugify(hash, 'transliterate,lowercase'));
+    } else {
+	  window.scrollTo(0, 0);
+	}
 };
 
 Content.render = function(template, data) {
@@ -804,6 +858,12 @@ Content.routes = function() {
   };
   
   urls['/*'] = function(url) {
+    var pos = url.indexOf('#');
+    var hash = null;
+    if(pos != -1) {
+      hash = url.substr(pos + 1);
+      url = url.substr(0, pos);
+    }
 	var val = Content.getPage(url);
     $(configApp.postId).empty();
     $(configApp.tocId).hide();
@@ -821,8 +881,8 @@ Content.routes = function() {
 	}
 	
 	item.parent().addClass('active');
-    Content.reloadPage(val);
-	Utils.visit('/' + url);
+    Content.reloadPage(val, hash);
+	Utils.visit('/' + url + (hash ? '#' + hash : ''));
   }
   routie(urls);
 };
@@ -881,9 +941,10 @@ Content.runToc = function(container) {
 	
 	if(tagName != 'h1' || i != 0) {		// Omit the first h1 header
 		// add span to each header
-		$(this).prepend('<span id="toc' + i + '"></span>');
 		var s = $(this).text();
-		var k = '<li class="toc-' + tagName + '"><a href="#toc' + i + '">' + s + '</a></li>';
+		var id = Utils.slugify(s, 'transliterate,lowercase,dot_to_dash,space_to_dash');
+		$(this).prepend('<span id="' + id + '"></span>'); // toc + i
+		var k = '<li class="toc-' + tagName + '"><a href="#' + id + '">' + s + '</a></li>';
 		$(list).append(k);
 		itemNo++;
 	}
@@ -1230,6 +1291,7 @@ Backend.init = function(appDir, configJson, metas) {
 	Loader.loadJavascript(appDir + '/js/routie/routie.min.js'),
 	Loader.loadJavascript(appDir + '/js/yaml/yaml.min.js'),
 	Loader.loadJavascript(appDir + '/js/markdown/markdown-it.js'),
+	Loader.loadJavascript(appDir + '/js/markdown/plugins/markdown-it-container.js'),
 	Loader.loadJavascript(appDir + '/js/markdown/powerdown.js')
   ];
   
@@ -1245,6 +1307,7 @@ Backend.init = function(appDir, configJson, metas) {
 	}
 	
 	Content.theme(function() {
+	  Content.bodyInit();
 	  Content.routes();
 	  Content.fillSlider();
 	  Content.fillMenu();
@@ -1313,3 +1376,4 @@ Backend.init = function(appDir, configJson, metas) {
 		document.write(e.message);
 	}
 })();
+

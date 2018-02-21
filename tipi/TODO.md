@@ -1,42 +1,33 @@
 * addons: pace (no está funcionando, creo que el loader de estilos no funciona bien), pace.css a theme y pace.css default (si no se define otra hoja de estilo) => pace.css a theme, no existe un css por defecto
 * anchors: link to headings ## The Walking Dead (2004) <-- [link](#The-Walking-Dead-2004)
+* blocks: index.html con todos los bloques, metas
 * errores: 404.md, codificacion caracteres tipi.html, error xml
+* headers: title, h1
 * iconos: para páginas
+* images: random splash image, logo, favicon, default image for pages/posts
 * layout: reload template on page change vs. transitions (ajaxcms, sunstreet, ...) vs. mustache data binding (ractive.js)
 * local storage: tick mark for read pages in links
+* loader: 1. sunstreet 2. mkdocs 3. mdwiki 4. tiddlewiki 5. docsify 6. tipi 7. madoko 8. gitbook 9. jekyll 10. markdown blog 11. markdown wiki 12. markdown cms 13. hackmd.io 14. https://nystudio107.com/blog/loadjs-as-a-lightweight-javascript-loader	15. https://davidwalsh.name/javascript-loader
 * markdown: test page, browserify, javascript package system, async (code2flow)
 * menu: list pages
 * metadata: title, date, category, modified, tags, slug, authors, summary, lang, status (draft)
+* pages: hash, pages, links, files, folders
 * posts: slider, posts sin fecha y aleatorios
 * render: powerdown url rewriting/overriding render methods?
 * samples: Dev
 * samples: Halloween
 * samples: Verano
-* samples: Start. Theme: 1. fixed header 2. volver arriba 3. menú 4. https://livedemo00.template-help.com/wordpress_53761/ 5. https://livedemo00.template-help.com/wordpress_53761/about/ 6. https://livedemo00.template-help.com/wordpress_53761/portfolio/ 7. mini banner arriba con system info (a partir linea 29) 8. https://livedemo00.template-help.com/wordpress_53761/portfolio/portfolio-3/category-2/ 9. https://livedemo00.template-help.com/wordpress_53761/contacts/
+* **samples: Start**. Theme: 1. fixed header 2. volver arriba 3. menú 4. https://livedemo00.template-help.com/wordpress_53761/ 5. https://livedemo00.template-help.com/wordpress_53761/about/ 6. https://livedemo00.template-help.com/wordpress_53761/portfolio/ 7. mini banner arriba con system info (a partir linea 29) 8. https://livedemo00.template-help.com/wordpress_53761/portfolio/portfolio-3/category-2/ 9. https://livedemo00.template-help.com/wordpress_53761/blog/ 10. https://livedemo00.template-help.com/wordpress_53761/contacts/ 11. título página en breadcrumb 12. nueva página
 * samples: Tipi
-* **samples: Wiki**
+* samples: Wiki
 * similar: see projects.md
 * templating: Features: includes, compile template, helpers, html no escape. ~Jinja2
 * theme: 1. tipi theme css, 2. http://www.bypeople.com/css-template/, 3. tipi (cd-scroll-down), 4. sunstreet, 5. pico, 6. default, 7. bastard, 8. uno-zen, 9. ambition, 10. theme tipi (google: codepen, html, css, simple, blog, theme, template, minimalist): #header, #toc, #tocIcon, #slider, #slides, #menu, #blog, #content, #disqus_thread, #footer, #pages, #social, #copyright, #poweredby, #error, blockquote, 11. blackdoc 12. bootstrap 13. start
 * toc: TOC, anchor.svg, TOC con nºs
+* welcome: NO THEME (index page is the template), con theme falla!! home, default page with folder name
 * ROADMAP
-* theme no carga con symbolic link, poder especificar tema con url
-* bastard.html de tema, cosas como {{ site_logo }}
-* no funcionan páginas como #/Cómics o #/Decoración
-* index.html con el template no funciona si añade scripts adicionales (bastard)
-* permitir #/comics.md para ver el archivo
-* bastard: scroll to top no funciona
-* blocks: al cargar tema lo del head al head (title, metas...) y lo del body al body.
-* images: random splash image, logo, favicon
-* welcome: NO THEME (index page is the template), home, default page with folder name
-* headers: h1
-* config pages/links/hash... Slug: wiki (upper first letter) / blog (lowercase), spaces / dash (space -> -) / underscore (space -> _), special (España) / translate (Espana). Files: title (case as slug) / lower (lowercase), spaces/dash (space -> -) / underscore (space -> _), special (España) / translate (Espana). Folders: files + subfolders / folder (files + subfolders) / force folder (page is always a folder) / auto (js only: try files + folders, if not found try folder with files)
-* URL routing & rewriting: todos los links que no sean externos son reescritos para añadir # por delante. Así: /Absoluto -> #/Absoluto, Relativo -> #Relativo, ./Subpagina -> #./Subpagina, ../Padre -> #../Padre, #anchor -> ##anchor
-* Cambiar en config page.url por page.file
-* Main page: # -> #/. La ruta # no está definida
-* Trailing slash: una página puede indicar que se redirija a pagina/ ya que los links cambian o forzar todas las páginas del sitio acaben con / o que se les quite /
-- pages.md: http://automad.org/documentation/editing-content How Automad Stores Content http://automad.org/documentation/editing-content/adding-pages Using a Text-Editor http://automad.org/documentation/editing-content/linking-to-files-and-pages
-* loader: 1. sunstreet 2. mkdocs 3. mdwiki 4. tiddlewiki 5. docsify 6. tipi 7. madoko 8. gitbook 9. jekyll 10. markdown blog 11. markdown wiki 12. ajax cms 13. hackmd.io 14. https://nystudio107.com/blog/loadjs-as-a-lightweight-javascript-loader	15. https://davidwalsh.name/javascript-loader
+
+
 
 system info js:
 https://stackoverflow.com/questions/8180296/what-information-can-we-access-from-the-client
@@ -118,6 +109,7 @@ ROADMAP
 - _app: social
 - https://github.com/markdown-it/markdown-it
 - _app: ids para headers (esperar a cambio de parser) y generar toc con los ids buenos
+- DROPBOX / GOOGLE DRIVE
 - ANDROID
 - _app: título (h1) a partir de h1 de markdown
 - nueva página de Wiki

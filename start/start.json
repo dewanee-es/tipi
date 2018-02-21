@@ -1,0 +1,15 @@
+{
+	"global": {
+		"title": "Sistema",
+		"welcome": "Sistema",
+		"appDir": "tipi",
+		"contentDir": "start/"
+	},
+	"footer": {
+		"copyright": "<a href='{{ base_url }}'>{{ site_title }}</a> v.2017"
+	},
+	"addons": {
+		"highlight": "mono-blue",
+		"pace": true
+	}
+}
