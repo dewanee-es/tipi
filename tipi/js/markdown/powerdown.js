@@ -1,75 +1,80 @@
 function Powerdown(options) {
 	var mdOptions = Object.assign({}, Powerdown.defaultOptions, options);
+	this.options = mdOptions;
 	this.markdown = window.markdownit(mdOptions);
 	
-	window.markdownitContainer(this.markdown, 'alert', {
+	var containerTypes = Powerdown.defaultOptions.container.types;
+	var containerRenderer = Powerdown.defaultOptions.container.renderer;
+	
+	if(mdOptions && mdOptions.container) {
+	  containerTypes = mdOptions.container.types || containerTypes;
+	  containerRenderer = mdOptions.container.renderer || containerRenderer;
+	}
+	
+	window.markdownitContainer(this.markdown, 'container', {
 		validate: function(params) {
-			return Powerdown.alertTranslate(params) !== null;
+			return Powerdown.containerProcess(params, containerTypes) !== null;
 		},
 
 		render: function (tokens, idx, _options, env, self) {
+      var container = Powerdown.containerProcess(tokens[idx].info, containerTypes);
 			if (tokens[idx].nesting === 1) {
-			    var params = Powerdown.alertTranslate(tokens[idx].info);
-				return '<div class="alert alert-' + params.type + '"><strong>' + params.title + '</strong>';
+			  container.open = true;
 			} else {
-				return '</div>';
+			  container.open = false;
 			}
+			return containerRenderer(container);
 		}
 	});
 	
 	this.renderer = new Powerdown.Renderer(this.markdown.renderer);
 }
 
-Powerdown.alertTranslate = function(text) {
-    var s = text.trim().split(/:($| (.+)?)/, 2);
-    var res = { type: null, title: null };
-    if(s[1]) {
-        res.title = s[1].trim();
-    } else {
-        res.title = s[0].trim();
-    }
-	switch(s[0].toLowerCase()) {
-		case 'info':
-		case 'information':
-		case 'informacion':
-		case 'información':
-			res.type = 'info';
-			break;
-		case 'warn':
-		case 'warning':
-		case 'warning!':
-		case 'aviso':
-			res.type = 'danger';
-			break;
-		case 'idea':
-		case 'tip':
-			res.type = 'success';
-			break;
-		case 'note':
-		case 'nota':
-			res.type = 'warning';
-			break;
-		default:
-			return null;
-	}
+Powerdown.containerProcess = function(text, types) {
+  var s = text.trim().split(/[:!]+($| (.+)?)/, 2);
+  var res = { type: null, title: null };
+  if(s[1]) {
+      res.title = s[1].trim();
+  } else {
+      res.title = s[0].trim();
+  }
+  s[0] = s[0].toLowerCase();
+  res.type = types[s[0]] || types['*'] || s[0];
 	return res;
 };
 
+Powerdown.containerRenderer = function(container) {
+  var tag;
+  if(container.open) {
+    tag = '<div class="' + container.type + '">';
+    if(container.title) {
+      tag += '<strong>' + container.title + '</strong>';
+    }
+  } else {
+    tag = '</div>';
+  }
+  return tag;
+}
+
 Powerdown.defaultOptions = {
-	html:			true,					// Enable HTML tags in source
-	xhtmlOut:		true,					// Use '/' to close single tags (<br />). CommonMark compatibility.
-	breaks:			true,					// Convert '\n' in paragraphs into <br>
-	linkify:		true,					// Autoconvert URL-like text to links
-	typographer:	true,					// Enable some language-neutral replacement + quotes beautification
-	highlight:		function(str, lang) {	// Highlighter function
-		if (lang && hljs.getLanguage(lang)) {
-			try {
-				return hljs.highlight(lang, str).value;
-			} catch (__) {}
-		}
-		
-		return ''; // use external default escaping
-	}
+  breaks:       true,         // Convert '\n' in paragraphs into <br>
+  container: {
+    types:      {},
+    renderer:   Powerdown.containerRenderer
+  },
+  highlight:    function(str, lang) { // Highlighter function
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(lang, str).value;
+      } catch (__) {}
+    }
+    
+    return ''; // use external default escaping
+  },
+	html:			    true,					// Enable HTML tags in source
+  linkify:      true,         // Autoconvert URL-like text to links
+  typographer:  true,         // Enable some language-neutral replacement + quotes beautification
+	xhtmlOut:		  true,					// Use '/' to close single tags (<br />). CommonMark compatibility.
 }
 
 Powerdown.prototype.render = function(text) {

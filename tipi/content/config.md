@@ -44,8 +44,9 @@ Here is the format of the config file with its default values. All the values ar
     "iconClass": "fa fa-"    // CSS class prefix for icons. Default value works with Font Awesome icons.
   },
   "addons": {     // Addons configuration. Set addon to true to activate
+    "bootstrap": false,       // Bootstrap. Set to true if you use bootstrap in your template. Set to "include" to also add source files.
     "fontAwesome": false,     // Font Awesome icons
-	"highlight": false,       // Highlight.JS. Set to stylesheet name, for example "default". Set to true for custom stylesheet.
+    "highlight": false,       // Highlight.JS. Set to stylesheet name, for example "default". Set to true to use own custom stylesheet.
     "pace": false,            // Pace loader
   }
 }

@@ -67,15 +67,16 @@ var configContent = {
   },
   footer: {
     copyright: '<a href="#">{{ site_title }}</a> &copy; {{ date.year }} &bull; All rights reserved.',
-	poweredBy: 'Powered by <a href="http://github.com/dewanee-es/tipi">Tipi</a>'
+	  poweredBy: 'Powered by <a href="http://github.com/dewanee-es/tipi">Tipi</a>'
   },
   social: {},
   pages: {},
   posts: {},
   theme: {
     template: 'index',
-	style: '',
-  	iconClass: 'fa fa-'	// Font Awesome
+	  style: '',
+  	iconClass: 'fa fa-',	// Font Awesome
+    containers: {}        // Custom container classes
   },
   addons: {	// See Bakend.addons
   }
@@ -89,6 +90,7 @@ var GoogleApi = {};
 var DisqusApi = {};
 var Loader = {};
 var Template = {};
+var Renderer = {};
 
 var escapeKey = 27;
 
@@ -672,6 +674,9 @@ Content.loaded = function(callback) {	// Callbacks for content load (called afte
 Content.markdown = function(text, page, callback) {
   'use strict';
   var md = new Powerdown({
+    container: {
+      types: configContent.theme.containers
+    }
   });
   var defaultLinkOpenRender = md.renderer.defaultRender('link_open');
   md.renderer.assign('link_open', function(tokens, idx, options, env, self) {
@@ -923,37 +928,59 @@ Content.runBreadcrumb = function(page, container) {
 Content.runToc = function(container) {
   'use strict';
   container = typeof container !== 'undefined' ? container : configApp.postId;
-  var list = $('<ul></ul>');
+  var toc = [];
   var itemNo = 0;
-  $(list).empty();
+  var listnum = [0, 0, 0, 0, 0];
   // search for first h1 header in the page
   $('h1').first().each(function() {
     // add span to the header
     $(this).prepend('<span id="tocMain"></span>');
     var s = $(this).text();
-    var k = '<li class="toc-h1"><a href="#tocMain">' + s + '</a></li>';
-    $(list).append(k);
-	itemNo++;
+    toc.push({
+      tag: 'h1',
+      id: 'tocMain',
+      text: s,
+      index: itemNo
+    });
+    itemNo++;
   });
   // searching for headers
   $(container + ' :header').each(function(i) {
     var tagName = $(this).prop('tagName').toLowerCase();
 	
 	if(tagName != 'h1' || i != 0) {		// Omit the first h1 header
+	  var level = parseInt(tagName.substr(1));
+    listnum[level - 2]++;
+    for(var i = level - 1; i < 5; i++) {
+      listnum[i] = 0;
+    }
+    var textlevel = '';
+    for(var i = 0; i < level - 1; i++) {
+      textlevel += listnum[i] + '.';
+    }
+	
 		// add span to each header
 		var s = $(this).text();
 		var id = Utils.slugify(s, 'transliterate,lowercase,dot_to_dash,space_to_dash');
-		$(this).prepend('<span id="' + id + '"></span>'); // toc + i
-		var k = '<li class="toc-' + tagName + '"><a href="#' + id + '">' + s + '</a></li>';
-		$(list).append(k);
+		$(this).prepend('<span id="' + id + '"></span>'); // toc + itemNo
+    toc.push({
+      tag: tagName,
+      id: id,
+      text: s,
+      level: textlevel,
+      index: itemNo
+    });
 		itemNo++;
 	}
   });
   
-  if(itemNo > 1) {
-	$(configApp.tocId).find('ul').first().empty().append(list);
-	$(configApp.tocId).show();
-	$(configApp.tocIconId).show();
+  if(itemNo > 2) {
+    $(configApp.tocId).first().empty().append(Renderer.toc(toc));
+	  $(configApp.tocId).show();
+	  $(configApp.tocIconId).show();
+  } else {
+    $(configApp.tocId).hide();
+  	$(configApp.tocIconId).hide();
   }
 };
 
@@ -1254,11 +1281,31 @@ Template.fromString = function(name, string) {
 	}
 };
 
+/******************* Renderer ****************/
+Renderer.container = false; // Use default renderer
+
+Renderer.toc = function(toc) {
+  var list = $('<ul></ul>');
+  for(var i = 0; i < toc.length; i++) {
+    list.append('<li class="toc-' + toc[i].tag + '"><a href="#' + toc[i].id + '">' + toc[i].text + '</a></li>');
+  }
+  return list;
+};
+
 /******************* Addons ****************/
 Backend.addons = {
-	bootstrap: function (appDir, assets) {
-		assets.push(Loader.loadCss(appDir + '/addons/bootstrap/css/bootstrap.min.css'));
-		assets.push(Loader.loadJavascript(appDir + '/addons/bootstrap/js/bootstrap.min.js'));
+	bootstrap: function (appDir, assets, mode) {
+	  if(mode == 'include') {
+	    assets.push(Loader.loadCss(appDir + '/addons/bootstrap/css/bootstrap.min.css'));
+	    assets.push(Loader.loadJavascript(appDir + '/addons/bootstrap/js/bootstrap.min.js'));
+	  }
+	  Renderer.toc = function(toc) {
+	    var list = $('<div class="list-group"></div>');
+	    for(var i = 1; i < toc.length; i++) {
+	      list.append('<a class="list-group-item toc-' + toc[i].tag + '" href="#' + toc[i].id + '">' + toc[i].level + ' ' + toc[i].text + '</a>')
+	    }
+	    return list;
+	  }
 	},
 	fontAwesome: function (appDir, assets) {
 		assets.push(Loader.loadCss(appDir + '/addons/font-awesome/css/font-awesome.min.css'));

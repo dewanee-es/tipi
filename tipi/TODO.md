@@ -1,12 +1,18 @@
+* Container: info
+* Container: tip
+* Container: notas
+* Container: warning
+* Container: cuadrados grises (STEP 1, ...)
+* Tablas con colspan
+* floats a la izquierda/derecha de imágenes
+* estilos en configApp (por ejemplo para tablas)
+---
 * addons: pace (no está funcionando, creo que el loader de estilos no funciona bien), pace.css a theme y pace.css default (si no se define otra hoja de estilo) => pace.css a theme, no existe un css por defecto
-* anchors: link to headings ## The Walking Dead (2004) <-- [link](#The-Walking-Dead-2004)
 * blocks: index.html con todos los bloques, metas
 * errores: 404.md, codificacion caracteres tipi.html, error xml
 * headers: title, h1
-* iconos: para páginas
 * images: random splash image, logo, favicon, default image for pages/posts
 * layout: reload template on page change vs. transitions (ajaxcms, sunstreet, ...) vs. mustache data binding (ractive.js)
-* local storage: tick mark for read pages in links
 * loader: 1. sunstreet 2. mkdocs 3. mdwiki 4. tiddlewiki 5. docsify 6. tipi 7. madoko 8. gitbook 9. jekyll 10. markdown blog 11. markdown wiki 12. markdown cms 13. hackmd.io 14. https://nystudio107.com/blog/loadjs-as-a-lightweight-javascript-loader	15. https://davidwalsh.name/javascript-loader
 * markdown: test page, browserify, javascript package system, async (code2flow)
 * menu: list pages
@@ -44,7 +50,9 @@ https://www.daniweb.com/programming/web-development/threads/91649/need-client-ma
 ROADMAP
 -------
 
+* iconos: para páginas
 - composer
+- sistema de addons con su propio archivo de configuración
 - screenshot.png (multiple devices, responsive)
 - cms.html / cms.css
 - angular
