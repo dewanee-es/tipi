@@ -26,6 +26,8 @@ function Powerdown(options) {
 			return containerRenderer(container);
 		}
 	});
+
+	window.markdownitFootnote(this.markdown);
 	
 	this.renderer = new Powerdown.Renderer(this.markdown.renderer);
 }

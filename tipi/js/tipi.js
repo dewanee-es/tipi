@@ -1338,7 +1338,8 @@ Backend.init = function(appDir, configJson, metas) {
 	Loader.loadJavascript(appDir + '/js/routie/routie.min.js'),
 	Loader.loadJavascript(appDir + '/js/yaml/yaml.min.js'),
 	Loader.loadJavascript(appDir + '/js/markdown/markdown-it.js'),
-	Loader.loadJavascript(appDir + '/js/markdown/plugins/markdown-it-container.js'),
+	Loader.loadJavascript(appDir + '/js/markdown/plugins/markdown-it-container.min.js'),
+	Loader.loadJavascript(appDir + '/js/markdown/plugins/markdown-it-footnote.min.js'),
 	Loader.loadJavascript(appDir + '/js/markdown/powerdown.js')
   ];
   
