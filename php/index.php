@@ -2,8 +2,8 @@
 // load dependencies
 require_once(__DIR__ . '/vendor/autoload.php');
 
-// instance Morphus
-$morphus = new Morphus(
+// init Tipi
+Tipi::init(
     __DIR__,    // root dir
     'config/',  // config dir
     'plugins/', // plugins dir
@@ -11,7 +11,8 @@ $morphus = new Morphus(
 );
 
 // override configuration?
-// $morphus->setConfig(array());
+// Tipi::config("option", "value");
+// Tipi::config(array("option" => "value", ...));
 
-// run application
-echo $morphus->run();
+// start application
+Tipi::start();
