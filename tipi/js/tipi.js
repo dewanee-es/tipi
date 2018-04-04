@@ -961,7 +961,7 @@ Content.runToc = function(container) {
     }
 	
 		// add span to each header
-		var s = $(this).clone().children().remove().end().text(); // only the text inside the parent element.
+		var s = $(this).clone().children('span').remove().end().text(); // only the text inside the parent element.
 		var id = Utils.slugify(s, 'transliterate,lowercase,dot_to_dash,space_to_dash');
 		$(this).prepend('<span id="' + id + '"></span>'); // toc + itemNo
     toc.push({
