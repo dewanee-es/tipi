@@ -1,4 +1,4 @@
-configApp.snippets.youtube = function(id) {
+snippets.youtube = function(id) {
 	if(id.indexOf('/') !== -1) {
 		id = id.substring(id.lastIndexOf('/'));
 	}

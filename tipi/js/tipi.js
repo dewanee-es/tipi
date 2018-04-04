@@ -37,12 +37,13 @@ var configApp = {
   // Misc
   errorId: '#error',
   
-  // Snippets
-  snippets: [],
-  
   // Storage
   storagePrefix: 'tipi-'
 };
+
+// Snippets
+var snippets = [];
+
 var configContent = {
   global: {
 	title: 'Untitled',
@@ -960,7 +961,7 @@ Content.runToc = function(container) {
     }
 	
 		// add span to each header
-		var s = $(this).text();
+		var s = $(this).clone().children().remove().end().text(); // only the text inside the parent element.
 		var id = Utils.slugify(s, 'transliterate,lowercase,dot_to_dash,space_to_dash');
 		$(this).prepend('<span id="' + id + '"></span>'); // toc + itemNo
     toc.push({
@@ -1004,23 +1005,28 @@ Content.snippets = function(html) {
 	var html2 = '';
 	var pos = 0;
 	var match;
-	var re = /\((\w+): ([^\)\n]+)\)/g;
+	var re = /\((\w+)((?:-\w+)*): ([^\)\n]+)\)/g;  // (name-param1-param2...: text)
 	
 	while((match = re.exec(html)) !== null) {
 		html2 += html.substring(pos, match.index);
-		if(configApp.snippets[match[1]] === undefined) {
+		var name = match[1];
+		var snippet = snippets[name];
+		if(snippet === undefined) {
 			$.ajax({
-				url: configContent.global.appDir + '/js/markdown/snippets/' + match[1] + '.js',
+				url: configContent.global.appDir + '/js/markdown/snippets/' + name + '.js',
 				dataType: 'script',
-				error: function() {
-					configApp.snippets[match[1]] = false;
-				},
 				async: false
 			});
+			if(snippets[name]) {
+			  snippet = snippets[name];
+			} else {
+			  snippets[name] = false;
+			}
 		}
-		if(configApp.snippets[match[1]] !== false) {
-			var snippet = configApp.snippets[match[1]](match[2]);
-			html2 += snippet;
+		if(snippet && {}.toString.call(snippet) === '[object Function]') {
+		  var args = match[2].split('-');
+		  args[0] = match[3]; // text
+			html2 += snippet.apply(null, args);  // text, param1, param2, ...
 		} else {
 			html2 += match[0];
 		}
