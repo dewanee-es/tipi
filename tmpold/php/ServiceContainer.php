@@ -84,7 +84,7 @@ class ServiceContainer {
    * Calls a service.
    *
    * This method will return true if 0 or more services were succesfully
-   * called. false is returned if one of the services broke the servuce chain.
+   * called. false is returned if one of the services broke the service chain.
    *
    * @param string $service
    * @param $arguments

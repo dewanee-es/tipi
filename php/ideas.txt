@@ -3,3 +3,4 @@ https://github.com/adamnicholson/Chief
 http://event.thephpleague.com/2.0/
 Plugin
 Flight
+https://github.com/anddimario/mucontent

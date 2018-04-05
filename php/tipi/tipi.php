@@ -28,6 +28,13 @@ class Tipi {
     */
     
     public static function start() {
+      // 1. get url
+      
+      // 2. look up url in urls (from datastore)
+      
+      // 3. serve 404 if not found
+      
+      // 4. if found, load corresponding instance and render
     }
     
 }
