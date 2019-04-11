@@ -1,0 +1,45 @@
+{% extends "templates\\admin.html" %}
+
+
+{% block actionbuttons %}
+  {% include 'partials\\admin\\items-overview-buttons.html' %}
+{% endblock %}
+
+{% block actionarea %}
+  <table class="table">
+      <thead>
+        <tr>
+            <th>Edit page</th>
+            <th>View page</th>
+            <th>page type</th>
+            <th>last changed</th>
+            <th>author</th>
+            <th>published</th>
+            <th>delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for key,item in items %}        
+        <tr>
+            <td>
+                <a href="/flot-manage/?section=items&action=edit&id={{key}}">edit {{ item['title'] }}</a>
+            </td>
+            <td>
+                <a href="/{{item['url']['value'] }}">{{item['url'] }}</a>
+            </td>
+            <td>[page type]</td>
+            <td>[date changed]</td>
+            <td>[author]</td>
+            <td>
+                {% if item['published'] == true %}
+                <i class="glyphicon glyphicon-ok fore-colour-green"></i>
+                {% else %}
+                <i class="glyphicon glyphicon-remove fore-colour-red"></i>
+                {% endif %}
+            </td>
+            <td>[deleted]</td>
+        </tr>        
+    {% endfor %}
+      </tbody>
+  </table>
+{% endblock %}
